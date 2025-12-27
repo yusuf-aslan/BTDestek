@@ -12,7 +12,7 @@
 - [x] Task: Generate `TicketResource` with custom List and Form layouts (Turkish labels). <!-- eeeeffe -->
 - [x] Task: Implement Canned Response helper logic in the Ticket form. <!-- a796dcc -->
 - [x] Task: Create a Dashboard Widget for active Announcements. <!-- a1dbf70 -->
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Backend Implementation' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Backend Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Public Portal Implementation
 - [ ] Task: Create the Landing Page with Announcement alerts and Ticket Submission form.
