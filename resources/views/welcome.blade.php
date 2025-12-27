@@ -89,7 +89,7 @@
 
                     <form action="{{ route('tickets.store') }}" method="POST" class="p-8 space-y-6">
                         @csrf
-                        <div class="grid md:grid-cols-2 gap-6">
+                        <div class="grid md:grid-cols-3 gap-6">
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Adınız Soyadınız</label>
                                 <input type="text" name="name" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Örn: Dr. Ahmet Yılmaz">
@@ -97,6 +97,10 @@
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Bölüm / Oda No</label>
                                 <input type="text" name="department_room" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Örn: Dahiliye - Kat 2">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Dahili No / Tel</label>
+                                <input type="text" name="phone_number" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Örn: 4455">
                             </div>
                         </div>
 

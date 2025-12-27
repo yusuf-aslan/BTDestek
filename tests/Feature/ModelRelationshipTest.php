@@ -24,13 +24,13 @@ test('ticket model is fillable', function () {
         'tracking_number' => 'TEST-123',
         'name' => 'John Doe',
         'department_room' => 'Room 101',
+        'phone_number' => '1234',
         'category_id' => $category->id,
         'subject' => 'Help',
         'description' => 'Issue',
         'status' => 'yeni',
         'priority' => 'orta',
         'ip_address' => '127.0.0.1',
-        'computer_name' => 'PC-01'
     ]);
 
     expect($ticket->tracking_number)->toBe('TEST-123');
@@ -61,6 +61,7 @@ test('ticket belongs to category', function () {
         'tracking_number' => 'NET-1',
         'name' => 'Jane',
         'department_room' => 'IT',
+        'phone_number' => '5555',
         'category_id' => $category->id,
         'subject' => 'Wifi',
         'description' => 'No signal'
@@ -76,6 +77,7 @@ test('category has many tickets', function () {
         'tracking_number' => 'SOFT-1',
         'name' => 'User 1',
         'department_room' => 'A',
+        'phone_number' => '111',
         'category_id' => $category->id,
         'subject' => 'Bug',
         'description' => 'Error'
@@ -84,6 +86,7 @@ test('category has many tickets', function () {
         'tracking_number' => 'SOFT-2',
         'name' => 'User 2',
         'department_room' => 'B',
+        'phone_number' => '222',
         'category_id' => $category->id,
         'subject' => 'Crash',
         'description' => 'Blue screen'

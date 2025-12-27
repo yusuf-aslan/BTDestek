@@ -23,17 +23,19 @@ test('tickets table has expected columns', function () {
         'tracking_number', 
         'name', 
         'department_room', 
+        'phone_number',
         'category_id', 
         'subject', 
         'description', 
         'status', 
         'priority', 
         'ip_address', 
-        'computer_name', 
         'resolved_at', 
         'created_at', 
         'updated_at'
     ]))->toBeTrue();
+    
+    expect(Schema::hasColumn('tickets', 'computer_name'))->toBeFalse();
 });
 
 test('announcements table has expected columns', function () {

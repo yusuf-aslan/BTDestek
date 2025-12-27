@@ -51,6 +51,10 @@
                         <p class="font-medium text-slate-700">{{ $ticket->department_room }}</p>
                     </div>
                     <div>
+                        <label class="text-xs font-bold text-slate-400 uppercase">Dahili No / Tel</label>
+                        <p class="font-medium text-slate-700">{{ $ticket->phone_number }}</p>
+                    </div>
+                    <div>
                         <label class="text-xs font-bold text-slate-400 uppercase">Kategori</label>
                         <p class="font-medium text-slate-700">{{ $ticket->category->name }}</p>
                     </div>

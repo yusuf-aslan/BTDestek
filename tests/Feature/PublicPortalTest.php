@@ -26,6 +26,7 @@ test('hospital staff can submit a ticket from the landing page', function () {
         ->post('/talep-olustur', [
             'name' => 'Ayşe Yılmaz',
             'department_room' => 'Poliklinik 1',
+            'phone_number' => '1234',
             'category_id' => $category->id,
             'subject' => 'Yazıcı çalışmıyor',
             'description' => 'Yazıcıdan ses geliyor ama çıktı vermiyor.',
@@ -34,6 +35,7 @@ test('hospital staff can submit a ticket from the landing page', function () {
     expect(Ticket::where('name', 'Ayşe Yılmaz')->exists())->toBeTrue();
     $ticket = Ticket::where('name', 'Ayşe Yılmaz')->first();
     expect($ticket->tracking_number)->not->toBeNull();
+    expect($ticket->phone_number)->toBe('1234');
 });
 
 test('hospital staff can track their ticket status', function () {
@@ -42,6 +44,7 @@ test('hospital staff can track their ticket status', function () {
         'tracking_number' => 'BT-TEST-999',
         'name' => 'Mehmet Öz',
         'department_room' => 'Muhasebe',
+        'phone_number' => '5555',
         'category_id' => $category->id,
         'subject' => 'HBYS Giriş',
         'description' => 'Şifremi unuttum.',

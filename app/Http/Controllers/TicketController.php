@@ -23,6 +23,7 @@ class TicketController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'department_room' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
