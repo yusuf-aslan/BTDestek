@@ -15,7 +15,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Backend Implementation' (Protocol in workflow.md) <!-- d71f80e -->
 
 ## Phase 3: Public Portal Implementation
-- [ ] Task: Create the Landing Page with Announcement alerts and Ticket Submission form.
+- [~] Task: Create the Landing Page with Announcement alerts and Ticket Submission form.
 - [ ] Task: Implement Ticket Tracking (Sorgulama) functionality.
 - [ ] Task: Ensure styling matches the 'Professional & Clinical' guidelines using Tailwind.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Public Portal' (Protocol in workflow.md)
