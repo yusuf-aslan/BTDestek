@@ -6,6 +6,6 @@
 - [~] Task: Conductor - User Manual Verification 'Phase 1: Database & Model' (Protocol in workflow.md)
 
 ## Phase 2: Frontend & Backend Updates
-- [~] Task: Update Public Portal (`welcome.blade.php`, `TicketController`) to capture `phone_number`.
+- [x] Task: Update Public Portal (`welcome.blade.php`, `TicketController`) to capture `phone_number`. <!-- e5b22cc -->
 - [ ] Task: Update Filament `TicketResource` (Form and Table) to replace Computer Name with Phone Number.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Frontend & Backend' (Protocol in workflow.md)
