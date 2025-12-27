@@ -35,3 +35,29 @@ test('hospital staff can submit a ticket from the landing page', function () {
     $ticket = Ticket::where('name', 'Ayşe Yılmaz')->first();
     expect($ticket->tracking_number)->not->toBeNull();
 });
+
+test('hospital staff can track their ticket status', function () {
+    $category = Category::create(['name' => 'Software']);
+    $ticket = Ticket::create([
+        'tracking_number' => 'BT-TEST-999',
+        'name' => 'Mehmet Öz',
+        'department_room' => 'Muhasebe',
+        'category_id' => $category->id,
+        'subject' => 'HBYS Giriş',
+        'description' => 'Şifremi unuttum.',
+        'status' => 'işlemde',
+        'priority' => 'orta'
+    ]);
+
+    $this->get("/talep-sorgula?tracking_number=BT-TEST-999")
+        ->assertSuccessful()
+        ->assertSee('BT-TEST-999')
+        ->assertSee('Mehmet Öz')
+        ->assertSee('işlemde'); 
+});
+
+test('tracking with invalid number shows error', function () {
+    $this->get("/talep-sorgula?tracking_number=INVALID-123")
+        ->assertRedirect()
+        ->assertSessionHasErrors(['tracking_number']);
+});

@@ -16,6 +16,6 @@
 
 ## Phase 3: Public Portal Implementation
 - [x] Task: Create the Landing Page with Announcement alerts and Ticket Submission form. <!-- abf7b39 -->
-- [ ] Task: Implement Ticket Tracking (Sorgulama) functionality.
+- [~] Task: Implement Ticket Tracking (Sorgulama) functionality.
 - [ ] Task: Ensure styling matches the 'Professional & Clinical' guidelines using Tailwind.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Public Portal' (Protocol in workflow.md)
