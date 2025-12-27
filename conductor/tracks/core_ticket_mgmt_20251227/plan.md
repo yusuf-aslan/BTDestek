@@ -1,11 +1,11 @@
 # Plan: Core Ticket Management & Public Portal
 
-## Phase 1: Database & Models
+## Phase 1: Database & Models [checkpoint: 7ee1906]
 - [x] Task: Create Migrations for Departments, Categories, Tickets, Announcements, and Canned Responses. <!-- bed20a6 -->
 - [x] Task: Implement Models with appropriate relationships and fillable fields. <!-- 90cecd0 -->
 - [x] Task: Implement `Ticket::booted()` logic for auto-capturing `ip_address` and `computer_name`. <!-- ea7bace -->
 - [x] Task: Create a `DatabaseSeeder` with Turkish defaults for Departments and Categories. <!-- a5d00c5 -->
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Database & Models' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Database & Models' (Protocol in workflow.md) <!-- 7ee1906 -->
 
 ## Phase 2: Backend (Filament) Implementation
 - [ ] Task: Generate Filament Resources for Department, Category, Announcement, and CannedResponse.
