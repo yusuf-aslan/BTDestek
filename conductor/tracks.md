@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Localization: Turkish Admin Panel
-*Link: [./conductor/tracks/localization_tr_20251227/](./conductor/tracks/localization_tr_20251227/)*
+## [~] Track: Refinement: Replace Computer Name with Phone Number
+*Link: [./conductor/tracks/refine_phone_number_20251227/](./conductor/tracks/refine_phone_number_20251227/)*
