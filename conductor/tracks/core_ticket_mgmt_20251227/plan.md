@@ -9,7 +9,7 @@
 
 ## Phase 2: Backend (Filament) Implementation
 - [x] Task: Generate Filament Resources for Department, Category, Announcement, and CannedResponse. <!-- f384f21 -->
-- [ ] Task: Generate `TicketResource` with custom List and Form layouts (Turkish labels).
+- [~] Task: Generate `TicketResource` with custom List and Form layouts (Turkish labels).
 - [ ] Task: Implement Canned Response helper logic in the Ticket form.
 - [ ] Task: Create a Dashboard Widget for active Announcements.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Backend Implementation' (Protocol in workflow.md)
