@@ -18,4 +18,4 @@
 - [x] Task: Create the Landing Page with Announcement alerts and Ticket Submission form. <!-- abf7b39 -->
 - [x] Task: Implement Ticket Tracking (Sorgulama) functionality. <!-- 63ee580 -->
 - [x] Task: Ensure styling matches the 'Professional & Clinical' guidelines using Tailwind. <!-- f11939c -->
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Public Portal' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Public Portal' (Protocol in workflow.md)
