@@ -1,7 +1,7 @@
 # Plan: Refinement: Replace Computer Name with Phone Number
 
 ## Phase 1: Database & Model Refactoring
-- [~] Task: Create migration to remove `computer_name` and add `phone_number` to `tickets` table.
+- [x] Task: Create migration to remove `computer_name` and add `phone_number` to `tickets` table. <!-- 40547e8 -->
 - [ ] Task: Update `Ticket` model (fillable fields) and remove `booted` auto-capture logic for hostname.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Database & Model' (Protocol in workflow.md)
 
