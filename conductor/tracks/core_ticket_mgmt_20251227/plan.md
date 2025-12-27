@@ -2,7 +2,7 @@
 
 ## Phase 1: Database & Models
 - [x] Task: Create Migrations for Departments, Categories, Tickets, Announcements, and Canned Responses. <!-- bed20a6 -->
-- [~] Task: Implement Models with appropriate relationships and fillable fields.
+- [x] Task: Implement Models with appropriate relationships and fillable fields. <!-- 90cecd0 -->
 - [ ] Task: Implement `Ticket::booted()` logic for auto-capturing `ip_address` and `computer_name`.
 - [ ] Task: Create a `DatabaseSeeder` with Turkish defaults for Departments and Categories.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Database & Models' (Protocol in workflow.md)
