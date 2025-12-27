@@ -7,12 +7,12 @@
 - [x] Task: Create a `DatabaseSeeder` with Turkish defaults for Departments and Categories. <!-- a5d00c5 -->
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Database & Models' (Protocol in workflow.md) <!-- 7ee1906 -->
 
-## Phase 2: Backend (Filament) Implementation
+## Phase 2: Backend (Filament) Implementation [checkpoint: d71f80e]
 - [x] Task: Generate Filament Resources for Department, Category, Announcement, and CannedResponse. <!-- f384f21 -->
 - [x] Task: Generate `TicketResource` with custom List and Form layouts (Turkish labels). <!-- eeeeffe -->
 - [x] Task: Implement Canned Response helper logic in the Ticket form. <!-- a796dcc -->
 - [x] Task: Create a Dashboard Widget for active Announcements. <!-- a1dbf70 -->
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Backend Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Backend Implementation' (Protocol in workflow.md) <!-- d71f80e -->
 
 ## Phase 3: Public Portal Implementation
 - [ ] Task: Create the Landing Page with Announcement alerts and Ticket Submission form.
