@@ -42,13 +42,13 @@ class DatabaseSeeder extends Seeder
         foreach ($categories as $category) {
             Category::firstOrCreate(['name' => $category['name']], ['description' => $category['description']]);
         }
-        
+
         // Seed default user if not exists
         if (!User::where('email', 'admin@btdestek.com')->exists()) {
              User::factory()->create([
                 'name' => 'Admin User',
-                'email' => 'admin@btdestek.com',
-                'password' => bcrypt('password'), 
+                'email' => 'webvetasarim@gmail.com',
+                'password' => bcrypt('1156'),
             ]);
         }
     }
