@@ -11,6 +11,7 @@ class Ticket extends Model
         'tracking_number',
         'name',
         'department_room',
+        'phone_number',
         'category_id',
         'subject',
         'description',
@@ -18,7 +19,6 @@ class Ticket extends Model
         'priority',
         'resolution_note',
         'ip_address',
-        'computer_name',
         'resolved_at',
     ];
 
@@ -31,16 +31,6 @@ class Ticket extends Model
     {
         static::creating(function (Ticket $ticket) {
             $ticket->ip_address = request()->ip();
-            
-            if ($ticket->ip_address) {
-                // Suppress errors for gethostbyaddr if IP is invalid or unreachable
-                $ticket->computer_name = @gethostbyaddr($ticket->ip_address);
-                
-                // If gethostbyaddr fails and returns false, fall back to IP
-                if ($ticket->computer_name === false) {
-                    $ticket->computer_name = $ticket->ip_address;
-                }
-            }
         });
     }
 }
