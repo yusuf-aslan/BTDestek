@@ -22,6 +22,10 @@ class TicketResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'subject';
 
+    protected static ?string $modelLabel = 'Talep';
+    protected static ?string $pluralModelLabel = 'Talepler';
+    protected static ?string $navigationLabel = 'Talepler';
+
     public static function form(Schema $schema): Schema
     {
         return TicketForm::configure($schema);

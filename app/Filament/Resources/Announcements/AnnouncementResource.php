@@ -22,6 +22,10 @@ class AnnouncementResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static ?string $modelLabel = 'Duyuru';
+    protected static ?string $pluralModelLabel = 'Duyurular';
+    protected static ?string $navigationLabel = 'Duyurular';
+
     public static function form(Schema $schema): Schema
     {
         return AnnouncementForm::configure($schema);

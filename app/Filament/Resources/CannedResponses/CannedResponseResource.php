@@ -22,6 +22,10 @@ class CannedResponseResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static ?string $modelLabel = 'Hazır Cevap';
+    protected static ?string $pluralModelLabel = 'Hazır Cevaplar';
+    protected static ?string $navigationLabel = 'Hazır Cevaplar';
+
     public static function form(Schema $schema): Schema
     {
         return CannedResponseForm::configure($schema);

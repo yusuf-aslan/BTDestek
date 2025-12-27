@@ -22,6 +22,10 @@ class DepartmentResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static ?string $modelLabel = 'Bölüm';
+    protected static ?string $pluralModelLabel = 'Bölümler';
+    protected static ?string $navigationLabel = 'Bölümler';
+
     public static function form(Schema $schema): Schema
     {
         return DepartmentForm::configure($schema);
