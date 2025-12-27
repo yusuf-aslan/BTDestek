@@ -29,7 +29,7 @@ To build a comprehensive, hybrid IT support ecosystem for a hospital environment
 -   **Workflow & Routing:**
     -   **Departments:** Routing to Hardware, Software, Network, or HBYS teams.
     -   **Status:** Yeni (New), İnceleniyor (Processing), Beklemede (Pending), Çözüldü (Resolved), İptal (Cancelled).
--   **Canned Responses:** Rapid response templates for common issues (e.g., "Printer toner replacement initiated").
+-   **Canned Responses:** Rapid response templates for common issues, auto-filling a **Resolution Note** for technicians.
 
 ### 3. Advanced Features (Gelişmiş Özellikler)
 -   **Notifications:** Automated Email (and optional SMS) notifications to the user when their ticket is received, updated, or closed.

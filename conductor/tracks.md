@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Core Ticket Management & Public Portal
-*Link: [./conductor/tracks/core_ticket_mgmt_20251227/](./conductor/tracks/core_ticket_mgmt_20251227/)*
+## [~] Track: Localization: Turkish Admin Panel
+*Link: [./conductor/tracks/localization_tr_20251227/](./conductor/tracks/localization_tr_20251227/)*
