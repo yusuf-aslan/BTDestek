@@ -14,8 +14,8 @@
 - [x] Task: Create a Dashboard Widget for active Announcements. <!-- a1dbf70 -->
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Backend Implementation' (Protocol in workflow.md) <!-- d71f80e -->
 
-## Phase 3: Public Portal Implementation
+## Phase 3: Public Portal Implementation [checkpoint: 1ed2997]
 - [x] Task: Create the Landing Page with Announcement alerts and Ticket Submission form. <!-- abf7b39 -->
 - [x] Task: Implement Ticket Tracking (Sorgulama) functionality. <!-- 63ee580 -->
 - [x] Task: Ensure styling matches the 'Professional & Clinical' guidelines using Tailwind. <!-- f11939c -->
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Public Portal' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Public Portal' (Protocol in workflow.md) <!-- 1ed2997 -->
