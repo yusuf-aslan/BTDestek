@@ -16,6 +16,7 @@ class Ticket extends Model
         'description',
         'status',
         'priority',
+        'resolution_note',
         'ip_address',
         'computer_name',
         'resolved_at',

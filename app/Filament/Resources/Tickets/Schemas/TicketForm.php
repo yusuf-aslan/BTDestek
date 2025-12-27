@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\Tickets\Schemas;
 
+use App\Models\CannedResponse;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Schemas\Schema;
 
 class TicketForm
@@ -68,6 +71,28 @@ class TicketForm
                                 'acil' => 'Acil',
                             ])
                             ->required(),
+                        
+                        Select::make('canned_response_id')
+                            ->label('Hazır Cevap Şablonu')
+                            ->options(CannedResponse::all()->pluck('title', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set, ?string $state) {
+                                if ($state) {
+                                    $response = CannedResponse::find($state);
+                                    if ($response) {
+                                        $set('resolution_note', $response->content);
+                                    }
+                                }
+                            })
+                            ->columnSpanFull(),
+                            
+                        Textarea::make('resolution_note')
+                            ->label('Çözüm Notu / Açıklama')
+                            ->rows(4)
+                            ->columnSpanFull(),
+
                         DateTimePicker::make('resolved_at')
                             ->label('Çözüm Tarihi'),
                     ])->columns(2),
