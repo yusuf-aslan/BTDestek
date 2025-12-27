@@ -30,15 +30,15 @@ class TicketForm
                         TextInput::make('department_room')
                             ->label('Bölüm / Oda')
                             ->disabled(),
+                        TextInput::make('phone_number')
+                            ->label('Dahili No / Tel')
+                            ->disabled(),
                         Select::make('category_id')
                             ->label('Kategori')
                             ->relationship('category', 'name')
                             ->disabled(),
                         TextInput::make('ip_address')
                             ->label('IP Adresi')
-                            ->disabled(),
-                        TextInput::make('computer_name')
-                            ->label('Bilgisayar Adı')
                             ->disabled(),
                         TextInput::make('subject')
                             ->label('Konu')

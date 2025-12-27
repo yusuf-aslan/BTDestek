@@ -25,6 +25,9 @@ class TicketsTable
                 TextColumn::make('category.name')
                     ->label('Kategori')
                     ->sortable(),
+                TextColumn::make('phone_number')
+                    ->label('Dahili')
+                    ->searchable(),
                 TextColumn::make('priority')
                     ->label('Öncelik')
                     ->badge()
