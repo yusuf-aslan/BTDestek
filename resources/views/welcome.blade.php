@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hastane BT Destek Portalı</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -12,6 +13,58 @@
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 selection:bg-blue-100">
+
+    <!-- Announcements Modal -->
+    @if($announcements->count() > 0)
+        <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;">
+            <!-- Backdrop -->
+            <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="show = false"></div>
+
+            <!-- Modal Panel -->
+            <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-4" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+                
+                <!-- Header -->
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                        </span>
+                        Önemli Duyurular
+                    </h3>
+                    <button @click="show = false" class="text-slate-400 hover:text-slate-600 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6 max-h-[60vh] overflow-y-auto space-y-4">
+                    @foreach($announcements as $announcement)
+                        <div class="p-4 rounded-xl border flex gap-4 items-start {{ $announcement->type === 'danger' ? 'bg-red-50 border-red-100 text-red-900' : ($announcement->type === 'warning' ? 'bg-amber-50 border-amber-100 text-amber-900' : 'bg-blue-50 border-blue-100 text-blue-900') }}">
+                            <div class="shrink-0 mt-0.5">
+                                @if($announcement->type === 'danger')
+                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                @else
+                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                @endif
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm mb-1">{{ $announcement->title }}</h4>
+                                <p class="text-sm opacity-90 leading-relaxed">{{ $announcement->content }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                    <button @click="show = false" class="bg-slate-900 text-white font-bold py-2 px-6 rounded-lg text-sm hover:bg-slate-800 transition">
+                        Okudum, Anladım
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50">

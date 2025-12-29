@@ -11,9 +11,11 @@ class Announcement extends Model
         'content',
         'type',
         'is_active',
+        'published_at',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'published_at' => 'datetime',
     ];
 }
