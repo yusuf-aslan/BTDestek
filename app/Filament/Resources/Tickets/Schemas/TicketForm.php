@@ -36,7 +36,9 @@ class TicketForm
                         Select::make('category_id')
                             ->label('Kategori')
                             ->relationship('category', 'name')
-                            ->disabled(),
+                            ->searchable()
+                            ->preload()
+                            ->required(),
                         TextInput::make('ip_address')
                             ->label('IP Adresi')
                             ->disabled(),
