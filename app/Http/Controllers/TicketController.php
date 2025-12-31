@@ -27,6 +27,7 @@ class TicketController extends Controller
             'category_id' => 'required|exists:categories,id',
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
+            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf,txt,log|max:5120',
         ]);
 
         $trackingNumber = 'BT-' . date('Y') . '-' . strtoupper(Str::random(6));
@@ -36,11 +37,26 @@ class TicketController extends Controller
             $trackingNumber = 'BT-' . date('Y') . '-' . strtoupper(Str::random(6));
         }
 
-        $ticket = Ticket::create(array_merge($validated, [
-            'tracking_number' => $trackingNumber,
-            'status' => 'yeni',
-            'priority' => 'orta',
-        ]));
+        $ticket = Ticket::create(array_merge(
+            collect($validated)->except('attachments')->toArray(),
+            [
+                'tracking_number' => $trackingNumber,
+                'status' => 'yeni',
+                'priority' => 'orta',
+            ]
+        ));
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('attachments');
+                $ticket->attachments()->create([
+                    'file_path' => $path,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_type' => $file->getMimeType(),
+                    'file_size' => $file->getSize(),
+                ]);
+            }
+        }
 
         return redirect()->back()->with('success', "Talebiniz alındı. Takip Numaranız: {$ticket->tracking_number}");
     }

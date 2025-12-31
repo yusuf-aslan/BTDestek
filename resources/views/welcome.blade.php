@@ -146,7 +146,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('tickets.store') }}" method="POST" class="p-8 space-y-6">
+                    <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
                         @csrf
                         <div class="grid md:grid-cols-3 gap-6">
                             <div class="space-y-2">
@@ -181,6 +181,29 @@
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Detaylı Açıklama</label>
                             <textarea name="description" rows="5" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Hata mesajı, cihaz markası vb. detayları belirtin..."></textarea>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Ekler (İsteğe Bağlı)</label>
+                            <div x-data="{ files: [] }" class="relative border-2 border-dashed border-slate-200 rounded-xl p-4 hover:border-blue-400 transition bg-slate-50/50 text-center cursor-pointer group" @click="$refs.fileInput.click()">
+                                <input x-ref="fileInput" type="file" name="attachments[]" multiple class="hidden" @change="files = Array.from($event.target.files)">
+                                
+                                <div x-show="files.length === 0" class="flex flex-col items-center gap-2 text-slate-500 group-hover:text-blue-500 transition">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                    <span class="text-sm font-medium">Dosyaları buraya sürükleyin veya seçin</span>
+                                    <span class="text-xs text-slate-400 group-hover:text-blue-400">(Max 5MB / Resim, PDF, Log)</span>
+                                </div>
+
+                                <div x-show="files.length > 0" class="space-y-1" style="display: none;">
+                                    <template x-for="file in files">
+                                        <div class="flex items-center gap-2 text-sm text-slate-700 bg-white p-2 rounded-lg border border-slate-100">
+                                            <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                            <span x-text="file.name" class="truncate"></span>
+                                            <span x-text="'(' + (file.size / 1024).toFixed(0) + ' KB)'" class="text-xs text-slate-400 ml-auto shrink-0"></span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 rounded-xl transition shadow-xl shadow-blue-100 flex items-center justify-center gap-3">
