@@ -9,11 +9,16 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class ActiveAnnouncements extends BaseWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
 
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $heading = 'Aktif Duyurular';
+
+    public static function canView(): bool
+    {
+        return Announcement::where('is_active', true)->exists();
+    }
 
     public function table(Table $table): Table
     {

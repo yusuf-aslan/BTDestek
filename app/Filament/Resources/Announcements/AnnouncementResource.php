@@ -31,6 +31,11 @@ class AnnouncementResource extends Resource
     protected static ?string $pluralModelLabel = 'Duyurular';
     protected static ?string $navigationLabel = 'Duyurular';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasModuleAccess('announcements');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return AnnouncementForm::configure($schema);

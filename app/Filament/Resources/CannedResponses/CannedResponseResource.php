@@ -18,13 +18,18 @@ class CannedResponseResource extends Resource
 {
     protected static ?string $model = CannedResponse::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
     protected static ?string $recordTitleAttribute = 'title';
 
     protected static ?string $modelLabel = 'Hazır Cevap';
     protected static ?string $pluralModelLabel = 'Hazır Cevaplar';
     protected static ?string $navigationLabel = 'Hazır Cevaplar';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasModuleAccess('canned_responses');
+    }
 
     public static function form(Schema $schema): Schema
     {

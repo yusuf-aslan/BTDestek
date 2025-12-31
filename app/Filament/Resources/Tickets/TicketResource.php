@@ -13,18 +13,37 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class TicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-ticket';
 
     protected static ?string $recordTitleAttribute = 'subject';
 
     protected static ?string $modelLabel = 'Talep';
     protected static ?string $pluralModelLabel = 'Talepler';
     protected static ?string $navigationLabel = 'Talepler';
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if ($user && !$user->is_admin) {
+            // Filter tickets where the category is assigned to the user
+            $query->whereHas('category', function (Builder $query) use ($user) {
+                $query->whereHas('users', function (Builder $query) use ($user) {
+                    $query->where('users.id', $user->id);
+                });
+            });
+        }
+
+        return $query;
+    }
 
     public static function form(Schema $schema): Schema
     {

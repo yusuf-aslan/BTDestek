@@ -41,6 +41,11 @@ class AnnouncementTemplateResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasModuleAccess('announcements');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema

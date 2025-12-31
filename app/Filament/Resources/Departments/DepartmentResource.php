@@ -18,13 +18,18 @@ class DepartmentResource extends Resource
 {
     protected static ?string $model = Department::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-office-2';
 
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $modelLabel = 'Bölüm';
     protected static ?string $pluralModelLabel = 'Bölümler';
     protected static ?string $navigationLabel = 'Bölümler';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->is_admin;
+    }
 
     public static function form(Schema $schema): Schema
     {

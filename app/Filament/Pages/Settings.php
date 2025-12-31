@@ -22,6 +22,11 @@ class Settings extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasModuleAccess('settings');
+    }
+
     protected static BackedEnum|string|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
     protected static ?string $title = 'Genel Ayarlar';

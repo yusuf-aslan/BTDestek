@@ -4,10 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['department_id', 'name', 'description'];
+
+    public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
 
     public function tickets(): HasMany
     {
@@ -17,5 +23,10 @@ class Category extends Model
     public function articles(): HasMany
     {
         return $this->hasMany(Article::class);
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
     }
 }
