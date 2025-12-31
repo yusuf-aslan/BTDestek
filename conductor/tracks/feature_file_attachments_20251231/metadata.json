@@ -2,5 +2,5 @@
   "name": "Feature: File Attachments",
   "description": "Allow users to upload screenshots and logs to tickets.",
   "start_date": "2025-12-31",
-  "status": "in_progress"
+  "status": "completed"
 }
