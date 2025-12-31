@@ -9,6 +9,11 @@ class CreateAnnouncement extends CreateRecord
 {
     protected static string $resource = AnnouncementResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function afterCreate(): void
     {
         $data = $this->form->getState();

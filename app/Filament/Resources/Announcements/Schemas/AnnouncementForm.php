@@ -6,6 +6,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class AnnouncementForm
@@ -14,14 +15,16 @@ class AnnouncementForm
     {
         return $schema
             ->components([
-                \Filament\Forms\Components\Section::make('Duyuru Detayları')
+                \Filament\Schemas\Components\Section::make('Hızlı Başlangıç')
+                    ->description('Hazır bir şablon kullanarak duyuru oluşturabilirsiniz.')
                     ->schema([
                         Select::make('template_id')
-                            ->label('Şablondan Yükle')
+                            ->label('Şablon Seçiniz')
                             ->options(\App\Models\AnnouncementTemplate::all()->pluck('title', 'id'))
                             ->searchable()
+                            ->preload()
                             ->live()
-                            ->afterStateUpdated(function ($state, \Filament\Forms\Set $set) {
+                            ->afterStateUpdated(function ($state, \Filament\Schemas\Components\Utilities\Set $set) {
                                 $template = \App\Models\AnnouncementTemplate::find($state);
                                 if ($template) {
                                     $set('title', $template->title);
@@ -30,12 +33,17 @@ class AnnouncementForm
                                 }
                             })
                             ->columnSpanFull()
-                            ->placeholder('Bir şablon seçerek alanları otomatik doldurabilirsiniz...'),
-                        
+                            ->placeholder('Sıfırdan oluşturmak için boş bırakın veya bir şablon seçin...'),
+                    ])
+                    ->collapsible(),
+
+                \Filament\Schemas\Components\Section::make('Duyuru İçeriği')
+                    ->schema([
                         TextInput::make('title')
                             ->label('Başlık')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->columnSpanFull(),
                             
                         Select::make('type')
                             ->label('Tür')
@@ -53,15 +61,17 @@ class AnnouncementForm
 
                         Toggle::make('is_active')
                             ->label('Aktif mi?')
-                            ->default(true),
+                            ->default(true)
+                            ->inline(false),
                             
                         Textarea::make('content')
                             ->label('İçerik')
                             ->required()
+                            ->rows(5)
                             ->columnSpanFull(),
 
                         \Filament\Forms\Components\Checkbox::make('save_as_template')
-                            ->label('Bu duyuruyu şablon olarak kaydet')
+                            ->label('Bu duyuruyu gelecekte kullanmak üzere şablon olarak kaydet')
                             ->columnSpanFull()
                             ->visible(fn ($livewire) => $livewire instanceof \App\Filament\Resources\Announcements\Pages\CreateAnnouncement),
                     ])->columns(2)

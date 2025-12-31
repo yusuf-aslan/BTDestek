@@ -24,7 +24,12 @@ class AnnouncementTemplateResource extends Resource
 {
     protected static ?string $model = AnnouncementTemplate::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-duplicate';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Duyuru Yönetimi';
+    }
 
     protected static ?string $navigationLabel = 'Duyuru Şablonları';
 
@@ -36,10 +41,10 @@ class AnnouncementTemplateResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function form(\Filament\Forms\Form $form): \Filament\Forms\Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('title')
                     ->label('Şablon Başlığı')
                     ->required()

@@ -18,7 +18,12 @@ class AnnouncementResource extends Resource
 {
     protected static ?string $model = Announcement::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-megaphone';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Duyuru Yönetimi';
+    }
 
     protected static ?string $recordTitleAttribute = 'title';
 
