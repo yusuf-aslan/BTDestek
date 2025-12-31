@@ -14,8 +14,13 @@ class TicketController extends Controller
     {
         $announcements = Announcement::where('is_active', true)->latest()->get();
         $categories = Category::all();
+        $popularArticles = \App\Models\Article::where('is_published', true)
+            ->where('published_at', '<=', now())
+            ->orderBy('views', 'desc')
+            ->take(3)
+            ->get();
         
-        return view('welcome', compact('announcements', 'categories'));
+        return view('welcome', compact('announcements', 'categories', 'popularArticles'));
     }
 
     public function store(Request $request)

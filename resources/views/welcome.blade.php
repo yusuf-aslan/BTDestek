@@ -87,6 +87,7 @@
             <nav class="hidden md:flex gap-8 text-sm font-semibold text-slate-500">
                 <a href="#submit" class="hover:text-blue-700 transition">Yeni Talep</a>
                 <a href="#track" class="hover:text-blue-700 transition">Durum Sorgula</a>
+                <a href="{{ route('kb.index') }}" class="hover:text-blue-700 transition">Bilgi Bankası</a>
                 <a href="/admin" class="px-4 py-1.5 rounded-full border border-slate-200 hover:bg-slate-50 transition text-slate-600">Teknisyen Girişi</a>
             </nav>
         </div>
@@ -217,6 +218,27 @@
             <!-- Sidebar -->
             <div class="lg:col-span-4 space-y-8">
                 
+                <!-- Knowledge Base Card -->
+                @if($popularArticles->count() > 0)
+                    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center justify-between">
+                            <span class="flex items-center gap-2 text-sm uppercase tracking-wider">
+                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                Hızlı Çözümler
+                            </span>
+                            <a href="{{ route('kb.index') }}" class="text-[10px] text-blue-600 font-bold hover:underline">TÜMÜ</a>
+                        </h3>
+                        <div class="space-y-4">
+                            @foreach($popularArticles as $article)
+                                <a href="{{ route('kb.show', $article->slug) }}" class="block group">
+                                    <h4 class="text-sm font-semibold text-slate-700 group-hover:text-blue-700 transition line-clamp-1">{{ $article->title }}</h4>
+                                    <p class="text-[11px] text-slate-400 mt-1">{{ $article->category->name }} • {{ $article->views }} Okunma</p>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Track Card -->
                 <div class="bg-slate-900 text-white rounded-2xl p-8 shadow-2xl relative overflow-hidden group" id="track">
                     <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition"></div>
@@ -275,6 +297,7 @@
             </div>
 
             <div class="flex gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                <a href="{{ route('kb.index') }}" class="hover:text-blue-600">Bilgi Bankası</a>
                 <a href="#" class="hover:text-blue-600">Kullanım Koşulları</a>
                 <a href="#" class="hover:text-blue-600">KVKK Aydınlatma</a>
             </div>
