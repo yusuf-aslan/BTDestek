@@ -75,4 +75,12 @@ class KnowledgeBaseTest extends TestCase
 
         $this->assertTrue($category->articles->contains($article));
     }
+
+    public function test_can_render_article_resource(): void
+    {
+        $this->actingAs(\App\Models\User::factory()->create());
+
+        $this->get(\App\Filament\Resources\Articles\ArticleResource::getUrl('index'))
+            ->assertSuccessful();
+    }
 }

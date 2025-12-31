@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hastane BT Destek Portalı</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .clinical-shadow { shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-900 selection:bg-blue-100">
+@extends('layouts.public')
 
+@section('content')
     <!-- Announcements Modal -->
     @if($announcements->count() > 0)
         <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;">
@@ -72,27 +59,6 @@
         </div>
     @endif
 
-    <!-- Header -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-200">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg leading-tight">Hastane <span class="text-blue-700">BT Destek</span></h1>
-                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Bilgi İşlem Birimi</p>
-                </div>
-            </div>
-            <nav class="hidden md:flex gap-8 text-sm font-semibold text-slate-500">
-                <a href="#submit" class="hover:text-blue-700 transition">Yeni Talep</a>
-                <a href="#track" class="hover:text-blue-700 transition">Durum Sorgula</a>
-                <a href="{{ route('kb.index') }}" class="hover:text-blue-700 transition">Bilgi Bankası</a>
-                <a href="/admin" class="px-4 py-1.5 rounded-full border border-slate-200 hover:bg-slate-50 transition text-slate-600">Teknisyen Girişi</a>
-            </nav>
-        </div>
-    </header>
-
     <main class="max-w-6xl mx-auto px-4 py-10">
         
         <!-- Announcements Section -->
@@ -143,6 +109,17 @@
                             </div>
                             <div class="font-medium text-sm leading-relaxed">
                                 {{ session('success') }}
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($errors->has('error'))
+                        <div class="m-8 p-5 bg-red-50 border border-red-100 text-red-900 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                            <div class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div class="font-medium text-sm leading-relaxed">
+                                {{ $errors->first('error') }}
                             </div>
                         </div>
                     @endif
@@ -268,41 +245,23 @@
                         Önemli Hatırlatmalar
                     </h3>
                     <ul class="space-y-4">
-                        <li class="flex gap-3">
-                            <div class="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1.5 shrink-0"></div>
-                            <p class="text-xs text-slate-600 leading-relaxed">Kritik tıbbi cihaz arızaları için sistem üzerinden talep oluşturduktan sonra dahili <b>1122</b>'yi arayınız.</p>
-                        </li>
-                        <li class="flex gap-3">
-                            <div class="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1.5 shrink-0"></div>
-                            <p class="text-xs text-slate-600 leading-relaxed">Parola sıfırlama işlemleri sadece kimlik ibrazı ile şahsen yapılmaktadır.</p>
-                        </li>
-                        <li class="flex gap-3">
-                            <div class="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1.5 shrink-0"></div>
-                            <p class="text-xs text-slate-600 leading-relaxed">Talebinize dair tüm güncellemeler otomatik olarak Bilgi İşlem ekranlarına düşmektedir.</p>
-                        </li>
+                        @if($settings->important_reminders)
+                            @foreach($settings->important_reminders as $reminder)
+                                <li class="flex gap-3">
+                                    <div class="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1.5 shrink-0"></div>
+                                    <p class="text-xs text-slate-600 leading-relaxed">{!! $reminder['text'] !!}</p>
+                                </li>
+                            @endforeach
+                        @else
+                            <li class="flex gap-3">
+                                <div class="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1.5 shrink-0"></div>
+                                <p class="text-xs text-slate-600 leading-relaxed">Şu an bir hatırlatma bulunmuyor.</p>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
 
         </div>
     </main>
-
-    <footer class="mt-20 py-10 border-t border-slate-200 bg-white">
-        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-slate-400 text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi</p>
-            
-            <div class="px-4 py-2 bg-slate-100 rounded-full border border-slate-200 flex items-center gap-2">
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                <span class="text-xs font-bold text-slate-600 tracking-wider">IP Adresiniz: <span class="text-blue-700">{{ request()->ip() }}</span></span>
-            </div>
-
-            <div class="flex gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                <a href="{{ route('kb.index') }}" class="hover:text-blue-600">Bilgi Bankası</a>
-                <a href="#" class="hover:text-blue-600">Kullanım Koşulları</a>
-                <a href="#" class="hover:text-blue-600">KVKK Aydınlatma</a>
-            </div>
-        </div>
-    </footer>
-
-</body>
-</html>
+@endsection

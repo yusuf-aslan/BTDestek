@@ -8,7 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Support\Str;
 use Filament\Schemas\Schema;
 
@@ -18,7 +18,8 @@ class ArticleForm
     {
         return $schema
             ->components([
-                Section::make('Makale Bilgileri')
+                Section::make('Makale Detayları')
+                    ->description('Temel bilgiler ve yayın ayarları.')
                     ->schema([
                         TextInput::make('title')
                             ->label('Başlık')
@@ -38,19 +39,25 @@ class ArticleForm
                             ->searchable()
                             ->preload(),
                         
-                        Toggle::make('is_published')
-                            ->label('Yayınla')
-                            ->default(false),
-
                         DateTimePicker::make('published_at')
                             ->label('Yayınlanma Tarihi')
                             ->default(now()),
 
-                        RichEditor::make('content')
-                            ->label('İçerik')
-                            ->required()
-                            ->columnSpanFull(),
+                        Toggle::make('is_published')
+                            ->label('Yayında')
+                            ->default(false)
+                            ->inline(false),
                     ])->columns(2),
+
+                Section::make('Makale İçeriği')
+                    ->description('Detaylı makale içeriğini buradan düzenleyebilirsiniz.')
+                    ->schema([
+                        RichEditor::make('content')
+                            ->hiddenLabel()
+                            ->required()
+                            ->columnSpanFull()
+                            ->extraInputAttributes(['style' => 'min-height: 400px;']),
+                    ])->collapsible(),
             ]);
     }
 }

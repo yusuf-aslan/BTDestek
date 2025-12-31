@@ -25,6 +25,30 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
+        // Working Hours Check
+        $settings = \Illuminate\Support\Facades\Cache::get('general_settings', \App\Models\GeneralSetting::first());
+        
+        if ($settings) {
+            $now = now();
+            $isWeekend = $now->isWeekend();
+            $currentTime = $now->format('H:i:s');
+            
+            // Check Weekend
+            if ($isWeekend && !$settings->weekend_tickets_allowed) {
+                return redirect()->back()->withErrors(['error' => 'Hafta sonları sistem üzerinden talep kabul edilmemektedir. Acil durumlar için lütfen nöbetçi amirliği arayınız.'])->withInput();
+            }
+
+            // Check Work Hours
+            if (!$settings->allow_tickets_outside_work_hours) {
+                $start = \Carbon\Carbon::parse($settings->work_hours_start)->format('H:i:s');
+                $end = \Carbon\Carbon::parse($settings->work_hours_end)->format('H:i:s');
+
+                if ($currentTime < $start || $currentTime > $end) {
+                    return redirect()->back()->withErrors(['error' => "Mesai saatleri ({$settings->work_hours_start} - {$settings->work_hours_end}) dışında sistem üzerinden talep kabul edilmemektedir."])->withInput();
+                }
+            }
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'department_room' => 'required|string|max:255',
