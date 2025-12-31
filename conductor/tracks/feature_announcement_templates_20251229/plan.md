@@ -11,5 +11,5 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Admin Panel' (Protocol in workflow.md) [checkpoint: 622557b]
 
 ## Phase 3: Frontend Updates
-- [x] Task: Update `welcome.blade.php` to display announcement publication time. <!-- 9e5590c -->
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Frontend Updates' (Protocol in workflow.md)
+- [x] Task: Update `welcome.blade.php` to display announcement publication time. <!-- e5904d8 -->
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Frontend Updates' (Protocol in workflow.md) [checkpoint: 3d35b71]
