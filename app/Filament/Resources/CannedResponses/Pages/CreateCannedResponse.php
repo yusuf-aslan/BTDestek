@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateCannedResponse extends CreateRecord
 {
     protected static string $resource = CannedResponseResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

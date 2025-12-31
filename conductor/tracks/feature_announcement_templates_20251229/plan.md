@@ -8,8 +8,8 @@
 ## Phase 2: Admin Panel (Filament)
 - [x] Task: Create `AnnouncementTemplateResource` for managing templates. <!-- f0a8274 -->
 - [x] Task: Update `AnnouncementResource` to support loading templates, saving as template, and `published_at`. <!-- 5882b3c -->
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Admin Panel' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Admin Panel' (Protocol in workflow.md) [checkpoint: 622557b]
 
 ## Phase 3: Frontend Updates
-- [ ] Task: Update `welcome.blade.php` to display announcement publication time.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Frontend Updates' (Protocol in workflow.md)
+- [x] Task: Update `welcome.blade.php` to display announcement publication time. <!-- 9e5590c -->
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Frontend Updates' (Protocol in workflow.md)
