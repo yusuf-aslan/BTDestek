@@ -15,3 +15,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## [x] Track: Feature: Show IP in Footer
 *Link: [./conductor/tracks/feature_show_ip_in_footer_20251229/](./conductor/tracks/feature_show_ip_in_footer_20251229/)*
+
+## [ ] Track: Feature: File Attachments
+*Link: [./conductor/tracks/feature_file_attachments_20251231/](./conductor/tracks/feature_file_attachments_20251231/)*
