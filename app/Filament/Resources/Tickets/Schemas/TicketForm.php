@@ -50,6 +50,33 @@ class TicketForm
                             ->columnSpanFull(),
                     ])->columns(2),
 
+                Section::make('Ekler')
+                    ->schema([
+                        \Filament\Forms\Components\Repeater::make('attachments')
+                            ->label('Yüklenen Dosyalar')
+                            ->relationship()
+                            ->schema([
+                                TextInput::make('file_name')
+                                    ->label('Dosya Adı')
+                                    ->disabled()
+                                    ->columnSpan(3),
+                                TextInput::make('file_size')
+                                    ->label('Boyut')
+                                    ->formatStateUsing(fn ($state) => round($state / 1024) . ' KB')
+                                    ->disabled(),
+                                \Filament\Forms\Components\Placeholder::make('download_link')
+                                    ->label('İşlem')
+                                    ->content(fn ($record) => $record ? new \Illuminate\Support\HtmlString('<a href="'.route('tickets.attachments.download', $record).'" target="_blank" class="text-primary-600 hover:text-primary-500 font-bold underline">İndir</a>') : '-')
+                            ])
+                            ->addable(false)
+                            ->deletable(false)
+                            ->reorderable(false)
+                            ->columnSpanFull()
+                            ->columns(5)
+                    ])
+                    ->collapsible()
+                    ->visible(fn ($record) => $record && $record->attachments()->count() > 0),
+
                 Section::make('Tekniker İşlemleri')
                     ->schema([
                         Select::make('status')
