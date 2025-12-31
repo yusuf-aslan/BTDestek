@@ -51,6 +51,12 @@
                             <div>
                                 <h4 class="font-bold text-sm mb-1">{{ $announcement->title }}</h4>
                                 <p class="text-sm opacity-90 leading-relaxed">{{ $announcement->content }}</p>
+                                @if($announcement->published_at)
+                                    <p class="text-xs opacity-75 mt-2 flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        {{ $announcement->published_at->format('d.m.Y H:i') }}
+                                    </p>
+                                @endif
                             </div>
                         </div>
                     @endforeach
@@ -239,6 +245,12 @@
     <footer class="mt-20 py-10 border-t border-slate-200 bg-white">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-slate-400 text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi</p>
+            
+            <div class="px-4 py-2 bg-slate-100 rounded-full border border-slate-200 flex items-center gap-2">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <span class="text-xs font-bold text-slate-600 tracking-wider">IP Adresiniz: <span class="text-blue-700">{{ request()->ip() }}</span></span>
+            </div>
+
             <div class="flex gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
                 <a href="#" class="hover:text-blue-600">Kullanım Koşulları</a>
                 <a href="#" class="hover:text-blue-600">KVKK Aydınlatma</a>
