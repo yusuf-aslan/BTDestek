@@ -73,10 +73,37 @@
             </a>
             
             <div class="flex items-center gap-8">
-                <nav class="hidden md:flex gap-10 text-xs font-bold text-slate-600 @if($settings->is_dark_mode_enabled) dark:text-slate-300 @endif uppercase tracking-widest">
-                    <a href="{{ route('home') }}#submit" class="hover:text-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:text-blue-400 @endif transition py-2 border-b-2 border-transparent hover:border-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:border-blue-400 @endif">Yeni Talep</a>
-                    <a href="{{ route('home') }}#track" class="hover:text-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:text-blue-400 @endif transition py-2 border-b-2 border-transparent hover:border-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:border-blue-400 @endif">Durum Sorgula</a>
-                    <a href="{{ route('kb.index') }}" class="hover:text-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:text-blue-400 @endif transition py-2 border-b-2 border-transparent hover:border-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:border-blue-400 @endif">Bilgi Bankası</a>
+                <nav class="hidden md:flex items-center gap-8 text-xs font-bold text-slate-600 @if($settings->is_dark_mode_enabled) dark:text-slate-300 @endif uppercase tracking-widest">
+                    @foreach($public_menus as $menu)
+                        @if($menu->children->count() > 0)
+                            <!-- Dropdown Menu -->
+                            <div x-data="{ open: false }" class="relative" @mouseenter="open = true" @mouseleave="open = false">
+                                <button class="flex items-center gap-1 hover:text-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:text-blue-400 @endif transition py-2 border-b-2 border-transparent hover:border-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:border-blue-400 @endif">
+                                    {{ $menu->title }}
+                                    <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div x-show="open" 
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="opacity-0 scale-95"
+                                     x-transition:enter-end="opacity-100 scale-100"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="opacity-100 scale-100"
+                                     x-transition:leave-end="opacity-0 scale-95"
+                                     class="absolute left-0 mt-0 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 z-[60]"
+                                     style="display: none;">
+                                    @foreach($menu->children as $child)
+                                        <a href="{{ $child->url }}" target="{{ $child->target }}" class="block px-4 py-2 text-[11px] hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
+                                            {{ $child->title }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ $menu->url }}" target="{{ $menu->target }}" class="hover:text-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:text-blue-400 @endif transition py-2 border-b-2 border-transparent hover:border-blue-700 @if($settings->is_dark_mode_enabled) dark:hover:border-blue-400 @endif">
+                                {{ $menu->title }}
+                            </a>
+                        @endif
+                    @endforeach
                 </nav>
 
                 @if($settings->is_dark_mode_enabled)

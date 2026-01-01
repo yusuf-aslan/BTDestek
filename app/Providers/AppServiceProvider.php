@@ -31,7 +31,16 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             });
 
+            $public_menus = \Illuminate\Support\Facades\Cache::rememberForever('public_menus', function () {
+                return \App\Models\Menu::whereNull('parent_id')
+                    ->where('is_active', true)
+                    ->with(['children' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])
+                    ->orderBy('sort_order')
+                    ->get();
+            });
+
             $view->with('settings', $settings);
+            $view->with('public_menus', $public_menus);
         });
     }
 }
