@@ -30,11 +30,9 @@ class TicketResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $count = static::getEloquentQuery()
+        return (string) static::getEloquentQuery()
             ->whereNotIn('status', ['çözüldü', 'iptal'])
             ->count();
-
-        return $count > 0 ? (string) $count : null;
     }
 
     public static function getNavigationBadgeColor(): ?string

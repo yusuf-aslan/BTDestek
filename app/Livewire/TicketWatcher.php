@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Ticket;
 use Filament\Notifications\Notification;
+use Filament\Actions\Action;
 use Illuminate\Support\Facades\Auth;
 
 class TicketWatcher extends Component
@@ -37,58 +38,104 @@ class TicketWatcher extends Component
     public function checkNewTickets()
     {
         $currentCount = $this->getTicketCount();
+        $isNew = $currentCount > $this->lastCount;
 
-        if ($currentCount > $this->lastCount) {
-            Notification::make()
-                ->title('YENİ DESTEK TALEBİ VAR!')
-                ->icon('heroicon-o-bell-alert')
-                ->iconColor('info')
-                ->body('Sisteme yeni bir talep düştü. Detayları incelemek için aşağıdaki butona tıklayın.')
-                ->actions([
-                    \Filament\Actions\Action::make('view')
-                        ->label('Talepleri Görüntüle')
-                        ->url(route('filament.admin.resources.tickets.index'))
-                        ->button()
-                        ->color('info'),
-                ])
-                ->persistent() // Siz kapatana kadar ekranda kalır
-                ->send();
-
-            $this->dispatch('play-notification-sound');
-            $this->dispatch('update-nav-badge', count: $currentCount);
+        if ($isNew) {
+            $this->showUrgentNotification();
         }
 
+        // Sayı değiştiyse diğer bileşenlere haber ver
+        if ($currentCount != $this->lastCount) {
+            $this->dispatch('refresh-active-tickets');
+        }
+
+        $this->dispatch('ticket-count-updated', count: $currentCount, isNew: $isNew);
         $this->lastCount = $currentCount;
+    }
+
+    public function showUrgentNotification()
+    {
+        Notification::make()
+            ->title('YENİ DESTEK TALEBİ!')
+            ->icon('heroicon-o-bell-alert')
+            ->iconColor('info')
+            ->body('Sisteme yeni bir talep düştü. Lütfen kontrol edin.')
+            ->actions([
+                Action::make('view')
+                    ->label('Talepleri Görüntüle')
+                    ->url(route('filament.admin.resources.tickets.index'))
+                    ->button()
+                    ->color('info'),
+            ])
+            ->persistent()
+            ->send();
     }
 
     public function render()
     {
         return <<<'BLADE'
-            <div wire:poll.20s="checkNewTickets" class="hidden">
-                <audio id="notification-sound" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
-                <script>
-                    window.addEventListener('play-notification-sound', () => {
-                        const audio = document.getElementById('notification-sound');
-                        if (audio) {
-                            audio.play().catch(e => console.log('Ses çalınamadı (Tarayıcı engeli olabilir):', e));
+            <div x-data="{
+                baseTitle: '',
+                init() {
+                    this.baseTitle = document.title.replace(/^(\d+)\s/, '');
+                    
+                    if ('Notification' in window && Notification.permission === 'default') {
+                        Notification.requestPermission();
+                    }
+
+                    this.$wire.checkNewTickets();
+                    setInterval(() => this.$wire.checkNewTickets(), 20000);
+
+                    window.addEventListener('storage', (e) => {
+                        if (e.key === 'last_seen_ticket_count') {
+                            this.updateDisplay(parseInt(localStorage.getItem('current_total_count') || 0), false);
                         }
                     });
-                    
-                    window.addEventListener('update-nav-badge', (event) => {
-                        // Sidebar'daki Talepler linkini bul
-                        const ticketsLink = document.querySelector('a[href*="/admin/tickets"]');
-                        if (ticketsLink) {
-                            // Badge elementini bul veya oluştur
-                            let badge = ticketsLink.querySelector('.fi-sidebar-item-badge');
-                            if (badge) {
-                                badge.innerText = event.detail.count;
+
+                    window.addEventListener('ticket-count-updated', (event) => {
+                        this.updateDisplay(event.detail.count, event.detail.isNew);
+                    });
+                },
+                updateDisplay(totalCount, isNew) {
+                    const isTicketsPage = window.location.pathname.includes('/admin/tickets');
+                    localStorage.setItem('current_total_count', totalCount);
+
+                    if (isTicketsPage) {
+                        localStorage.setItem('last_seen_ticket_count', totalCount);
+                    }
+
+                    const lastSeen = parseInt(localStorage.getItem('last_seen_ticket_count') || 0);
+                    const unread = Math.max(0, totalCount - lastSeen);
+
+                    if (unread > 0 && !isTicketsPage) {
+                        document.title = `(${unread}) ${this.baseTitle}`;
+                    } else {
+                        document.title = this.baseTitle;
+                    }
+
+                    if (isNew && document.hidden && Notification.permission === 'granted') {
+                        new Notification('🔔 YENİ TALEP!', {
+                            body: 'Sisteme yeni bir destek talebi düştü.',
+                            icon: '/favicon.ico'
+                        }).onclick = () => { window.focus(); };
+                    }
+
+                    // Sidebar Badge
+                    const ticketsLink = document.querySelector('a[href*=\'/admin/tickets\']');
+                    if (ticketsLink) {
+                        const badge = ticketsLink.querySelector('.fi-sidebar-item-badge, .fi-badge');
+                        if (badge) {
+                            badge.innerText = totalCount;
+                            if (totalCount > 0) {
+                                badge.classList.remove('hidden');
+                                badge.style.display = '';
                             } else {
-                                // Eğer daha önce 0 olduğu için badge yoksa, sayfayı yenilemek en güvenlisi
-                                window.location.reload();
+                                badge.classList.add('hidden');
                             }
                         }
-                    });
-                </script>
+                    }
+                }
+            }" class="hidden">
             </div>
         BLADE;
     }
