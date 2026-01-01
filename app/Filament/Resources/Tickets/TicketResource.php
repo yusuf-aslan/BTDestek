@@ -28,6 +28,22 @@ class TicketResource extends Resource
     protected static ?string $pluralModelLabel = 'Talepler';
     protected static ?string $navigationLabel = 'Talepler';
 
+    public static function getNavigationBadge(): ?string
+    {
+        $count = static::getEloquentQuery()
+            ->whereNotIn('status', ['çözüldü', 'iptal'])
+            ->count();
+
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getEloquentQuery()
+            ->whereNotIn('status', ['çözüldü', 'iptal'])
+            ->count() > 0 ? 'warning' : 'gray';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();

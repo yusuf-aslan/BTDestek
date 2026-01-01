@@ -33,6 +33,13 @@ class Settings extends Page implements HasForms
 
     protected static ?string $navigationLabel = 'Ayarlar';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Sistem';
+    }
+
+    protected static ?int $navigationSort = 1;
+
     protected string $view = 'filament.pages.settings';
 
     public ?array $data = [];

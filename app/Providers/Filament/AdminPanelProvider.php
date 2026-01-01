@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Livewire\TicketWatcher;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -31,6 +32,10 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName(fn () => \Illuminate\Support\Facades\Cache::get('general_settings')?->site_title ?? 'Hastane BT Destek')
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): string => Blade::render('@livewire(\'TicketWatcher\')'),
+            )
             ->colors([
                 'primary' => Color::Amber,
             ])
