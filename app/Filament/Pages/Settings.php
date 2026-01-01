@@ -69,6 +69,15 @@ class Settings extends Page implements HasForms
                             ->visibility('public'),
                     ])->columns(2),
 
+                Section::make('Görünüm Ayarları')
+                    ->description('Sitenin genel görünüm özellikleri.')
+                    ->schema([
+                        Toggle::make('is_dark_mode_enabled')
+                            ->label('Gece/Gündüz Modu')
+                            ->helperText('Açık ise kullanıcılar sağ üst köşeden karanlık moda geçiş yapabilir.')
+                            ->default(true),
+                    ]),
+
                 Section::make('Çalışma Saatleri')
                     ->description('Mesai saatleri ve talep kabul kuralları.')
                     ->schema([

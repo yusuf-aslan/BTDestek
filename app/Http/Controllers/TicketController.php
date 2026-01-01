@@ -102,6 +102,6 @@ class TicketController extends Controller
             return redirect()->back()->withErrors(['tracking_number' => 'Geçersiz takip numarası.']);
         }
 
-        return view('ticket-status', compact('ticket'));
+        return redirect()->route('home')->with('queried_ticket', $ticket);
     }
 }

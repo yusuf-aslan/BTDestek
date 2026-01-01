@@ -15,12 +15,14 @@ class GeneralSetting extends Model
         'work_hours_end',
         'allow_tickets_outside_work_hours',
         'weekend_tickets_allowed',
+        'is_dark_mode_enabled',
     ];
 
     protected $casts = [
         'important_reminders' => 'array',
         'allow_tickets_outside_work_hours' => 'boolean',
         'weekend_tickets_allowed' => 'boolean',
+        'is_dark_mode_enabled' => 'boolean',
     ];
 
     protected static function booted()

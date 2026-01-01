@@ -3,9 +3,29 @@
 @section('content')
     <!-- Announcements Modal -->
     @if($announcements->count() > 0)
-        <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;">
+        @php 
+            $latestId = $announcements->first()->id; 
+        @endphp
+        <div x-data="{ 
+                show: false, 
+                latestId: {{ $latestId }},
+                init() {
+                    const dismissedId = localStorage.getItem('dismissed_announcement_id');
+                    // Sadece sorgulama sonucunda değilse ve bu duyuru daha önce kapatılmamışsa göster
+                    if (dismissedId != this.latestId && !{{ session('queried_ticket') ? 'true' : 'false' }}) {
+                        setTimeout(() => { this.show = true }, 500);
+                    }
+                },
+                dismiss() {
+                    localStorage.setItem('dismissed_announcement_id', this.latestId);
+                    this.show = false;
+                }
+             }" 
+             x-show="show" 
+             class="fixed inset-0 z-[100] flex items-center justify-center px-4" 
+             style="display: none;">
             <!-- Backdrop -->
-            <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="show = false"></div>
+            <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="dismiss()"></div>
 
             <!-- Modal Panel -->
             <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-4" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
@@ -19,20 +39,20 @@
                         </span>
                         Önemli Duyurular
                     </h3>
-                    <button @click="show = false" class="text-slate-400 hover:text-slate-600 transition">
+                    <button @click="dismiss()" class="text-slate-400 hover:text-slate-600 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
 
                 <!-- Content -->
-                <div class="p-6 max-h-[60vh] overflow-y-auto space-y-4">
+                <div class="p-6 max-h-[60vh] overflow-y-auto space-y-4 bg-white dark:bg-slate-900">
                     @foreach($announcements as $announcement)
-                        <div class="p-4 rounded-xl border flex gap-4 items-start {{ $announcement->type === 'danger' ? 'bg-red-50 border-red-100 text-red-900' : ($announcement->type === 'warning' ? 'bg-amber-50 border-amber-100 text-amber-900' : 'bg-blue-50 border-blue-100 text-blue-900') }}">
+                        <div class="p-4 rounded-xl border flex gap-4 items-start {{ $announcement->type === 'danger' ? 'bg-red-50 border-red-100 text-red-900 dark:bg-red-900/20 dark:border-red-800/50 dark:text-red-300' : ($announcement->type === 'warning' ? 'bg-amber-50 border-amber-100 text-amber-900 dark:bg-amber-900/20 dark:border-amber-800/50 dark:text-amber-300' : 'bg-blue-50 border-blue-100 text-blue-900 dark:bg-blue-900/20 dark:border-blue-800/50 dark:text-blue-300') }}">
                             <div class="shrink-0 mt-0.5">
                                 @if($announcement->type === 'danger')
-                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                 @else
-                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 @endif
                             </div>
                             <div>
@@ -50,9 +70,113 @@
                 </div>
 
                 <!-- Footer -->
-                <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
-                    <button @click="show = false" class="bg-slate-900 text-white font-bold py-2 px-6 rounded-lg text-sm hover:bg-slate-800 transition">
+                <div class="bg-slate-50 dark:bg-slate-800 px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex justify-end">
+                    <button @click="dismiss()" class="bg-slate-900 dark:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg text-sm hover:bg-slate-800 dark:hover:bg-blue-700 transition">
                         Okudum, Anladım
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Ticket Status Modal -->
+    @if(session('queried_ticket'))
+        @php $ticket = session('queried_ticket'); @endphp
+        <div x-data="{ showStatus: true }" x-show="showStatus" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;">
+            <div x-show="showStatus" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" @click="showStatus = false"></div>
+
+            <div x-show="showStatus" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-4" class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden">
+                
+                <!-- Modal Header -->
+                <div class="bg-slate-50 dark:bg-slate-900/50 px-8 py-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white flex items-center gap-3">
+                            <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
+                            Talep Durumu
+                        </h3>
+                        <p class="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mt-1">{{ $ticket->tracking_number }}</p>
+                    </div>
+                    <button @click="showStatus = false" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-8 max-h-[70vh] overflow-y-auto">
+                    <!-- Status Badge -->
+                    <div class="flex items-center justify-between mb-8 p-4 rounded-2xl {{ 
+                        $ticket->status === 'yeni' ? 'bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50' : (
+                        $ticket->status === 'işlemde' ? 'bg-amber-50 border border-amber-100 dark:bg-amber-900/20 dark:border-amber-800/50' : (
+                        $ticket->status === 'beklemede' ? 'bg-slate-50 border border-slate-200 dark:bg-slate-700/50 dark:border-slate-600' : (
+                        $ticket->status === 'çözüldü' ? 'bg-emerald-50 border border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800/50' : 'bg-red-50 border border-red-100 dark:bg-red-900/20 dark:border-red-800/50')))
+                    }}">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full animate-pulse {{ 
+                                $ticket->status === 'yeni' ? 'bg-blue-500' : (
+                                $ticket->status === 'işlemde' ? 'bg-amber-500' : (
+                                $ticket->status === 'beklemede' ? 'bg-slate-500' : (
+                                $ticket->status === 'çözüldü' ? 'bg-emerald-500' : 'bg-red-500')))
+                            }}"></div>
+                            <span class="font-bold text-sm uppercase tracking-wider {{ 
+                                $ticket->status === 'yeni' ? 'text-blue-700 dark:text-blue-400' : (
+                                $ticket->status === 'işlemde' ? 'text-amber-700 dark:text-amber-400' : (
+                                $ticket->status === 'beklemede' ? 'text-slate-700 dark:text-slate-300' : (
+                                $ticket->status === 'çözüldü' ? 'text-emerald-700 dark:text-emerald-400' : 'text-red-700 dark:text-red-400')))
+                            }}">
+                                {{ strtoupper($ticket->status) }}
+                            </span>
+                        </div>
+                        <span class="text-xs font-medium text-slate-400">{{ $ticket->created_at->format('d.m.Y H:i') }}</span>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 mb-8">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Talep Sahibi</label>
+                            <p class="font-semibold text-slate-700 dark:text-slate-200">{{ $ticket->name }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bölüm / Oda</label>
+                            <p class="font-semibold text-slate-700 dark:text-slate-200">{{ $ticket->department_room }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Kategori</label>
+                            <p class="font-semibold text-slate-700 dark:text-slate-200">{{ $ticket->category->name }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Öncelik</label>
+                            <p class="font-semibold text-slate-700 dark:text-slate-200 capitalize">{{ $ticket->priority }}</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 mb-8">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Konu</label>
+                        <p class="font-bold text-lg text-slate-800 dark:text-white leading-tight">{{ $ticket->subject }}</p>
+                    </div>
+
+                    <div class="space-y-2 mb-8">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Açıklama</label>
+                        <div class="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl text-sm text-slate-600 dark:text-slate-300 leading-relaxed border border-slate-100 dark:border-slate-700">
+                            {{ $ticket->description }}
+                        </div>
+                    </div>
+
+                    @if($ticket->resolution_note)
+                        <div class="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-700">
+                            <label class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Teknisyen Çözüm Notu
+                            </label>
+                            <div class="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 rounded-2xl text-blue-900 dark:text-blue-300 text-sm font-medium leading-relaxed shadow-sm shadow-blue-100">
+                                {{ $ticket->resolution_note }}
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="bg-slate-50 dark:bg-slate-900/50 px-8 py-6 border-t border-slate-100 dark:border-slate-700 flex justify-center">
+                    <button @click="showStatus = false" class="bg-slate-900 dark:bg-blue-600 text-white font-bold py-3 px-10 rounded-xl text-sm hover:bg-slate-800 dark:hover:bg-blue-700 transition shadow-xl shadow-slate-200">
+                        Anladım
                     </button>
                 </div>
             </div>
@@ -64,20 +188,20 @@
         <!-- Announcements Section -->
         @if($announcements->count() > 0)
             <div class="mb-10 space-y-4">
-                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                <h2 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
                     <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                     Güncel Duyurular
                 </h2>
                 <div class="grid gap-3">
                     @foreach($announcements as $announcement)
-                        <div class="p-4 rounded-xl border flex gap-4 items-center transition {{ $announcement->type === 'danger' ? 'bg-red-50 border-red-100 text-red-900' : ($announcement->type === 'warning' ? 'bg-amber-50 border-amber-100 text-amber-900' : 'bg-blue-50 border-blue-100 text-blue-900') }}">
+                        <div class="p-4 rounded-xl border flex gap-4 items-center transition {{ $announcement->type === 'danger' ? 'bg-red-50 border-red-100 text-red-900 dark:bg-red-900/20 dark:border-red-800/50 dark:text-red-300' : ($announcement->type === 'warning' ? 'bg-amber-50 border-amber-100 text-amber-900 dark:bg-amber-900/20 dark:border-amber-800/50 dark:text-amber-300' : 'bg-blue-50 border-blue-100 text-blue-900 dark:bg-blue-900/20 dark:border-blue-800/50 dark:text-blue-300') }}">
                             <div class="shrink-0">
                                 @if($announcement->type === 'danger')
-                                    <div class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center">
+                                    <div class="w-8 h-8 bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                     </div>
                                 @else
-                                    <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
+                                    <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     </div>
                                 @endif
@@ -96,15 +220,15 @@
             
             <!-- Submit Form -->
             <div class="lg:col-span-8 space-y-8" id="submit">
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="p-8 border-b border-slate-100 bg-slate-50/30">
-                        <h2 class="text-2xl font-bold tracking-tight text-slate-800">Destek Talebi Oluştur</h2>
-                        <p class="text-slate-500 mt-1">Hızlı çözüm için lütfen tüm alanları eksiksiz doldurun.</p>
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                    <div class="p-8 border-b border-slate-100 dark:border-slate-700 bg-slate-50/30 dark:bg-slate-900/20">
+                        <h2 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-white">Destek Talebi Oluştur</h2>
+                        <p class="text-slate-500 dark:text-slate-400 mt-1">Hızlı çözüm için lütfen tüm alanları eksiksiz doldurun.</p>
                     </div>
                     
                     @if(session('success'))
-                        <div class="m-8 p-5 bg-emerald-50 border border-green-100 text-emerald-900 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-                            <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shrink-0">
+                        <div class="m-8 p-5 bg-emerald-50 dark:bg-emerald-900/20 border border-green-100 dark:border-green-800/50 text-emerald-900 dark:text-emerald-300 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                            <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             </div>
                             <div class="font-medium text-sm leading-relaxed">
@@ -114,8 +238,8 @@
                     @endif
 
                     @if($errors->has('error'))
-                        <div class="m-8 p-5 bg-red-50 border border-red-100 text-red-900 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-                            <div class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center shrink-0">
+                        <div class="m-8 p-5 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/50 text-red-900 dark:text-red-300 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                            <div class="w-10 h-10 bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </div>
                             <div class="font-medium text-sm leading-relaxed">
@@ -128,22 +252,22 @@
                         @csrf
                         <div class="grid md:grid-cols-3 gap-6">
                             <div class="space-y-2">
-                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Adınız Soyadınız</label>
-                                <input type="text" name="name" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Örn: Dr. Ahmet Yılmaz">
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Adınız Soyadınız</label>
+                                <input type="text" name="name" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dr. Ahmet Yılmaz">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Bölüm / Oda No</label>
-                                <input type="text" name="department_room" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Örn: Dahiliye - Kat 2">
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Bölüm / Oda No</label>
+                                <input type="text" name="department_room" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dahiliye - Kat 2">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Dahili No / Tel</label>
-                                <input type="text" name="phone_number" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Örn: 4455">
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Dahili No / Tel</label>
+                                <input type="text" name="phone_number" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 4455">
                             </div>
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Kategori</label>
-                            <select name="category_id" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50 appearance-none">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Kategori</label>
+                            <select name="category_id" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white appearance-none">
                                 <option value="">Bir kategori seçin...</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -152,21 +276,21 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Konu Başlığı</label>
-                            <input type="text" name="subject" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Kısaca sorununuz nedir?">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Konu Başlığı</label>
+                            <input type="text" name="subject" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Kısaca sorununuz nedir?">
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Detaylı Açıklama</label>
-                            <textarea name="description" rows="5" required class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-50 focus:border-blue-500 outline-none transition bg-slate-50/50" placeholder="Hata mesajı, cihaz markası vb. detayları belirtin..."></textarea>
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Detaylı Açıklama</label>
+                            <textarea name="description" rows="5" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Hata mesajı, cihaz markası vb. detayları belirtin..."></textarea>
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Ekler (İsteğe Bağlı)</label>
-                            <div x-data="{ files: [] }" class="relative border-2 border-dashed border-slate-200 rounded-xl p-4 hover:border-blue-400 transition bg-slate-50/50 text-center cursor-pointer group" @click="$refs.fileInput.click()">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Ekler (İsteğe Bağlı)</label>
+                            <div x-data="{ files: [] }" class="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition bg-slate-50/50 dark:bg-slate-900/50 text-center cursor-pointer group" @click="$refs.fileInput.click()">
                                 <input x-ref="fileInput" type="file" name="attachments[]" multiple class="hidden" @change="files = Array.from($event.target.files)">
                                 
-                                <div x-show="files.length === 0" class="flex flex-col items-center gap-2 text-slate-500 group-hover:text-blue-500 transition">
+                                <div x-show="files.length === 0" class="flex flex-col items-center gap-2 text-slate-500 dark:text-slate-400 group-hover:text-blue-500 transition">
                                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                                     <span class="text-sm font-medium">Dosyaları buraya sürükleyin veya seçin</span>
                                     <span class="text-xs text-slate-400 group-hover:text-blue-400">(Max 5MB / Resim, PDF, Log)</span>
@@ -174,7 +298,7 @@
 
                                 <div x-show="files.length > 0" class="space-y-1" style="display: none;">
                                     <template x-for="file in files">
-                                        <div class="flex items-center gap-2 text-sm text-slate-700 bg-white p-2 rounded-lg border border-slate-100">
+                                        <div class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 p-2 rounded-lg border border-slate-100 dark:border-slate-700">
                                             <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                             <span x-text="file.name" class="truncate"></span>
                                             <span x-text="'(' + (file.size / 1024).toFixed(0) + ' KB)'" class="text-xs text-slate-400 ml-auto shrink-0"></span>
@@ -184,7 +308,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 rounded-xl transition shadow-xl shadow-blue-100 flex items-center justify-center gap-3">
+                        <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 rounded-xl transition shadow-xl shadow-blue-100 dark:shadow-none flex items-center justify-center gap-3">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                             Talebi Gönder
                         </button>
@@ -197,19 +321,19 @@
                 
                 <!-- Knowledge Base Card -->
                 @if($popularArticles->count() > 0)
-                    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
-                        <h3 class="font-bold text-slate-800 mb-4 flex items-center justify-between">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-300">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center justify-between">
                             <span class="flex items-center gap-2 text-sm uppercase tracking-wider">
-                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                                 Hızlı Çözümler
                             </span>
-                            <a href="{{ route('kb.index') }}" class="text-[10px] text-blue-600 font-bold hover:underline">TÜMÜ</a>
+                            <a href="{{ route('kb.index') }}" class="text-[10px] text-blue-600 dark:text-blue-400 font-bold hover:underline">TÜMÜ</a>
                         </h3>
                         <div class="space-y-4">
                             @foreach($popularArticles as $article)
                                 <a href="{{ route('kb.show', $article->slug) }}" class="block group">
-                                    <h4 class="text-sm font-semibold text-slate-700 group-hover:text-blue-700 transition line-clamp-1">{{ $article->title }}</h4>
-                                    <p class="text-[11px] text-slate-400 mt-1">{{ $article->category->name }} • {{ $article->views }} Okunma</p>
+                                    <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition line-clamp-1">{{ $article->title }}</h4>
+                                    <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">{{ $article->category->name }} • {{ $article->views }} Okunma</p>
                                 </a>
                             @endforeach
                         </div>
@@ -217,7 +341,7 @@
                 @endif
 
                 <!-- Track Card -->
-                <div class="bg-slate-900 text-white rounded-2xl p-8 shadow-2xl relative overflow-hidden group" id="track">
+                <div class="bg-slate-900 dark:bg-slate-950 text-white rounded-2xl p-8 shadow-2xl relative overflow-hidden group" id="track">
                     <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition"></div>
                     
                     <h2 class="text-xl font-bold mb-2">Talep Sorgula</h2>
@@ -225,7 +349,7 @@
                     
                     <form action="{{ route('tickets.show') }}" method="GET" class="space-y-4">
                         <div class="relative">
-                            <input type="text" name="tracking_number" required class="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="BT-2025-XXXXXX">
+                            <input type="text" name="tracking_number" required class="w-full px-4 py-3 bg-slate-800/50 dark:bg-slate-900/50 border border-slate-700 dark:border-slate-800 rounded-xl text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="BT-2025-XXXXXX">
                         </div>
                         <button type="submit" class="w-full bg-white text-slate-900 font-bold py-3 rounded-xl hover:bg-blue-50 transition flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -239,23 +363,23 @@
                 </div>
 
                 <!-- Info Card -->
-                <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
-                    <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
-                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-300">
+                    <h3 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Önemli Hatırlatmalar
                     </h3>
                     <ul class="space-y-4">
                         @if($settings->important_reminders)
                             @foreach($settings->important_reminders as $reminder)
                                 <li class="flex gap-3">
-                                    <div class="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1.5 shrink-0"></div>
-                                    <p class="text-xs text-slate-600 leading-relaxed">{!! $reminder['text'] !!}</p>
+                                    <div class="w-1.5 h-1.5 bg-blue-600 dark:bg-blue-400 rounded-full mt-1.5 shrink-0"></div>
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{!! $reminder['text'] !!}</p>
                                 </li>
                             @endforeach
                         @else
                             <li class="flex gap-3">
-                                <div class="w-1.5 h-1.5 bg-blue-600 rounded-full mt-1.5 shrink-0"></div>
-                                <p class="text-xs text-slate-600 leading-relaxed">Şu an bir hatırlatma bulunmuyor.</p>
+                                <div class="w-1.5 h-1.5 bg-blue-600 dark:bg-blue-400 rounded-full mt-1.5 shrink-0"></div>
+                                <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Şu an bir hatırlatma bulunmuyor.</p>
                             </li>
                         @endif
                     </ul>
