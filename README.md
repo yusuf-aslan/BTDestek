@@ -1,60 +1,117 @@
-# 🏥 TOTM BT Destek Sistemi
+# 🏥 Hastane BT Destek Sistemi (Hospital IT Support)
 
-Modern, hızlı ve kullanıcı dostu bir hastane Bilgi İşlem (BT) talep yönetim ve iletişim portalı.
+Modern, hızlı ve kullanıcı dostu bir hastane Bilgi İşlem (BT) talep yönetim, varlık takip ve raporlama platformu.
 
-Bu platform, personel ile Bilgi İşlem birimi arasındaki iletişimi dijitalleştirerek, arıza ve destek süreçlerini hızlandırmak, dokümante etmek ve raporlamak amacıyla geliştirilmiştir.
+Bu proje, hastane personelinin BT birimine sorunlarını en hızlı şekilde iletmesini sağlamak, BT teknisyenlerinin iş yükünü organize etmek ve kurum envanterini (bilgisayar, yazıcı vb.) dijital ortamda yönetmek amacıyla **Laravel 12** ve **Filament** kullanılarak geliştirilmiştir.
+
+![Dashboard Preview](https://raw.githubusercontent.com/yusuf-aslan/BTDestek/master/public/images/dashboard-preview.png)
+*(Görsel temsilidir)*
 
 ---
 
 ## 🚀 Öne Çıkan Özellikler
 
-### 🖱️ Kullanıcı Portalı (Önyüz)
-*   **Hızlı Destek Talebi:** Minimalist form yapısıyla saniyeler içinde talep oluşturma.
-*   **Dosya Eki Desteği:** Taleplere ekran görüntüsü, log veya belge ekleyebilme.
-*   **Modern Talep Sorgulama:** Sayfa yenilenmeden, şık bir pop-up (modal) üzerinden anlık durum takibi.
-*   **Akıllı Duyurular:** Önemli gelişmeleri ana sayfada ve özel modal pencerelerde görme. "Okudum" işaretlenen duyuruların tekrar rahatsız etmemesi.
-*   **Bilgi Bankası (Knowledge Base):** Sıkça sorulan sorular ve çözüm rehberleri için kategori bazlı makale sistemi.
-*   **Dinamik Menü:** Admin panelinden yönetilebilen, alt menü (dropdown) destekli navigasyon yapısı.
-*   **Görünüm Seçenekleri:** Kullanıcı tercihine göre Gece (Dark) veya Gündüz (Light) modu.
+### 1. 🖱️ Personel Arayüzü (Public Portal)
+Kullanıcı girişi gerektirmeyen, herkesin erişebileceği hızlı işlem merkezi.
+*   **Hızlı Talep Oluşturma:** Ad, Bölüm, Kategori ve Açıklama ile saniyeler içinde arıza bildirimi.
+*   **Akıllı Doğrulama:** IP adresinden otomatik **Hostname (Bilgisayar Adı)** tespiti.
+*   **Talep Sorgulama:** Takip numarası (Örn: `#BT-2026-X8Y2`) ile anlık durum sorgulama (Bekliyor, İşlemde, Çözüldü).
+*   **Duyuru Sistemi:** Kritik sistem kesintileri veya bilgilendirmeler için pop-up ve banner duyurular.
+*   **Bilgi Bankası (KB):** Sık yaşanan sorunlar için resimli çözüm rehberleri (Self-Service).
+*   **Dosya Yükleme:** Arıza ile ilgili ekran görüntüsü veya hata loglarını güvenli şekilde ekleme.
 
-### 🛠️ Yönetim Paneli (Admin)
-*   **Gerçek Zamanlı Takip:** Yeni bir talep düştüğünde sekme başlığında, yan menüde ve ekran bildirimlerinde anlık uyarı.
-*   **Gelişmiş Filtreleme:** Talepleri durum (Bekleyen, Çözülen, İptal), kategori, öncelik ve tarih aralığına göre süzebilme.
-*   **Modül & Kategori Bazlı Yetki:** Personellere sadece belirli kategorileri veya modülleri (Duyurular, Ayarlar vb.) görme yetkisi tanımlama.
-*   **Ortam Kütüphanesi:** Yüklenen tüm dosyaların merkezi yönetimi, önizlemesi ve indirilmesi.
-*   **Hazır Cevaplar (Canned Responses):** Sık kullanılan çözüm metinlerini şablon olarak kaydedip taleplere tek tıkla uygulama.
-*   **Mesai Saatleri Yönetimi:** Mesai saati dışı veya hafta sonu talep alımını kısıtlayabilme.
+### 2. 🛠️ Yönetim Paneli (Admin & Teknisyen)
+BT personelinin tüm süreci yönettiği güvenli alan.
+*   **Dashboard & İstatistikler:** Anlık bekleyen talep sayıları, günlük yoğunluk grafikleri.
+*   **Gelişmiş Raporlama:** 
+    *   Hangi departmandan daha çok arıza geliyor? (Isı Haritası)
+    *   En çok hangi kategori (Yazıcı, Ağ, HBYS) sorun çıkarıyor?
+    *   Son 30 günlük talep trend analizi.
+    *   Tüm raporları **Excel** formatında dışa aktarma.
+*   **İş Emri Çıktısı (Yazdırılabilir Form):** Tamamlanan işler için üzerinde teknisyen ve personel imza alanları bulunan, kurumsal **PDF formatında İş Emri** oluşturma.
+*   **Rol ve Yetki Yönetimi:** Admin ve Teknisyen ayrımı. Kategori bazlı yetkilendirme (Örn: Yazılım ekibi sadece Yazılım taleplerini görsün).
 
----
+### 3. 📦 Varlık Yönetimi (ITAM)
+Kurumdaki donanımların yaşam döngüsü takibi.
+*   **Envanter Takibi:** Bilgisayar, Yazıcı, Monitör vb. cihazların kaydı.
+*   **Detaylı Özellikler:** RAM, Disk, Model gibi teknik özelliklerin (JSON tabanlı esnek yapı) tutulması.
+*   **Zimmet Takibi:** Cihazın hangi personelde veya hangi odada olduğunun takibi.
+*   **Arıza Geçmişi:** Bir cihazın (Varlığın) detayına girildiğinde, o cihaza ait geçmişte açılmış tüm arıza kayıtlarının listelenmesi.
+*   **Excel Import:** Mevcut envanter listelerinin toplu olarak içeri aktarılması.
 
-## 🛠️ Teknik Altyapı
-
-*   **Framework:** Laravel 12 (PHP 8.2+)
-*   **Admin Panel:** Filament 4 (Modern, PHP-Native yapı)
-*   **Reaktif Bileşenler:** Livewire 3 & Alpine.js
-*   **Tasarım:** Tailwind CSS
-*   **Veritabanı:** MySQL / PostgreSQL / SQLite desteği
-*   **Önbellekleme:** Performans için Cache entegrasyonu (Menüler ve Ayarlar için)
-
----
-
-## 📦 Kurulum
-
-1. Depoyu klonlayın: `git clone <repo-url>`
-2. Bağımlılıkları yükleyin: `composer install` ve `npm install`
-3. Çevre değişkenlerini ayarlayın: `.env.example` dosyasını `.env` olarak kopyalayın.
-4. Veritabanını oluşturun ve migrationları çalıştırın: `php artisan migrate`
-5. Depolama linkini oluşturun: `php artisan storage:link`
-6. Uygulamayı ayağa kaldırın: `php artisan serve`
+### 4. 🔔 Bildirim ve Ayarlar
+*   **E-Posta Bildirimleri:** Talep oluşturulduğunda, durumu değiştiğinde veya çözüldüğünde otomatik E-Posta gönderimi.
+*   **SMTP Ayarları:** Kod dosyasına dokunmadan, yönetim panelinden SMTP sunucu bilgilerini (Host, Port, User, Pass) güncelleyebilme.
+*   **Mesai Yönetimi:** Mesai saatleri dışında veya hafta sonlarında talep açılmasını engelleme opsiyonu.
+*   **Site Ayarları:** Logo, Başlık, Favicon ve Önemli Hatırlatmalar metinlerinin panelden yönetimi.
 
 ---
 
-## 📅 Güncel Durum (Son Güncellemeler)
-*   **[BUGÜN]** Dinamik menü yönetim sistemi eklendi.
-*   **[BUGÜN]** Ortam kütüphanesi ve merkezi dosya yönetimi kuruldu.
-*   **[BUGÜN]** Gerçek zamanlı bildirim ve canlı talep sayacı entegre edildi.
-*   **[DÜN]** Kategori bazlı erişim kontrolü ve mesai saatleri kısıtlaması getirildi.
-*   **[DÜN]** Bilgi Bankası (Knowledge Base) modülü tamamlandı.
+## 🛠️ Teknik Altyapı (Tech Stack)
+
+*   **Backend:** Laravel 12 (PHP 8.2+)
+*   **Admin Panel:** FilamentPHP (TALL Stack)
+*   **Frontend:** Blade, Livewire 3, Alpine.js, Tailwind CSS
+*   **Veritabanı:** MySQL / MariaDB (SQLite destekli)
+*   **Kuyruk Sistemi:** Database Queue (Asenkron işlemler ve Mail gönderimi için)
+*   **PDF Motoru:** CSS tabanlı print view (Native tarayıcı desteği ile)
 
 ---
-*Bu proje sürekli geliştirilmekte olup, gün sonlarında README dosyası güncellenmektedir.*
+
+## ⚙️ Kurulum (Installation)
+
+Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin:
+
+1.  **Depoyu Klonlayın:**
+    ```bash
+    git clone https://github.com/yusuf-aslan/BTDestek.git
+    cd BTDestek
+    ```
+
+2.  **Bağımlılıkları Yükleyin:**
+    ```bash
+    composer install
+    npm install
+    ```
+
+3.  **Çevre Ayarlarını Yapılandırın:**
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+    *.env dosyasındaki veritabanı ayarlarını yapmayı unutmayın.*
+
+4.  **Veritabanını Hazırlayın:**
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+    *(Bu komut veritabanını oluşturur ve varsayılan Admin kullanıcısını ekler)*
+
+5.  **Depolama Bağlantısını Kurun:**
+    ```bash
+    php artisan storage:link
+    ```
+
+6.  **Uygulamayı Başlatın:**
+    ```bash
+    npm run build
+    php artisan serve
+    ```
+
+7.  **Giriş Bilgileri:**
+    *   **Admin Paneli:** `/admin`
+    *   **E-Posta:** `admin@btdestek.com`
+    *   **Şifre:** `password`
+
+---
+
+## 🔄 Geliştirme Süreci (Changelog)
+
+*   **v1.5 - Raporlama & Çıktı:** Gelişmiş grafiksel raporlar ve PDF iş emri çıktısı eklendi.
+*   **v1.4 - Varlık Yönetimi:** ITAM modülü, cihaz takibi ve talep ilişkilendirme.
+*   **v1.3 - Bildirimler:** SMTP entegrasyonu ve otomatik e-posta bildirimleri.
+*   **v1.2 - Panel Ayarları:** Veritabanı tabanlı genel ayarlar ve SMTP konfigürasyonu.
+*   **v1.0 - Çekirdek:** Talep toplama, KB ve Admin paneli.
+
+---
+**Lisans:** MIT License
