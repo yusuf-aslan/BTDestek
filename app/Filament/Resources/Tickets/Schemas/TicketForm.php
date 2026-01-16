@@ -27,6 +27,10 @@ class TicketForm
                         TextInput::make('name')
                             ->label('Ad Soyad')
                             ->disabled(),
+                        TextInput::make('email')
+                            ->label('E-posta')
+                            ->email()
+                            ->disabled(),
                         TextInput::make('department_room')
                             ->label('Bölüm / Oda')
                             ->disabled(),
@@ -39,8 +43,18 @@ class TicketForm
                             ->searchable()
                             ->preload()
                             ->required(),
+                        Select::make('asset_id')
+                            ->label('İlgili Varlık / Cihaz')
+                            ->relationship('asset', 'name')
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} ({$record->asset_tag})")
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Varlık Seçiniz (Opsiyonel)'),
                         TextInput::make('ip_address')
                             ->label('IP Adresi')
+                            ->disabled(),
+                        TextInput::make('computer_name')
+                            ->label('Bilgisayar Adı')
                             ->disabled(),
                         TextInput::make('subject')
                             ->label('Konu')

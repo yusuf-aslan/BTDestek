@@ -21,3 +21,9 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## [x] Track: Feature: Knowledge Base
 *Link: [./conductor/tracks/feature_knowledge_base_20251231/](./conductor/tracks/feature_knowledge_base_20251231/)*
+
+## [x] Track: Feature: Asset Management (Varlık Yönetimi)
+*Link: [./conductor/tracks/feature_asset_management_20260114/](./conductor/tracks/feature_asset_management_20260114/)*
+
+## [x] Track: Feature: Notifications
+*Link: [./conductor/tracks/feature_notifications_20260116/](./conductor/tracks/feature_notifications_20260116/)*

@@ -12,9 +12,11 @@ class Ticket extends Model
     protected $fillable = [
         'tracking_number',
         'name',
+        'email',
         'department_room',
         'phone_number',
         'category_id',
+        'asset_id',
         'subject',
         'description',
         'status',
@@ -30,6 +32,11 @@ class Ticket extends Model
         return [
             'resolved_at' => 'datetime',
         ];
+    }
+
+    public function asset(): BelongsTo
+    {
+        return $this->belongsTo(Asset::class);
     }
 
     public function category(): BelongsTo

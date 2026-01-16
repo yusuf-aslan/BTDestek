@@ -26,9 +26,19 @@ class TicketsTable
                     ->label('Konu')
                     ->searchable()
                     ->limit(30),
+                TextColumn::make('email')
+                    ->label('E-posta')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('category.name')
                     ->label('Kategori')
                     ->sortable(),
+                TextColumn::make('asset.name')
+                    ->label('Varlık')
+                    ->searchable()
+                    ->placeholder('-')
+                    ->limit(20)
+                    ->toggleable(),
                 TextColumn::make('phone_number')
                     ->label('Dahili')
                     ->searchable(),

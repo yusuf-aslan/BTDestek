@@ -16,6 +16,14 @@ class GeneralSetting extends Model
         'allow_tickets_outside_work_hours',
         'weekend_tickets_allowed',
         'is_dark_mode_enabled',
+        'mail_mailer',
+        'mail_host',
+        'mail_port',
+        'mail_username',
+        'mail_password',
+        'mail_encryption',
+        'mail_from_address',
+        'mail_from_name',
     ];
 
     protected $casts = [
