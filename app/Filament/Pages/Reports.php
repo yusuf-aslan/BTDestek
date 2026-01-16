@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Filament\Widgets\TicketStatsOverview;
 use App\Filament\Pages\Reports\Widgets\TicketsChart;
 use App\Filament\Pages\Reports\Widgets\TicketsPerCategoryChart;
+use App\Filament\Pages\Reports\Widgets\TicketsPerDepartmentChart;
 use Filament\Pages\Page;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -40,6 +41,9 @@ class Reports extends Page implements HasTable
     {
         return [
             TicketStatsOverview::class,
+            TicketsChart::class,
+            TicketsPerCategoryChart::class,
+            TicketsPerDepartmentChart::class,
         ];
     }
 

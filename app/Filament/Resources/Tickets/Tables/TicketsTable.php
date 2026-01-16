@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Tickets\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -116,6 +117,12 @@ class TicketsTable
             ])
             ->recordActions([
                 EditAction::make(),
+                Action::make('print')
+                    ->label('Yazdır')
+                    ->icon('heroicon-o-printer')
+                    ->color('gray')
+                    ->url(fn ($record) => route('admin.tickets.print', $record))
+                    ->openUrlInNewTab(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

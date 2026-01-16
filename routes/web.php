@@ -13,3 +13,7 @@ Route::get('/bilgi-bankasi/{slug}', [\App\Http\Controllers\ArticleController::cl
 Route::get('/tickets/attachments/{attachment}', [\App\Http\Controllers\TicketAttachmentController::class, 'download'])
     ->name('tickets.attachments.download')
     ->middleware('auth');
+
+Route::get('/admin/tickets/{ticket}/print', [\App\Http\Controllers\Admin\TicketPrintController::class, 'show'])
+    ->name('admin.tickets.print')
+    ->middleware('auth');
