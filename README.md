@@ -4,8 +4,9 @@ Modern, hızlı ve kullanıcı dostu bir hastane Bilgi İşlem (BT) talep yönet
 
 Bu proje, hastane personelinin BT birimine sorunlarını en hızlı şekilde iletmesini sağlamak, BT teknisyenlerinin iş yükünü organize etmek ve kurum envanterini (bilgisayar, yazıcı vb.) dijital ortamda yönetmek amacıyla **Laravel 12** ve **Filament** kullanılarak geliştirilmiştir.
 
-![Dashboard Preview](https://raw.githubusercontent.com/yusuf-aslan/BTDestek/master/public/images/dashboard-preview.png)
-*(Görsel temsilidir)*
+![Yönetim Paneli](gorsel.jpg)
+
+![Personel Arayüzü](ongorsel.jpg)
 
 ---
 

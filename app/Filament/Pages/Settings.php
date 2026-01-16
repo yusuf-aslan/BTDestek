@@ -144,17 +144,14 @@ class Settings extends Page implements HasForms
                                 Section::make('SMTP Sunucu Ayarları')
                                     ->description('Sistem bildirimlerinin gönderileceği sunucu ayarları.')
                                     ->schema([
-                                        TextInput::make('mail_host')
-                                            ->label('SMTP Sunucusu')
-                                            ->placeholder('smtp.example.com')
-                                            ->required(),
-                                        
-                                        TextInput::make('mail_port')
-                                            ->label('SMTP Port')
-                                            ->placeholder('587')
-                                            ->numeric()
-                                            ->required(),
-
+                                                                TextInput::make('mail_host')
+                                                                    ->label('SMTP Sunucusu')
+                                                                    ->placeholder('smtp.example.com'),
+                                                                
+                                                                TextInput::make('mail_port')
+                                                                    ->label('SMTP Port')
+                                                                    ->placeholder('587')
+                                                                    ->numeric(),
                                         TextInput::make('mail_username')
                                             ->label('Kullanıcı Adı')
                                             ->placeholder('user@example.com'),
