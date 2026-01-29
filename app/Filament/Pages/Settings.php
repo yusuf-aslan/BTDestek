@@ -200,6 +200,8 @@ class Settings extends Page implements HasForms
         
         GeneralSetting::first()->update($data);
 
+        \Illuminate\Support\Facades\Cache::forget('general_settings');
+
         Notification::make()
             ->success()
             ->title('Ayarlar kaydedildi.')
