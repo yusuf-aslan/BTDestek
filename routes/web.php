@@ -7,6 +7,8 @@ Route::get('/', [TicketController::class, 'index'])->name('home');
 Route::post('/talep-olustur', [TicketController::class, 'store'])->name('tickets.store');
 Route::get('/talep-sorgula', [TicketController::class, 'show'])->name('tickets.show');
 
+Route::get('/talep/{ticket}/yazdir', [\App\Http\Controllers\PublicTicketPrintController::class, 'show'])->name('public.tickets.print');
+
 Route::get('/bilgi-bankasi', [\App\Http\Controllers\ArticleController::class, 'index'])->name('kb.index');
 Route::get('/bilgi-bankasi/{slug}', [\App\Http\Controllers\ArticleController::class, 'show'])->name('kb.show');
 

@@ -226,13 +226,33 @@
                         <p class="text-slate-500 dark:text-slate-400 mt-1">Hızlı çözüm için lütfen tüm alanları eksiksiz doldurun.</p>
                     </div>
                     
-                    @if(session('success'))
-                        <div class="m-8 p-5 bg-emerald-50 dark:bg-emerald-900/20 border border-green-100 dark:border-green-800/50 text-emerald-900 dark:text-emerald-300 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-                            <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center shrink-0">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            </div>
-                            <div class="font-medium text-sm leading-relaxed">
-                                {{ session('success') }}
+                    @if(session('success_data'))
+                        @php $successData = session('success_data'); @endphp
+                        <div class="m-8 p-6 bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-100 dark:border-emerald-800/50 text-emerald-900 dark:text-emerald-300 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-500">
+                            <div class="flex items-start gap-5">
+                                <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center shrink-0 mt-1">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-emerald-800 dark:text-emerald-200 mb-1">Talebiniz Alındı!</h4>
+                                    <p class="font-medium text-sm text-emerald-700 dark:text-emerald-300/90 leading-relaxed mb-3">
+                                        {{ $successData['message'] }}
+                                    </p>
+                                    <div class="mb-4">
+                                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400/80 uppercase tracking-wider">Talep Numaranız</span>
+                                        <p class="text-2xl font-extrabold text-emerald-800 dark:text-white tracking-wider bg-emerald-100 dark:bg-emerald-900/50 px-4 py-2 rounded-lg inline-block ml-2">{{ $successData['tracking_number'] }}</p>
+                                    </div>
+                                    <div class="flex items-center gap-3 mt-5">
+                                        <a href="{{ route('public.tickets.print', ['ticket' => $successData['ticket_id'], 'action' => 'print']) }}" target="_blank" class="flex items-center justify-center gap-2 bg-emerald-600/90 hover:bg-emerald-600 text-white font-bold py-2 px-5 rounded-lg transition text-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                                            Yazdır
+                                        </a>
+                                        <a href="{{ route('public.tickets.print', ['ticket' => $successData['ticket_id'], 'action' => 'pdf']) }}" target="_blank" class="flex items-center justify-center gap-2 bg-white/80 dark:bg-emerald-900/50 hover:bg-white dark:hover:bg-emerald-900 text-emerald-800 dark:text-white font-bold py-2 px-5 rounded-lg transition text-sm border border-emerald-200 dark:border-emerald-800">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                            PDF İndir
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -255,10 +275,12 @@
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Adınız Soyadınız</label>
                                 <input type="text" name="name" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dr. Ahmet Yılmaz">
                             </div>
+                            @if($settings->show_email_on_ticket_form)
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">E-posta (İsteğe Bağlı)</label>
                                 <input type="email" name="email" class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="bildirim@ornek.com">
                             </div>
+                            @endif
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Bölüm / Oda No</label>
                                 <input type="text" name="department_room" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dahiliye - Kat 2">

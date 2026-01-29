@@ -86,6 +86,10 @@ class Settings extends Page implements HasForms
                                             ->label('Gece/Gündüz Modu')
                                             ->helperText('Açık ise kullanıcılar sağ üst köşeden karanlık moda geçiş yapabilir.')
                                             ->default(true),
+                                        Toggle::make('show_email_on_ticket_form')
+                                            ->label('Talep Formunda E-posta Alanını Göster')
+                                            ->helperText('Açık ise talep oluşturma formunda e-posta alanı gösterilir.')
+                                            ->default(false),
                                     ]),
                             ]),
 

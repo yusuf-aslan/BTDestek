@@ -19,8 +19,9 @@ class TicketController extends Controller
             ->orderBy('views', 'desc')
             ->take(3)
             ->get();
+        $settings = \Illuminate\Support\Facades\Cache::get('general_settings', \App\Models\GeneralSetting::first());
         
-        return view('welcome', compact('announcements', 'categories', 'popularArticles'));
+        return view('welcome', compact('announcements', 'categories', 'popularArticles', 'settings'));
     }
 
     public function store(Request $request)
@@ -88,7 +89,11 @@ class TicketController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', "Talebiniz alındı. Takip Numaranız: {$ticket->tracking_number}");
+        return redirect()->back()->with('success_data', [
+            'message' => 'Talebiniz başarıyla alındı. Talep numaranızı ve aşağıdaki yazdırma seçeneğini kullanarak talebinizin bir kopyasını saklamanızı öneririz.',
+            'tracking_number' => $ticket->tracking_number,
+            'ticket_id' => $ticket->id,
+        ]);
     }
 
     public function show(Request $request)
