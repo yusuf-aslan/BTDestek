@@ -18,8 +18,9 @@ class TicketController extends Controller
             ->where('published_at', '<=', now())
             ->orderBy('views', 'desc')
             ->take(3)
-            ->get();
-        $settings = \Illuminate\Support\Facades\Cache::get('general_settings', \App\Models\GeneralSetting::first());
+$settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
+            return \App\Models\GeneralSetting::first();
+        });
         
         return view('welcome', compact('announcements', 'categories', 'popularArticles', 'settings'));
     }
@@ -27,7 +28,9 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         // Working Hours Check
-        $settings = \Illuminate\Support\Facades\Cache::get('general_settings', \App\Models\GeneralSetting::first());
+        $settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
+            return \App\Models\GeneralSetting::first();
+        });
         
         if ($settings) {
             $now = now();
