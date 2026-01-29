@@ -18,7 +18,9 @@ class TicketController extends Controller
             ->where('published_at', '<=', now())
             ->orderBy('views', 'desc')
             ->take(3)
-$settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
+            ->get();
+
+        $settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
             return \App\Models\GeneralSetting::first();
         });
         
