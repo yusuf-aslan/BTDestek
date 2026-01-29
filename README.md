@@ -108,6 +108,12 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.6 - Kullanıcı Deneyimi & Çıktı Geliştirmeleri:**
+    *   **PHP 8.4 Desteği:** Proje altyapısı PHP 8.4'e güncellendi.
+    *   **Opsiyonel E-posta Alanı:** Talep formundaki e-posta alanı artık panelden isteğe bağlı olarak gösterilip gizlenebiliyor.
+    *   **Talep Çıktısı & PDF:** Talep oluşturulduktan sonra kullanıcılar artık taleplerinin bir kopyasını yazdırabilir veya PDF olarak indirebilir.
+    *   **Terminoloji Güncellemesi:** Kullanıcı arayüzünde "Takip Numarası" ifadesi, daha anlaşılır olan "Talep Numarası" olarak değiştirildi.
+    *   **PDF Türkçe Karakter Desteği:** Oluşturulan PDF çıktılarındaki Türkçe karakter sorunu giderildi.
 *   **v1.5 - Raporlama & Çıktı:** Gelişmiş grafiksel raporlar ve PDF iş emri çıktısı eklendi.
 *   **v1.4 - Varlık Yönetimi:** ITAM modülü, cihaz takibi ve talep ilişkilendirme.
 *   **v1.3 - Bildirimler:** SMTP entegrasyonu ve otomatik e-posta bildirimleri.
