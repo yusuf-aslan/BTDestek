@@ -18,43 +18,38 @@ class AssetImporter extends Importer
             ImportColumn::make('name')
                 ->label('Cihaz Adı / PC No')
                 ->requiredMapping()
-                ->rules(['required', 'max:255']),
-
-            ImportColumn::make('asset_tag')
-                ->label('Demirbaş No / Envanter No')
-                ->rules(['max:255']),
+                ->rules(['required', 'max:255'])
+                ->guessMapping(['PC_NO', 'PCNO']),
 
             ImportColumn::make('department')
                 ->relationship(resolveUsing: 'name')
-                ->label('Bölüm / Ana Birim'),
+                ->label('Bölüm / Ana Birim')
+                ->guessMapping(['ANABIRIM']),
 
             ImportColumn::make('location')
                 ->label('Konum / Alt Birim')
-                ->rules(['max:255']),
+                ->rules(['max:255'])
+                ->guessMapping(['ALTBIRIM']),
 
             ImportColumn::make('model')
-                ->label('Marka / Model'),
+                ->label('Marka / Model')
+                ->guessMapping(['PC_MODEL']),
 
-            ImportColumn::make('serial_number')
-                ->label('Seri Numarası'),
-
-            // Virtual columns mapped to 'specs' via model mutators
             ImportColumn::make('ram')
-                ->label('RAM Kapasitesi'),
+                ->label('RAM Kapasitesi')
+                ->guessMapping(['RAM']),
 
             ImportColumn::make('monitor')
-                ->label('Monitör Modeli'),
+                ->label('Monitör Modeli')
+                ->guessMapping(['MONITOR']),
         ];
     }
 
     public function resolveRecord(): Asset
     {
-        // If 'asset_tag' is present in the import, try to find the record by it.
-        // Otherwise, create a new one.
-        
         if ($this->options['update_existing'] ?? false) {
              return Asset::firstOrNew([
-                 'asset_tag' => $this->data['asset_tag'],
+                 'name' => $this->data['name'],
              ]);
         }
 
