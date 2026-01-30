@@ -16,6 +16,7 @@ class GeneralSetting extends Model
         'allow_tickets_outside_work_hours',
         'weekend_tickets_allowed',
         'is_dark_mode_enabled',
+        'show_email_on_ticket_form',
         'mail_mailer',
         'mail_host',
         'mail_port',
