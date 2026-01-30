@@ -15,10 +15,10 @@ class ListDepartments extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            ImportAction::make()
+            \Filament\Actions\Imports\ImportAction::make()
                 ->label('Excel\'den İçe Aktar')
                 ->importer(DepartmentImporter::class),
-            CreateAction::make(),
+            \Filament\Actions\CreateAction::make(),
         ];
     }
 }
