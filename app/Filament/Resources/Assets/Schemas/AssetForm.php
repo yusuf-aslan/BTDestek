@@ -57,8 +57,6 @@ class AssetForm
                             ->required(),
                     ])->columns(2),
 
-                    ->collapsible(),
-
                 Section::make('Konum ve Sahiplik')
                     ->schema([
                         Select::make('location_id')
