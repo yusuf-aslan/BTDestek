@@ -19,9 +19,9 @@ class Asset extends Model
         'warranty_expires_at' => 'date',
     ];
 
-    public function department(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Location::class);
     }
 
     public function assignedUser(): BelongsTo

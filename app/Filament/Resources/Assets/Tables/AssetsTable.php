@@ -49,8 +49,12 @@ class AssetsTable
                         'broken' => 'danger',
                         default => 'gray',
                     }),
-                TextColumn::make('department.name')
-                    ->label('Bölüm')
+                TextColumn::make('location.anabirim')
+                    ->label('Ana Birim')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('location.altbirim')
+                    ->label('Alt Birim')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('assignedUser.name')
@@ -94,9 +98,9 @@ class AssetsTable
                         'broken' => 'Arızalı',
                         'retired' => 'Hurda',
                     ]),
-                SelectFilter::make('department')
-                    ->relationship('department', 'name')
-                    ->label('Bölüm')
+                SelectFilter::make('location')
+                    ->relationship('location', 'anabirim')
+                    ->label('Ana Birim')
                     ->searchable()
                     ->preload(),
                 TrashedFilter::make(),

@@ -3,6 +3,7 @@
 namespace App\Filament\Imports;
 
 use App\Models\Asset;
+use App\Models\Location;
 use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;
@@ -21,16 +22,6 @@ class AssetImporter extends Importer
                 ->rules(['required', 'max:255'])
                 ->guessMapping(['PC_NO', 'PCNO']),
 
-            ImportColumn::make('department')
-                ->relationship(resolveUsing: 'name')
-                ->label('Bölüm / Ana Birim')
-                ->guessMapping(['ANABIRIM']),
-
-            ImportColumn::make('location')
-                ->label('Konum / Alt Birim')
-                ->rules(['max:255'])
-                ->guessMapping(['ALTBIRIM']),
-
             ImportColumn::make('model')
                 ->label('Marka / Model')
                 ->guessMapping(['PC_MODEL']),
@@ -42,6 +33,15 @@ class AssetImporter extends Importer
             ImportColumn::make('monitor')
                 ->label('Monitör Modeli')
                 ->guessMapping(['MONITOR']),
+            
+            // Virtual columns to capture location data
+            ImportColumn::make('anabirim_raw')
+                ->label('Ana Birim (Konum)')
+                ->guessMapping(['ANABIRIM']),
+
+            ImportColumn::make('altbirim_raw')
+                ->label('Alt Birim (Konum)')
+                ->guessMapping(['ALTBIRIM']),
         ];
     }
 
@@ -54,6 +54,18 @@ class AssetImporter extends Importer
         }
 
         return new Asset();
+    }
+
+    public function afterSave(Asset $asset): void
+    {
+        if ($this->data['anabirim_raw']) {
+            $location = Location::firstOrCreate([
+                'anabirim' => $this->data['anabirim_raw'],
+                'altbirim' => $this->data['altbirim_raw'] ?? null,
+            ]);
+
+            $asset->location()->associate($location)->save();
+        }
     }
 
     public static function getCompletedNotificationBody(Import $import): string

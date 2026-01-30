@@ -57,11 +57,14 @@ class AssetForm
                             ->required(),
                     ])->columns(2),
 
+                    ->collapsible(),
+
                 Section::make('Konum ve Sahiplik')
                     ->schema([
-                        Select::make('department_id')
-                            ->relationship('department', 'name')
-                            ->label('Departman / Birim')
+                        Select::make('location_id')
+                            ->relationship('location', 'anabirim')
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->anabirim} / {$record->altbirim}")
+                            ->label('Bölüm / Birim')
                             ->searchable()
                             ->preload(),
                         Select::make('assigned_user_id')
@@ -69,11 +72,6 @@ class AssetForm
                             ->label('Zimmetli Personel')
                             ->searchable()
                             ->preload(),
-                        TextInput::make('location')
-                            ->label('Oda / Konum Detayı')
-                            ->placeholder('Örn: Zemin Kat, Oda 102')
-                            ->maxLength(255)
-                            ->columnSpanFull(),
                     ])->columns(2),
 
                 Section::make('Teknik Detaylar')
