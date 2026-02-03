@@ -108,6 +108,9 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.7 - İçe Aktarma & Arayüz İyileştirmeleri:**
+    *   **Veri Aktarım Düzeltmesi:** "Bölüm - Birim Yönetimi" için Excel/CSV dosyalarını içe aktarma özelliği onarıldı. Dosya tipi doğrulaması ve Türkçe karakter kodlama sorunları giderildi.
+    *   **Menü Yeniden Düzenlemesi:** "Varlık Yönetimi" ve "Bölüm - Birim Yönetimi" menüleri, daha tutarlı bir kullanıcı deneyimi için "Varlık Yönetimi" grubu altında birleştirildi.
 *   **v1.6 - Kullanıcı Deneyimi & Çıktı Geliştirmeleri:**
     *   **PHP 8.4 Desteği:** Proje altyapısı PHP 8.4'e güncellendi.
     *   **Opsiyonel E-posta Alanı:** Talep formundaki e-posta alanı artık panelden isteğe bağlı olarak gösterilip gizlenebiliyor.

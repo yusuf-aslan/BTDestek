@@ -19,11 +19,11 @@ class LocationImporter extends Importer
                 ->label('Ana Birim')
                 ->requiredMapping()
                 ->rules(['required', 'max:255'])
-                ->guessMapping(['ANABIRIM']),
+                ->guess(['ANABIRIM']),
             ImportColumn::make('altbirim')
                 ->label('Alt Birim')
                 ->rules(['max:255'])
-                ->guessMapping(['ALTBIRIM']),
+                ->guess(['ALTBIRIM']),
         ];
     }
 

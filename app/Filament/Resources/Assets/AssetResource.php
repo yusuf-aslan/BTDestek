@@ -24,8 +24,10 @@ class AssetResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Sistem Yönetimi';
+        return 'Varlık Yönetimi';
     }
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $modelLabel = 'Varlık';
     protected static ?string $pluralModelLabel = 'Varlıklar';
