@@ -20,52 +20,70 @@ class AssetImporter extends Importer
                 ->label('Cihaz Adı / PC No')
                 ->requiredMapping()
                 ->rules(['required', 'max:255'])
-                ->guessMapping(['PC_NO', 'PCNO']),
+                ->guess(['PC_NO', 'PCNO']),
 
             ImportColumn::make('model')
                 ->label('Marka / Model')
-                ->guessMapping(['PC_MODEL']),
+                ->guess(['PC_MODEL']),
 
             ImportColumn::make('ram')
                 ->label('RAM Kapasitesi')
-                ->guessMapping(['RAM']),
+                ->guess(['RAM']),
 
             ImportColumn::make('monitor')
                 ->label('Monitör Modeli')
-                ->guessMapping(['MONITOR']),
+                ->guess(['MONITOR']),
             
             // Virtual columns to capture location data
             ImportColumn::make('anabirim_raw')
                 ->label('Ana Birim (Konum)')
-                ->guessMapping(['ANABIRIM']),
+                ->guess(['ANABIRIM']),
 
             ImportColumn::make('altbirim_raw')
                 ->label('Alt Birim (Konum)')
-                ->guessMapping(['ALTBIRIM']),
+                ->guess(['ALTBIRIM']),
         ];
     }
 
-    public function resolveRecord(): Asset
+    public function resolveRecord(): ?Asset
     {
-        if ($this->options['update_existing'] ?? false) {
-             return Asset::firstOrNew([
-                 'name' => $this->data['name'],
-             ]);
-        }
-
-        return new Asset();
-    }
-
-    public function afterSave(Asset $asset): void
-    {
+        // Find or create the location first, if location data is provided.
+        $location = null;
         if ($this->data['anabirim_raw']) {
             $location = Location::firstOrCreate([
                 'anabirim' => $this->data['anabirim_raw'],
                 'altbirim' => $this->data['altbirim_raw'] ?? null,
             ]);
-
-            $asset->location()->associate($location)->save();
         }
+
+        // Find existing asset or create a new instance.
+        $asset = ($this->options['update_existing'] ?? false)
+            ? Asset::firstOrNew(['name' => $this->data['name']])
+            : new Asset();
+
+        // Fill the main asset data from the columns.
+        $asset->fill([
+            'name' => $this->data['name'],
+            'model' => $this->data['model'] ?? null,
+        ]);
+        
+        // Use mutators to handle specs data.
+        if (isset($this->data['ram'])) {
+            $asset->ram = $this->data['ram'];
+        }
+        if (isset($this->data['monitor'])) {
+            $asset->monitor = $this->data['monitor'];
+        }
+
+        // Associate the location if it exists.
+        if ($location) {
+            $asset->location()->associate($location);
+        }
+
+        // Save the record to the database.
+        $asset->save();
+
+        return $asset;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
