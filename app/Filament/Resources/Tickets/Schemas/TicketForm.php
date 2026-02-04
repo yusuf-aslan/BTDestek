@@ -46,7 +46,11 @@ class TicketForm
                         Select::make('asset_id')
                             ->label('İlgili Varlık / Cihaz')
                             ->relationship('asset', 'name')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} ({$record->asset_tag})")
+                            ->getOptionLabelFromRecordUsing(function ($record) {
+                                return $record->asset_tag
+                                    ? "{$record->name} ({$record->asset_tag})"
+                                    : $record->name;
+                            })
                             ->searchable()
                             ->preload()
                             ->placeholder('Varlık Seçiniz (Opsiyonel)'),
