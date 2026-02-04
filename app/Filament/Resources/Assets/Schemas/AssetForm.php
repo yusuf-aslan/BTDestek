@@ -26,7 +26,6 @@ class AssetForm
                         TextInput::make('asset_tag')
                             ->label('Demirbaş No')
                             ->unique(ignoreRecord: true)
-                            ->required()
                             ->maxLength(255),
                         TextInput::make('serial_number')
                             ->label('Seri Numarası')
