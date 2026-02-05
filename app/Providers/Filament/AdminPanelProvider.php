@@ -15,6 +15,7 @@ use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
+use Filament\Navigation\NavigationItem;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -47,6 +48,12 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 //
+            ])
+            ->navigationItems([
+                NavigationItem::make('Anasayfa')
+                    ->url('/')
+                    ->icon('heroicon-o-globe-alt')
+                    ->openUrlInNewTab(),
             ])
             ->middleware([
                 EncryptCookies::class,
