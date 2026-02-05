@@ -108,6 +108,9 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.8 - Varlık Sorgulama & Raporlama:**
+    *   **Varlık Sorgula (Asset Query):** "Varlık Yönetimi" altına, varlıkları "Ana Birim" ve "Model" bazlı filtreleyip listeleyebilen özel bir sorgulama sayfası eklendi.
+    *   **Yazdır / PDF:** Filtrelenen varlık listesinin, kurumsal formatta yazdırılabilmesi veya PDF olarak kaydedilebilmesi için raporlama özelliği eklendi.
 *   **v1.7 - İçe Aktarma & Arayüz İyileştirmeleri:**
     *   **Veri Aktarım Düzeltmesi:** "Bölüm - Birim Yönetimi" için Excel/CSV dosyalarını içe aktarma özelliği onarıldı. Dosya tipi doğrulaması ve Türkçe karakter kodlama sorunları giderildi.
     *   **Menü Yeniden Düzenlemesi:** "Varlık Yönetimi" ve "Bölüm - Birim Yönetimi" menüleri, daha tutarlı bir kullanıcı deneyimi için "Varlık Yönetimi" grubu altında birleştirildi.

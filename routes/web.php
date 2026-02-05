@@ -19,3 +19,7 @@ Route::get('/tickets/attachments/{attachment}', [\App\Http\Controllers\TicketAtt
 Route::get('/admin/tickets/{ticket}/print', [\App\Http\Controllers\Admin\TicketPrintController::class, 'show'])
     ->name('admin.tickets.print')
     ->middleware('auth');
+
+Route::get('/admin/varlik-sorgula/yazdir', [\App\Http\Controllers\Admin\AssetQueryPrintController::class, 'show'])
+    ->name('asset-query.print')
+    ->middleware('auth');

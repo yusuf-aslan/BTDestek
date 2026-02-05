@@ -189,7 +189,6 @@ class AssetQuery extends Page implements HasTable, HasForms
             ])
             ->defaultSort('name', 'asc')
             ->emptyStateHeading('Varlık Bulunamadı')
-            ->emptyStateDescription('Seçtiğiniz kriterlere uygun varlık bulunamadı. Lütfen filtreleme kriterlerinizi kontrol edin.')
-            ->emptyStateIcon('heroicon-o-magnifying-glass');
+            ->emptyStateDescription('Seçtiğiniz kriterlere uygun varlık bulunamadı. Lütfen filtreleme kriterlerinizi kontrol edin.');
     }
 }
