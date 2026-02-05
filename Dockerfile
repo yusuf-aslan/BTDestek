@@ -37,7 +37,7 @@ COPY --chown=www-data:www-data . /var/www
 RUN git config --global --add safe.directory /var/www
 
 # Install dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+RUN rm -rf vendor && COMPOSER_MEMORY_LIMIT=-1 composer install --no-interaction --optimize-autoloader --no-dev
 
 # Make entrypoint script executable
 RUN chmod +x /var/www/docker-entrypoint.sh
