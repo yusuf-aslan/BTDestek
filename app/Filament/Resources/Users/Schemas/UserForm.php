@@ -49,9 +49,16 @@ class UserForm
                             ->helperText('Admin olmayan kullanıcıların erişebileceği ek modüller.')
                             ->options([
                                 'announcements' => 'Duyurular',
+                                'announcement_templates' => 'Duyuru Şablonları',
                                 'articles' => 'Bilgi Bankası',
+                                'assets' => 'Varlık Yönetimi',
                                 'canned_responses' => 'Hazır Cevaplar',
+                                'categories' => 'Kategoriler',
+                                'departments' => 'Departmanlar',
+                                'locations' => 'Konumlar',
+                                'menus' => 'Menüler',
                                 'settings' => 'Site Ayarları',
+                                'tickets' => 'Talepler',
                                 'users' => 'Personel Yönetimi',
                             ])
                             ->columns(2)
