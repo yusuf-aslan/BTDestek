@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Varlık Sorgulama Raporu - {{ $anabirim }}</title>
+    <title>Envanter Sorgulama Raporu - {{ $anabirim }}</title>
     <style>
         * {
             margin: 0;
@@ -167,7 +167,7 @@
     <div class="header">
         <h1>🏥 Hastane BT Destek Sistemi</h1>
         <div class="meta">
-            <strong>Varlık Sorgulama Raporu</strong>
+            <strong>Envanter Sorgulama Raporu</strong>
         </div>
     </div>
 
@@ -185,11 +185,10 @@
                 <tr>
                     <th style="width: 5%">#</th>
                     <th style="width: 20%">Cihaz Adı</th>
-                    <th style="width: 12%">Demirbaş No</th>
-                    <th style="width: 12%">Marka</th>
-                    <th style="width: 12%">Model</th>
+
+                    <th style="width: 12%">Marka Model</th>
                     <th style="width: 15%">Alt Birim</th>
-                    <th style="width: 15%">Zimmetli Kişi</th>
+
                     <th style="width: 9%">Durum</th>
                 </tr>
             </thead>
@@ -198,25 +197,20 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td><strong>{{ $asset->name }}</strong></td>
-                        <td>{{ $asset->asset_tag ?? '-' }}</td>
-                        <td>{{ $asset->brand ?? '-' }}</td>
+
                         <td>{{ $asset->model ?? '-' }}</td>
                         <td>{{ $asset->location->altbirim ?? '-' }}</td>
-                        <td>{{ $asset->assignedUser->name ?? 'Atanmamış' }}</td>
+
                         <td>
                             @php
                                 $statusText = match($asset->status) {
                                     'active' => 'Aktif',
-                                    'stock' => 'Depoda',
-                                    'maintenance' => 'Bakımda',
                                     'retired' => 'Hurda',
-                                    'broken' => 'Arızalı',
                                     default => $asset->status
                                 };
                                 $statusClass = match($asset->status) {
                                     'active' => 'badge-success',
-                                    'maintenance' => 'badge-warning',
-                                    'broken', 'retired' => 'badge-danger',
+                                    'retired' => 'badge-danger',
                                     default => 'badge-gray'
                                 };
                             @endphp
@@ -229,20 +223,19 @@
 
         <div class="summary">
             <h3>📊 Özet İstatistikler</h3>
-            <p><strong>Toplam Varlık:</strong> {{ $assets->count() }} adet</p>
-            <p><strong>Aktif Varlıklar:</strong> {{ $assets->where('status', 'active')->count() }} adet</p>
-            <p><strong>Bakımdaki Varlıklar:</strong> {{ $assets->where('status', 'maintenance')->count() }} adet</p>
-            <p><strong>Arızalı Varlıklar:</strong> {{ $assets->where('status', 'broken')->count() }} adet</p>
+            <p><strong>Toplam Envanter:</strong> {{ $assets->count() }} adet</p>
+            <p><strong>Aktif Envanterler:</strong> {{ $assets->where('status', 'active')->count() }} adet</p>
+
         </div>
     @else
         <div style="text-align: center; padding: 40px; background: #fef3c7; border-radius: 8px; color: #92400e;">
-            <p style="font-size: 16px;">❌ Seçilen kriterlere uygun varlık bulunamadı.</p>
+            <p style="font-size: 16px;">❌ Seçilen kriterlere uygun envanter bulunamadı.</p>
         </div>
     @endif
 
     <div class="footer">
         <p>Bu rapor <strong>{{ $printDate }}</strong> tarihinde sistemden otomatik olarak oluşturulmuştur.</p>
-        <p style="margin-top: 5px; font-size: 11px;">Hastane BT Destek Sistemi - Varlık Yönetimi</p>
+        <p style="margin-top: 5px; font-size: 11px;">Hastane BT Destek Sistemi - Envanter Yönetimi</p>
     </div>
 
     <script>

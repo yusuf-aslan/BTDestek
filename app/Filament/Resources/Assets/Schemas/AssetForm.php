@@ -22,14 +22,10 @@ class AssetForm
                             ->label('Cihaz Adı / Kodu')
                             ->placeholder('Örn: BILGI-ISLEM-PC-01')
                             ->required()
-                            ->maxLength(255),
-                        TextInput::make('asset_tag')
-                            ->label('Demirbaş No')
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255),
-                        TextInput::make('serial_number')
-                            ->label('Seri Numarası')
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true),
+
+
                         Select::make('type')
                             ->label('Cihaz Türü')
                             ->options([
@@ -47,10 +43,7 @@ class AssetForm
                             ->label('Durum')
                             ->options([
                                 'active' => 'Aktif / Kullanımda',
-                                'stock' => 'Depoda / Yedek',
-                                'maintenance' => 'Serviste / Bakımda',
                                 'retired' => 'Hurda / Kullanım Dışı',
-                                'broken' => 'Arızalı',
                             ])
                             ->default('active')
                             ->required(),
@@ -64,26 +57,33 @@ class AssetForm
                             ->label('Bölüm / Birim')
                             ->searchable()
                             ->preload(),
-                        Select::make('assigned_user_id')
-                            ->relationship('assignedUser', 'name')
-                            ->label('Zimmetli Personel')
-                            ->searchable()
-                            ->preload(),
+
                     ])->columns(2),
 
                 Section::make('Teknik Detaylar')
                     ->schema([
-                        TextInput::make('brand')
-                            ->label('Marka')
-                            ->placeholder('Dell, HP, Lenovo...'),
-                        TextInput::make('model')
-                            ->label('Model')
-                            ->placeholder('Optiplex 3080...'),
+                        Select::make('model')
+                            ->label('Marka Model')
+                            ->options(
+                                \App\Models\Asset::query()
+                                    ->whereNotNull('model')
+                                    ->where('model', '!=', '')
+                                    ->distinct()
+                                    ->pluck('model', 'model')
+                                    ->toArray()
+                            )
+                            ->searchable()
+                            ->preload()
+                            ->createOptionUsing(function (string $value) {
+                                return $value; // Simply return the new value
+                            })
+                            ->placeholder('Model Seçin veya Yeni Oluşturun (Örn: Optiplex 3080...)'),
                         KeyValue::make('specs')
                             ->label('Teknik Özellikler')
                             ->keyLabel('Özellik (Örn: RAM)')
                             ->valueLabel('Değer (Örn: 16GB)')
                             ->addActionLabel('Özellik Ekle')
+                            ->default(['RAM' => '', 'Monitör' => ''])
                             ->columnSpanFull(),
                     ])->columns(2),
 

@@ -15,7 +15,7 @@ class AssetQueryPrintController extends Controller
         $model = $request->query('model', 'all');
 
         // Build query
-        $query = Asset::query()->with(['location', 'assignedUser']);
+        $query = Asset::query()->with(['location']);
 
         if (!empty($anabirim)) {
             $query->whereHas('location', function (Builder $q) use ($anabirim) {

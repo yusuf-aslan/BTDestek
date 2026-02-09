@@ -16,6 +16,8 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+
 
 class AssetQuery extends Page implements HasTable, HasForms
 {
@@ -23,8 +25,8 @@ class AssetQuery extends Page implements HasTable, HasForms
     use InteractsWithForms;
 
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-magnifying-glass';
-    protected static ?string $title = 'Varlık Sorgulama';
-    protected static ?string $navigationLabel = 'Varlık Sorgula';
+    protected static ?string $title = 'Envanter Sorgulama';
+    protected static ?string $navigationLabel = 'Envanter Sorgula';
     protected static ?int $navigationSort = 2;
     
     protected string $view = 'filament.pages.asset-query';
@@ -34,7 +36,7 @@ class AssetQuery extends Page implements HasTable, HasForms
     public function mount(): void
     {
         $this->form->fill([
-            'anabirim' => null,
+            'anabirim' => 'all',
             'model' => 'all',
         ]);
     }
@@ -44,23 +46,27 @@ class AssetQuery extends Page implements HasTable, HasForms
         return $schema
             ->schema([
                 Section::make('Filtreleme Kriterleri')
-                    ->description('Varlıkları sorgulamak için ana birim ve isteğe bağlı olarak model seçin.')
+                    ->description('Envanterleri sorgulamak için ana birim ve isteğe bağlı olarak model seçin.')
                     ->schema([
                         Select::make('anabirim')
                             ->label('Ana Birim')
                             ->options(function () {
-                                return Location::query()
+                                $anabirims = Location::query()
                                     ->distinct()
                                     ->orderBy('anabirim')
-                                    ->pluck('anabirim', 'anabirim');
+                                    ->pluck('anabirim', 'anabirim')
+                                    ->toArray();
+                                return ['all' => 'Tüm Bölümler'] + $anabirims;
                             })
                             ->searchable()
                             ->preload()
                             ->required()
                             ->live()
-                            ->afterStateUpdated(function ($state) {
+                            ->afterStateUpdated(function ($state, Set $set) {
                                 // Reset model when anabirim changes
-                                $this->data['model'] = 'all';
+                                if ($state === 'all') {
+                                    $set('model', 'all');
+                                }
                             }),
                         
                         Select::make('model')
@@ -68,14 +74,15 @@ class AssetQuery extends Page implements HasTable, HasForms
                             ->options(function (Get $get) {
                                 $anabirim = $get('anabirim');
                                 
-                                if (!$anabirim) {
-                                    return ['all' => 'Tümü'];
+                                $query = Asset::query();
+
+                                if ($anabirim && $anabirim !== 'all') {
+                                    $query->whereHas('location', function (Builder $q) use ($anabirim) {
+                                        $q->where('anabirim', $anabirim);
+                                    });
                                 }
 
-                                $models = Asset::query()
-                                    ->whereHas('location', function (Builder $query) use ($anabirim) {
-                                        $query->where('anabirim', $anabirim);
-                                    })
+                                $models = $query
                                     ->whereNotNull('model')
                                     ->where('model', '!=', '')
                                     ->distinct()
@@ -88,7 +95,7 @@ class AssetQuery extends Page implements HasTable, HasForms
                             ->default('all')
                             ->searchable()
                             ->live()
-                            ->disabled(fn (Get $get): bool => !$get('anabirim')),
+
                     ])
                     ->columns(2),
             ])
@@ -97,23 +104,31 @@ class AssetQuery extends Page implements HasTable, HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Varlık Yönetimi';
+        return 'Envanter Yönetimi';
     }
 
     public function table(Table $table): Table
     {
         return $table
             ->query(function () {
-                $query = Asset::query()->with(['location', 'assignedUser']);
+                $query = Asset::query()->with(['location']);
 
-                if (!empty($this->data['anabirim'])) {
+                // Apply Anabirim filter
+                if (!empty($this->data['anabirim']) && $this->data['anabirim'] !== 'all') {
                     $query->whereHas('location', function (Builder $q) {
                         $q->where('anabirim', $this->data['anabirim']);
                     });
                 }
 
+                // Apply Model filter
                 if (!empty($this->data['model']) && $this->data['model'] !== 'all') {
                     $query->where('model', $this->data['model']);
+                }
+
+                // Special case: If "Tüm Bölümler" is selected for anabirim AND no specific model is chosen,
+                // then default to active computers.
+                if ($this->data['anabirim'] === 'all' && ($this->data['model'] === 'all' || empty($this->data['model']))) {
+                    $query->where('status', 'active')->where('type', 'computer');
                 }
 
                 return $query;
@@ -124,10 +139,7 @@ class AssetQuery extends Page implements HasTable, HasForms
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('asset_tag')
-                    ->label('Demirbaş No')
-                    ->searchable()
-                    ->copyable(),
+
                 TextColumn::make('type')
                     ->label('Tür')
                     ->badge()
@@ -147,12 +159,8 @@ class AssetQuery extends Page implements HasTable, HasForms
                         'network' => 'success',
                         default => 'gray',
                     }),
-                TextColumn::make('brand')
-                    ->label('Marka')
-                    ->searchable()
-                    ->sortable(),
                 TextColumn::make('model')
-                    ->label('Model')
+                    ->label('Marka Model')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('location.anabirim')
@@ -163,32 +171,23 @@ class AssetQuery extends Page implements HasTable, HasForms
                     ->label('Alt Birim')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('assignedUser.name')
-                    ->label('Zimmetli Kişi')
-                    ->sortable()
-                    ->searchable()
-                    ->placeholder('Atanmamış'),
+
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'active' => 'Aktif',
-                        'stock' => 'Depoda',
-                        'maintenance' => 'Bakımda',
                         'retired' => 'Hurda',
-                        'broken' => 'Arızalı',
                         default => $state,
                     })
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
-                        'maintenance' => 'warning',
-                        'broken', 'retired' => 'danger',
-                        'stock' => 'gray',
+                        'retired' => 'danger',
                         default => 'info',
                     }),
             ])
             ->defaultSort('name', 'asc')
-            ->emptyStateHeading('Varlık Bulunamadı')
-            ->emptyStateDescription('Seçtiğiniz kriterlere uygun varlık bulunamadı. Lütfen filtreleme kriterlerinizi kontrol edin.');
+            ->emptyStateHeading('Envanter Bulunamadı')
+            ->emptyStateDescription('Seçtiğiniz kriterlere uygun envanter bulunamadı. Lütfen filtreleme kriterlerinizi kontrol edin.');
     }
 }

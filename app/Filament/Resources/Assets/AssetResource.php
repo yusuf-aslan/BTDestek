@@ -24,14 +24,14 @@ class AssetResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Varlık Yönetimi';
+        return 'Envanter Yönetimi';
     }
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $modelLabel = 'Varlık';
-    protected static ?string $pluralModelLabel = 'Varlıklar';
-    protected static ?string $navigationLabel = 'Varlık Yönetimi';
+    protected static ?string $modelLabel = 'Envanter';
+    protected static ?string $pluralModelLabel = 'Envanterler';
+    protected static ?string $navigationLabel = 'Envanter Yönetimi';
 
     public static function form(Schema $schema): Schema
     {

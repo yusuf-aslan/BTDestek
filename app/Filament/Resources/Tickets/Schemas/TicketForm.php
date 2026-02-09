@@ -44,22 +44,19 @@ class TicketForm
                             ->preload()
                             ->required(),
                         Select::make('asset_id')
-                            ->label('İlgili Varlık / Cihaz')
+                            ->label('İlgili Envanter / Cihaz')
                             ->relationship('asset', 'name')
-                            ->getOptionLabelFromRecordUsing(function ($record) {
-                                return $record->asset_tag
-                                    ? "{$record->name} ({$record->asset_tag})"
-                                    : $record->name;
-                            })
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)
                             ->searchable()
                             ->preload()
-                            ->placeholder('Varlık Seçiniz (Opsiyonel)'),
+                            ->placeholder('Envanter Seçiniz (Opsiyonel)'),
                         TextInput::make('ip_address')
-                            ->label('IP Adresi')
+                            ->label('Talep Yazılan PC IP')
                             ->disabled(),
-                        TextInput::make('computer_name')
-                            ->label('Bilgisayar Adı')
+                        TextInput::make('broken_pc_ip')
+                            ->label('Arızalı PC IP')
                             ->disabled(),
+
                         TextInput::make('subject')
                             ->label('Konu')
                             ->disabled()

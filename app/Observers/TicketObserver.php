@@ -16,7 +16,7 @@ class TicketObserver
     public function created(Ticket $ticket): void
     {
         // Dispatch Auto-Diagnostics
-        \App\Jobs\ResolveTicketHostname::dispatch($ticket)->afterResponse();
+
 
         if ($ticket->email) {
             try {

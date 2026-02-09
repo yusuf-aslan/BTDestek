@@ -51,7 +51,7 @@ class UserForm
                                 'announcements' => 'Duyurular',
                                 'announcement_templates' => 'Duyuru Şablonları',
                                 'articles' => 'Bilgi Bankası',
-                                'assets' => 'Varlık Yönetimi',
+                                'assets' => 'Envanter Yönetimi',
                                 'canned_responses' => 'Hazır Cevaplar',
                                 'categories' => 'Kategoriler',
                                 'departments' => 'Departmanlar',

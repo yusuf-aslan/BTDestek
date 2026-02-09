@@ -1,6 +1,6 @@
 # 🏥 Hastane BT Destek Sistemi (Hospital IT Support)
 
-Modern, hızlı ve kullanıcı dostu bir hastane Bilgi İşlem (BT) talep yönetim, varlık takip ve raporlama platformu.
+Modern, hızlı ve kullanıcı dostu bir hastane Bilgi İşlem (BT) talep yönetim, envanter takip ve raporlama platformu.
 
 Bu proje, hastane personelinin BT birimine sorunlarını en hızlı şekilde iletmesini sağlamak, BT teknisyenlerinin iş yükünü organize etmek ve kurum envanterini (bilgisayar, yazıcı vb.) dijital ortamda yönetmek amacıyla **Laravel 12** ve **Filament** kullanılarak geliştirilmiştir.
 
@@ -15,7 +15,7 @@ Bu proje, hastane personelinin BT birimine sorunlarını en hızlı şekilde ile
 ### 1. 🖱️ Personel Arayüzü (Public Portal)
 Kullanıcı girişi gerektirmeyen, herkesin erişebileceği hızlı işlem merkezi.
 *   **Hızlı Talep Oluşturma:** Ad, Bölüm, Kategori ve Açıklama ile saniyeler içinde arıza bildirimi.
-*   **Akıllı Doğrulama:** IP adresinden otomatik **Hostname (Bilgisayar Adı)** tespiti.
+
 *   **Talep Sorgulama:** Takip numarası (Örn: `#BT-2026-X8Y2`) ile anlık durum sorgulama (Bekliyor, İşlemde, Çözüldü).
 *   **Duyuru Sistemi:** Kritik sistem kesintileri veya bilgilendirmeler için pop-up ve banner duyurular.
 *   **Bilgi Bankası (KB):** Sık yaşanan sorunlar için resimli çözüm rehberleri (Self-Service).
@@ -32,12 +32,12 @@ BT personelinin tüm süreci yönettiği güvenli alan.
 *   **İş Emri Çıktısı (Yazdırılabilir Form):** Tamamlanan işler için üzerinde teknisyen ve personel imza alanları bulunan, kurumsal **PDF formatında İş Emri** oluşturma.
 *   **Rol ve Yetki Yönetimi:** Admin ve Teknisyen ayrımı. Kategori bazlı yetkilendirme (Örn: Yazılım ekibi sadece Yazılım taleplerini görsün).
 
-### 3. 📦 Varlık Yönetimi (ITAM)
+### 3. 📦 Envanter Yönetimi (ITAM)
 Kurumdaki donanımların yaşam döngüsü takibi.
 *   **Envanter Takibi:** Bilgisayar, Yazıcı, Monitör vb. cihazların kaydı.
 *   **Detaylı Özellikler:** RAM, Disk, Model gibi teknik özelliklerin (JSON tabanlı esnek yapı) tutulması.
 *   **Zimmet Takibi:** Cihazın hangi personelde veya hangi odada olduğunun takibi.
-*   **Arıza Geçmişi:** Bir cihazın (Varlığın) detayına girildiğinde, o cihaza ait geçmişte açılmış tüm arıza kayıtlarının listelenmesi.
+*   **Arıza Geçmişi:** Bir cihazın (Envanterin) detayına girildiğinde, o cihaza ait geçmişte açılmış tüm arıza kayıtlarının listelenmesi.
 *   **Excel Import:** Mevcut envanter listelerinin toplu olarak içeri aktarılması.
 
 ### 4. 🔔 Bildirim ve Ayarlar
@@ -108,12 +108,19 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 
 ## 🔄 Geliştirme Süreci (Changelog)
 
-*   **v1.8 - Varlık Sorgulama & Raporlama:**
-    *   **Varlık Sorgula (Asset Query):** "Varlık Yönetimi" altına, varlıkları "Ana Birim" ve "Model" bazlı filtreleyip listeleyebilen özel bir sorgulama sayfası eklendi.
-    *   **Yazdır / PDF:** Filtrelenen varlık listesinin, kurumsal formatta yazdırılabilmesi veya PDF olarak kaydedilebilmesi için raporlama özelliği eklendi.
+*   **v1.9 - Envanter Yönetimi ve Raporlama Geliştirmeleri:**
+    *   **Terminoloji Güncellemesi:** Proje genelinde "Varlık" kelimesi "Envanter" olarak değiştirildi.
+    *   **Saha Kaldırma:** Kullanılmayan `Demirbaş No`, `Seri Numarası`, `Zimmetli Personel` ve `Bilgisayar Adı` alanları sistemden kaldırıldı.
+    *   **Envanter Sorgulama Geliştirmesi:** "Envanter Sorgulama" sayfasına model bazlı arama ve tüm bölümlerde arama yapma özelliği eklendi.
+    *   **Çöp Kutusu (Soft Delete):** Envanter yönetimine, silinen kayıtların geri getirilebilmesi için "Çöp Kutusu" özelliği eklendi.
+    *   **Yeni Alan: Arızalı PC IP:** Kullanıcıların, arızalı bir cihaz için ayrı bir IP adresi girebilmesi sağlandı.
+    *   **Raporlama Arayüzü:** "Raporlar ve İstatistikler" sayfasının yerleşimi, tablonun üstte, grafiklerin altta olacak şekilde yeniden düzenlendi.
+*   **v1.8 - Envanter Sorgulama & Raporlama:**
+    *   **Envanter Sorgula (Asset Query):** "Envanter Yönetimi" altına, envanterleri "Ana Birim" ve "Model" bazlı filtreleyip listeleyebilen özel bir sorgulama sayfası eklendi.
+    *   **Yazdır / PDF:** Filtrelenen envanter listesinin, kurumsal formatta yazdırılabilmesi veya PDF olarak kaydedilebilmesi için raporlama özelliği eklendi.
 *   **v1.7 - İçe Aktarma & Arayüz İyileştirmeleri:**
     *   **Veri Aktarım Düzeltmesi:** "Bölüm - Birim Yönetimi" için Excel/CSV dosyalarını içe aktarma özelliği onarıldı. Dosya tipi doğrulaması ve Türkçe karakter kodlama sorunları giderildi.
-    *   **Menü Yeniden Düzenlemesi:** "Varlık Yönetimi" ve "Bölüm - Birim Yönetimi" menüleri, daha tutarlı bir kullanıcı deneyimi için "Varlık Yönetimi" grubu altında birleştirildi.
+    *   **Menü Yeniden Düzenlemesi:** "Envanter Yönetimi" ve "Bölüm - Birim Yönetimi" menüleri, daha tutarlı bir kullanıcı deneyimi için "Envanter Yönetimi" grubu altında birleştirildi.
 *   **v1.6 - Kullanıcı Deneyimi & Çıktı Geliştirmeleri:**
     *   **PHP 8.4 Desteği:** Proje altyapısı PHP 8.4'e güncellendi.
     *   **Opsiyonel E-posta Alanı:** Talep formundaki e-posta alanı artık panelden isteğe bağlı olarak gösterilip gizlenebiliyor.
@@ -121,7 +128,7 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
     *   **Terminoloji Güncellemesi:** Kullanıcı arayüzünde "Takip Numarası" ifadesi, daha anlaşılır olan "Talep Numarası" olarak değiştirildi.
     *   **PDF Türkçe Karakter Desteği:** Oluşturulan PDF çıktılarındaki Türkçe karakter sorunu giderildi.
 *   **v1.5 - Raporlama & Çıktı:** Gelişmiş grafiksel raporlar ve PDF iş emri çıktısı eklendi.
-*   **v1.4 - Varlık Yönetimi:** ITAM modülü, cihaz takibi ve talep ilişkilendirme.
+*   **v1.4 - Envanter Yönetimi:** ITAM modülü, cihaz takibi ve talep ilişkilendirme.
 *   **v1.3 - Bildirimler:** SMTP entegrasyonu ve otomatik e-posta bildirimleri.
 *   **v1.2 - Panel Ayarları:** Veritabanı tabanlı genel ayarlar ve SMTP konfigürasyonu.
 *   **v1.0 - Çekirdek:** Talep toplama, KB ve Admin paneli.

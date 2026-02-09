@@ -7,7 +7,7 @@ use Filament\Widgets\ChartWidget;
 
 class AssetsWithMostTicketsChart extends ChartWidget
 {
-    protected ?string $heading = 'En Çok Arıza Kaydı Açılan Varlıklar';
+    protected ?string $heading = 'En Çok Arıza Kaydı Açılan Envanterler';
     protected static ?int $sort = 3;
 
     protected function getData(): array

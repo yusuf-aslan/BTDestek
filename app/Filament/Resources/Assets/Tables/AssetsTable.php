@@ -25,10 +25,7 @@ class AssetsTable
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('asset_tag')
-                    ->label('Demirbaş No')
-                    ->searchable()
-                    ->copyable(),
+
                 TextColumn::make('type')
                     ->label('Tür')
                     ->badge()
@@ -49,6 +46,10 @@ class AssetsTable
                         'broken' => 'danger',
                         default => 'gray',
                     }),
+                TextColumn::make('model')
+                    ->label('Marka Model')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('location.anabirim')
                     ->label('Ana Birim')
                     ->sortable()
@@ -57,26 +58,18 @@ class AssetsTable
                     ->label('Alt Birim')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('assignedUser.name')
-                    ->label('Zimmetli Kişi')
-                    ->sortable()
-                    ->searchable(),
+
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'active' => 'Aktif',
-                        'stock' => 'Depoda',
-                        'maintenance' => 'Bakımda',
                         'retired' => 'Hurda',
-                        'broken' => 'Arızalı',
                         default => $state,
                     })
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
-                        'maintenance' => 'warning',
-                        'broken', 'retired' => 'danger',
-                        'stock' => 'gray',
+                        'retired' => 'danger',
                         default => 'info',
                     }),
             ])
@@ -93,9 +86,6 @@ class AssetsTable
                     ->label('Durum')
                     ->options([
                         'active' => 'Aktif',
-                        'stock' => 'Depoda',
-                        'maintenance' => 'Bakımda',
-                        'broken' => 'Arızalı',
                         'retired' => 'Hurda',
                     ]),
                 SelectFilter::make('location')
@@ -111,7 +101,7 @@ class AssetsTable
             ->headerActions([
                 ImportAction::make()
                     ->importer(AssetImporter::class)
-                    ->label('Excel ile Varlık Yükle'),
+                    ->label('Excel ile Envanter Yükle'),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

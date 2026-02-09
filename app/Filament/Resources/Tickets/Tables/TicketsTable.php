@@ -35,7 +35,7 @@ class TicketsTable
                     ->label('Kategori')
                     ->sortable(),
                 TextColumn::make('asset.name')
-                    ->label('Varlık')
+                    ->label('Envanter')
                     ->searchable()
                     ->placeholder('-')
                     ->limit(20)

@@ -6,7 +6,7 @@
                 Filtreleme Kriterleri
             </x-slot>
             <x-slot name="description">
-                Varlıkları sorgulamak için ana birim ve isteğe bağlı olarak model seçin.
+                Envanterleri sorgulamak için ana birim ve isteğe bağlı olarak model seçin.
             </x-slot>
             
             <form wire:submit.prevent="$refresh">
@@ -64,10 +64,10 @@
             <x-filament::section>
                 <div class="text-center py-12">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                        Varlık Sorgusu
+                        Envanter Sorgusu
                     </h3>
                     <p class="text-gray-600 dark:text-gray-400">
-                        Varlıkları sorgulamak için yukarıdaki formdan <strong>Ana Birim</strong> seçin ve isteğe bağlı olarak 
+                        Envanterleri sorgulamak için yukarıdaki formdan <strong>Ana Birim</strong> seçin ve isteğe bağlı olarak 
                         <strong>Model</strong> filtresi uygulayın.
                     </p>
                 </div>

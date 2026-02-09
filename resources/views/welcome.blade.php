@@ -289,6 +289,10 @@
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Dahili No / Tel</label>
                                 <input type="text" name="phone_number" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 4455">
                             </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Arızalı PC IP (Opsiyonel)</label>
+                                <input type="text" name="broken_pc_ip" class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 10.10.10.20">
+                            </div>
                         </div>
 
                         <div class="space-y-2">

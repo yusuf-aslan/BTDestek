@@ -60,6 +60,7 @@ class TicketController extends Controller
             'email' => 'nullable|email|max:255',
             'department_room' => 'required|string|max:255',
             'phone_number' => 'required|string|max:255',
+            'broken_pc_ip' => 'nullable|ip',
             'category_id' => 'required|exists:categories,id',
             'subject' => 'required|string|max:255',
             'description' => 'required|string',

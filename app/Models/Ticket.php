@@ -23,6 +23,7 @@ class Ticket extends Model
         'priority',
         'resolution_note',
         'ip_address',
+        'broken_pc_ip',
         'resolved_at',
         'resolved_by',
     ];

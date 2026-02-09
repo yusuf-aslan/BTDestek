@@ -1,4 +1,4 @@
-# Plan: Asset Management (Varlık Yönetimi)
+# Plan: Asset Management (Envanter Yönetimi)
 
 ## Objective
 Implement a robust IT Asset Management (ITAM) module to track hardware inventory (Computers, Printers, etc.), manage their lifecycle, and integrate them with the existing ticketing system. The module must support importing legacy data (PC No, RAM, Monitor, etc.) while offering a flexible structure for future asset types.
@@ -12,7 +12,7 @@ Implement a robust IT Asset Management (ITAM) module to track hardware inventory
 ## Tasks
 
 ### Phase 1: Database & Model Structure
-- [x] Create `Asset` model and migration with fields: `name`, `asset_tag`, `serial_number`, `type`, `status`, `department_id`, `assigned_user_id`, `location`, `brand`, `model`, `purchase_date`, `warranty_expires_at`, `specs` (JSON), `notes`.
+- [x] Create `Asset` model and migration with fields: `name`, `type`, `status`, `department_id`, `location`, `brand`, `model`, `purchase_date`, `warranty_expires_at`, `specs` (JSON), `notes`.
 - [x] Define relationships: `Asset` belongs to `Department` and `User`.
 - [x] Create `AssetType` enum or hardcoded array (Computer, Printer, Network, Peripheral, MedicalDevice).
 - [x] Create `AssetStatus` enum (Active, Maintenance, Retired, InStock).

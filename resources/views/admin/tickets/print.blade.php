@@ -112,9 +112,15 @@
             <td>{{ $ticket->phone_number }}</td>
         </tr>
         <tr>
-            <th>IP Adresi / Hostname</th>
-            <td>{{ $ticket->ip_address }} / {{ $ticket->computer_name ?? '-' }}</td>
+            <th>Talep Yazılan PC IP</th>
+            <td>{{ $ticket->ip_address }}</td>
         </tr>
+        @if($ticket->broken_pc_ip)
+        <tr>
+            <th>Arızalı PC IP</th>
+            <td>{{ $ticket->broken_pc_ip }}</td>
+        </tr>
+        @endif
     </table>
 
     <div class="section-title">Sorun Detayı</div>

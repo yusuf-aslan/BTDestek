@@ -40,6 +40,13 @@ class Reports extends Page implements HasTable
     protected function getHeaderWidgets(): array
     {
         return [
+            // No header widgets
+        ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
             TicketStatsOverview::class,
             TicketsChart::class,
             TicketsPerCategoryChart::class,

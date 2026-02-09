@@ -25,7 +25,7 @@ To build a comprehensive, hybrid IT support ecosystem for a hospital environment
 
 ### 2. Backend & Ticket Management (Yönetim Paneli)
 -   **Queue Management:** Technicians view a dashboard of incoming tickets, filterable by priority, category, and status.
--   **Auto-Diagnostics:** The system automatically captures the requestor's `ip_address` and tries to resolve the `computer_name` (Hostname) to assist in locating the issue.
+
 -   **Workflow & Routing:**
     -   **Departments:** Routing to Hardware, Software, Network, or HBYS teams.
     -   **Status:** Yeni (New), İnceleniyor (Processing), Beklemede (Pending), Çözüldü (Resolved), İptal (Cancelled).
