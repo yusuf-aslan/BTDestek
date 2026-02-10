@@ -24,6 +24,11 @@ class Asset extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function deviceTemplate(): BelongsTo
+    {
+        return $this->belongsTo(DeviceTemplate::class);
+    }
+
 
 
     public function tickets(): HasMany

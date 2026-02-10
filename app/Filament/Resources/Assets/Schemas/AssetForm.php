@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Assets\Schemas;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Schemas\Components\Section;
+use App\Models\DeviceTemplate;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -62,18 +63,46 @@ class AssetForm
 
                 Section::make('Teknik Detaylar')
                     ->schema([
-                        Select::make('model')
-                            ->label('Marka Model')
-                            ->options(
-                                \App\Models\Asset::query()
-                                    ->whereNotNull('model')
-                                    ->where('model', '!=', '')
-                                    ->distinct()
-                                    ->pluck('model', 'model')
-                                    ->toArray()
-                            )
+                        Select::make('device_template_id')
+                            ->relationship('deviceTemplate', 'name')
+                            ->label('Cihaz Şablonu Seçin')
+                            ->placeholder('Şablon Seçiniz (Opsiyonel)')
                             ->searchable()
                             ->preload()
+                            ->live()
+                            ->afterStateUpdated(function ($state, \Filament\Schemas\Components\Utilities\Set $set) {
+                                if ($state) {
+                                    $template = \App\Models\DeviceTemplate::find($state);
+                                    if ($template && is_array($template->specs)) {
+                                        $prefilledSpecs = [];
+                                        foreach ($template->specs as $key => $value) {
+                                            $prefilledSpecs[$key] = $value ?? ''; // Use template value or empty string
+                                        }
+                                        $set('specs', $prefilledSpecs);
+                                    }
+                                } else {
+                                    $set('specs', []); // Clear specs if no template is selected
+                                }
+                            })
+                            ->columnSpanFull(), // Make it full width for better visibility
+                        Select::make('model')
+                            ->label('Marka Model')
+                            ->options(function (string $search = '') {
+                                $query = \App\Models\Asset::query()
+                                    ->whereNotNull('model')
+                                    ->where('model', '!=', '');
+
+                                if ($search) {
+                                    $query->where('model', 'like', "%{$search}%");
+                                }
+
+                                return $query
+                                    ->distinct()
+                                    ->pluck('model', 'model')
+                                    ->toArray();
+                            })
+                            ->searchable()
+                            ->live() // Added live()
                             ->createOptionUsing(function (string $value) {
                                 return $value; // Simply return the new value
                             })
