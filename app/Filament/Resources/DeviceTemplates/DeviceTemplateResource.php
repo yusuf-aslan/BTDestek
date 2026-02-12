@@ -44,6 +44,10 @@ class DeviceTemplateResource extends Resource
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
+                TextInput::make('model')
+                    ->label('Marka Model')
+                    ->nullable()
+                    ->maxLength(255),
                 KeyValue::make('specs')
                     ->label('Teknik Özellikler Şablonu')
                     ->keyLabel('Özellik (Örn: RAM)')

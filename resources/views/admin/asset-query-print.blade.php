@@ -187,6 +187,8 @@
                     <th style="width: 20%">Cihaz Adı</th>
 
                     <th style="width: 12%">Marka Model</th>
+                    <th style="width: 10%">RAM</th>
+                    <th style="width: 10%">Monitör</th>
                     <th style="width: 15%">Alt Birim</th>
 
                     <th style="width: 9%">Durum</th>
@@ -199,6 +201,8 @@
                         <td><strong>{{ $asset->name }}</strong></td>
 
                         <td>{{ $asset->model ?? '-' }}</td>
+                        <td>{{ $asset->specs['ram'] ?? '-' }}</td>
+                        <td>{{ $asset->specs['monitor'] ?? '-' }}</td>
                         <td>{{ $asset->location->altbirim ?? '-' }}</td>
 
                         <td>

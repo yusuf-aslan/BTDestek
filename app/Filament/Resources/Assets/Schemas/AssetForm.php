@@ -10,6 +10,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use App\Models\Asset;
 
 class AssetForm
 {
@@ -73,48 +74,39 @@ class AssetForm
                             ->afterStateUpdated(function ($state, \Filament\Schemas\Components\Utilities\Set $set) {
                                 if ($state) {
                                     $template = \App\Models\DeviceTemplate::find($state);
-                                    if ($template && is_array($template->specs)) {
-                                        $prefilledSpecs = [];
-                                        foreach ($template->specs as $key => $value) {
-                                            $prefilledSpecs[$key] = $value ?? ''; // Use template value or empty string
+                                    if ($template) { // Check if template exists
+                                        // Populate specs
+                                        if (is_array($template->specs)) {
+                                            $prefilledSpecs = [];
+                                            foreach ($template->specs as $key => $value) {
+                                                $prefilledSpecs[$key] = $value ?? '';
+                                            }
+                                            $set('specs', $prefilledSpecs);
                                         }
-                                        $set('specs', $prefilledSpecs);
+
+                                        // Populate model if template has one
+                                        if ($template->model) { // Now DeviceTemplate has a 'model' attribute
+                                            $set('model', $template->model);
+                                        }
                                     }
                                 } else {
                                     $set('specs', []); // Clear specs if no template is selected
+                                    // Not clearing model here as it might have been manually set or derived from previous template
                                 }
                             })
-                            ->columnSpanFull(), // Make it full width for better visibility
-                        Select::make('model')
+                            ->columnSpanFull() // Make it full width for better visibility
+                            ->hidden(fn (?\App\Models\Asset $record) => $record !== null), // Add this line
+                        TextInput::make('model')
                             ->label('Marka Model')
-                            ->options(function (string $search = '') {
-                                $query = \App\Models\Asset::query()
-                                    ->whereNotNull('model')
-                                    ->where('model', '!=', '');
-
-                                if ($search) {
-                                    $query->where('model', 'like', "%{$search}%");
-                                }
-
-                                return $query
-                                    ->distinct()
-                                    ->pluck('model', 'model')
-                                    ->toArray();
-                            })
-                            ->searchable()
-                            ->live() // Added live()
-                            ->createOptionUsing(function (string $value) {
-                                return $value; // Simply return the new value
-                            })
                             ->placeholder('Model Seçin veya Yeni Oluşturun (Örn: Optiplex 3080...)'),
                         KeyValue::make('specs')
                             ->label('Teknik Özellikler')
                             ->keyLabel('Özellik (Örn: RAM)')
                             ->valueLabel('Değer (Örn: 16GB)')
                             ->addActionLabel('Özellik Ekle')
-                            ->default(['RAM' => '', 'Monitör' => ''])
-                            ->columnSpanFull(),
-                    ])->columns(2),
+                                                                                        ->default(['RAM' => '', 'Monitör' => ''])
+                                                                                        ->columnSpanFull()
+                                                                                        ->dehydrateStateUsing(fn (?array $state) => $state),                    ])->columns(2),
 
                 Section::make('Finansal Bilgiler')
                     ->schema([

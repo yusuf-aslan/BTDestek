@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Assets\Tables;
 
 use App\Filament\Imports\AssetImporter;
+use App\Models\Asset;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -49,7 +50,22 @@ class AssetsTable
                 TextColumn::make('model')
                     ->label('Marka Model')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->tooltip(function (Asset $record): ?string {
+                        $tooltipContent = [];
+                        if (isset($record->specs['ram']) && $record->specs['ram']) {
+                            $tooltipContent[] = 'RAM: ' . $record->specs['ram'];
+                        }
+                        if (isset($record->specs['monitor']) && $record->specs['monitor']) {
+                            $tooltipContent[] = 'Monitör: ' . $record->specs['monitor'];
+                        }
+
+                        if (empty($tooltipContent)) {
+                            return null; // No specs to show
+                        }
+
+                        return implode("\n", $tooltipContent);
+                    }),
                 TextColumn::make('location.anabirim')
                     ->label('Ana Birim')
                     ->sortable()

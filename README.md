@@ -108,6 +108,14 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.10 - Detaylı Envanter Yönetimi Geliştirmeleri:**
+    *   **PDF Raporuna Teknik Özellikler:** Envanter sorgulama PDF raporuna RAM ve Monitör teknik özellikleri eklendi.
+    *   **Cihaz Şablonlarına Marka Model:** Cihaz şablonlarına (DeviceTemplate) Marka Model alanı eklendi, böylece şablondan envanter oluşturulurken model bilgisi otomatik dolduruluyor.
+    *   **Envanter Formu Şablon İyileştirmeleri:** Yeni envanter eklerken "Cihaz Şablonu Seçin" alanı artık sadece yeni kayıt oluştururken gösteriliyor ve var olan kayıtları düzenlerken gizleniyor.
+    *   **Lokasyon Yönetimi Geliştirmeleri:** "Ana Birim" oluşturma formu, mevcut ana birimler arasından seçim yapmaya veya yeni bir ana birim eklemeye olanak tanıyan bir modal ile geliştirildi.
+    *   **Envanter Listesi ve Sorgu Ekranında Teknik Özellik Tooltip'i:** "Tüm Envanterler" listesi ve "Envanter Sorgula" ekranında "Marka Model" üzerine gelindiğinde, RAM ve Monitör gibi teknik özellikler bir araç ipucu (tooltip) olarak gösteriliyor.
+    *   **Envanter Formu Marka Model Girişi:** Envanter ekleme/düzenleme formundaki "Marka Model" alanı, artık herhangi bir değer girilmesine izin veren ve şablonlardan doldurulan modeller için doğrulama sorununu gideren bir metin giriş alanı olarak yapılandırıldı.
+
 *   **v1.9 - Envanter Yönetimi ve Raporlama Geliştirmeleri:**
     *   **Terminoloji Güncellemesi:** Proje genelinde "Varlık" kelimesi "Envanter" olarak değiştirildi.
     *   **Saha Kaldırma:** Kullanılmayan `Demirbaş No`, `Seri Numarası`, `Zimmetli Personel` ve `Bilgisayar Adı` alanları sistemden kaldırıldı.
