@@ -105,8 +105,14 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
     *   **Şifre:** `password`
 
 ---
-
 ## 🔄 Geliştirme Süreci (Changelog)
+
+*   **v1.11 - Sistem Güvenliği ve Kullanıcı Deneyimi Geliştirmeleri:**
+    *   **Sistem Yedekleme ve Geri Yükleme (JSON):** Tüm veritabanı tablolarını (Talepler, Envanterler, Ayarlar, Kullanıcılar vb.) tek bir JSON dosyası olarak yedekleme ve geri yükleme özelliği eklendi. Geri yükleme işlemi sırasında veri bütünlüğünü korumak için otomatik tablo temizleme (truncate) mekanizması kuruldu.
+    *   **Dinamik IP Adresi Gösterimi:** Kullanıcı IP adresinin sayfa üzerinde nerede görüneceği (Üst Menü, Alt Bilgi, Sol Alt Sabit Kart veya Gizli) artık panelden dinamik olarak ayarlanabiliyor. 'Sabit' ve 'Üst Menü' modlarında yüksek görünürlük için animasyonlu tasarımlar eklendi.
+    *   **Teknisyen Atama ve Çözüm Mantığı İyileştirmesi:** Talepler çözüldüğünde, çözümü yapan kişi (`assigned_to`) olarak atanmamışsa otomatik olarak atama yapılması ve çözüm kredisinin (`resolved_by`) doğru kişiye yazılması sağlandı.
+    *   **Filament v4 Uyumluluğu:** Tüm yönetim paneli bileşenleri ve form şemaları en güncel Filament v4 standartlarına (Schema ve Actions sınıfları) taşındı.
+    *   **Veritabanı Bildirimleri:** Teknikerlere yeni talep atandığında veya durum değiştiğinde panel üzerinden anlık bildirim gitmesi sağlandı.
 
 *   **v1.10 - Detaylı Envanter Yönetimi Geliştirmeleri:**
     *   **PDF Raporuna Teknik Özellikler:** Envanter sorgulama PDF raporuna RAM ve Monitör teknik özellikleri eklendi.

@@ -32,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->databaseNotifications()
             ->brandName(fn () => \Illuminate\Support\Facades\Cache::get('general_settings')?->site_title ?? 'Hastane BT Destek')
             ->renderHook(
                 PanelsRenderHook::BODY_END,

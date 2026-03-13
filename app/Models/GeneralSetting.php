@@ -17,6 +17,7 @@ class GeneralSetting extends Model
         'weekend_tickets_allowed',
         'is_dark_mode_enabled',
         'show_email_on_ticket_form',
+        'ip_display_position',
         'mail_mailer',
         'mail_host',
         'mail_port',

@@ -3,8 +3,10 @@
 namespace App\Filament\Pages;
 
 use App\Models\GeneralSetting;
+use App\Services\BackupService;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
@@ -17,6 +19,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use BackedEnum;
 use Filament\Support\Icons\Heroicon;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Settings extends Page implements HasForms
 {
@@ -48,6 +51,63 @@ class Settings extends Page implements HasForms
     {
         $settings = GeneralSetting::firstOrCreate([]);
         $this->form->fill($settings->toArray());
+    }
+
+    public function exportBackup(): StreamedResponse
+    {
+        $service = new BackupService();
+        $json = $service->export();
+        $filename = 'btdestek_backup_' . date('Y-m-d_H-i-s') . '.json';
+
+        return response()->streamDownload(function () use ($json) {
+            echo $json;
+        }, $filename, [
+            'Content-Type' => 'application/json',
+        ]);
+    }
+
+    public function importBackup(): void
+    {
+        $backupFile = $this->data['backup_file'] ?? null;
+        
+        if (!$backupFile) {
+            Notification::make()
+                ->danger()
+                ->title('Lütfen bir yedek dosyası seçin.')
+                ->send();
+            return;
+        }
+
+        $json = \Illuminate\Support\Facades\Storage::disk('public')->get($backupFile);
+        $data = json_decode($json, true);
+
+        if (!$data) {
+            Notification::make()
+                ->danger()
+                ->title('Dosya formatı geçersiz.')
+                ->send();
+            return;
+        }
+
+        $service = new BackupService();
+        if ($service->import($data)) {
+            // Clear cache
+            \Illuminate\Support\Facades\Cache::forget('general_settings');
+            
+            Notification::make()
+                ->success()
+                ->title('Sistem yedeği başarıyla geri yüklendi.')
+                ->body('Tüm veriler yenilendi. Lütfen sayfayı yenileyin.')
+                ->persistent()
+                ->send();
+            
+            // Log out user for safety? Maybe not necessary if IDs are preserved.
+        } else {
+            Notification::make()
+                ->danger()
+                ->title('Geri yükleme işlemi başarısız oldu.')
+                ->send();
+        }
     }
 
     public function form(Schema $schema): Schema
@@ -90,7 +150,17 @@ class Settings extends Page implements HasForms
                                             ->label('Talep Formunda E-posta Alanını Göster')
                                             ->helperText('Açık ise talep oluşturma formunda e-posta alanı gösterilir.')
                                             ->default(false),
-                                    ]),
+                                        Select::make('ip_display_position')
+                                            ->label('IP Adresi Gösterim Konumu')
+                                            ->options([
+                                                'footer' => 'Alt Bilgi (Footer)',
+                                                'header' => 'Üst Menü (Logo Yanı)',
+                                                'fixed' => 'Sabit (Sol Alt Köşe)',
+                                                'hidden' => 'Gizle',
+                                            ])
+                                            ->default('footer')
+                                            ->required(),
+                                    ])->columns(2),
                             ]),
 
                         \Filament\Schemas\Components\Tabs\Tab::make('Mesai & Kurallar')
@@ -178,6 +248,44 @@ class Settings extends Page implements HasForms
                                             ->label('Gönderen Adı')
                                             ->placeholder('BT Destek Sistemi'),
                                     ])->columns(2),
+                            ]),
+
+                        \Filament\Schemas\Components\Tabs\Tab::make('Yedekleme')
+                            ->icon('heroicon-o-arrow-path-rounded-square')
+                            ->schema([
+                                Section::make('Dışa Aktar')
+                                    ->description('Tüm verileri (Talepler, Varlıklar, Kategoriler vb.) bir JSON dosyası olarak indirin.')
+                                    ->schema([
+                                        \Filament\Schemas\Components\Actions::make([
+                                            Action::make('export_backup')
+                                                ->label('Sistem Yedeğini İndir (.json)')
+                                                ->icon('heroicon-o-arrow-down-tray')
+                                                ->color('info')
+                                                ->action('exportBackup'),
+                                        ]),
+                                    ]),
+                                
+                                Section::make('İçe Aktar')
+                                    ->description('Önceden aldığınız bir yedek dosyasını geri yükleyin. UYARI: Mevcut tüm verileriniz silinecek ve yedek dosyasındaki veriler yazılacaktır.')
+                                    ->schema([
+                                        FileUpload::make('backup_file')
+                                            ->label('Yedek Dosyası Seçin')
+                                            ->disk('public')
+                                            ->directory('backups')
+                                            ->acceptedFileTypes(['application/json'])
+                                            ->live(),
+
+                                        \Filament\Schemas\Components\Actions::make([
+                                            Action::make('import_backup')
+                                                ->label('Yedeği Geri Yükle')
+                                                ->icon('heroicon-o-arrow-up-tray')
+                                                ->color('danger')
+                                                ->requiresConfirmation()
+                                                ->modalHeading('Emin misiniz?')
+                                                ->modalDescription('Bu işlem mevcut tüm verileri silecek ve yedeği geri yükleyecektir. Bu işlem geri alınamaz.')
+                                                ->action('importBackup'),
+                                        ]),
+                                    ]),
                             ]),
                     ])
                     ->columnSpan('full'),

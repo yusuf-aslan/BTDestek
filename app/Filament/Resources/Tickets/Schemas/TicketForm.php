@@ -12,6 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class TicketForm
 {
@@ -42,7 +43,8 @@ class TicketForm
                             ->relationship('category', 'name')
                             ->searchable()
                             ->preload()
-                            ->required(),
+                            ->required()
+                            ->live(),
                         Select::make('asset_id')
                             ->label('İlgili Envanter / Cihaz')
                             ->relationship('asset', 'name')
@@ -96,6 +98,21 @@ class TicketForm
 
                 Section::make('Tekniker İşlemleri')
                     ->schema([
+                        Select::make('assigned_to')
+                            ->label('Atanan Teknisyen')
+                            ->relationship('assignedTo', 'name', function (\Illuminate\Database\Eloquent\Builder $query, Get $get) {
+                                $categoryId = $get('category_id');
+                                if ($categoryId) {
+                                    $hasCategoryUsers = \App\Models\User::whereHas('categories', fn ($q) => $q->where('categories.id', $categoryId))->exists();
+                                    if ($hasCategoryUsers) {
+                                        return $query->whereHas('categories', fn ($q) => $q->where('categories.id', $categoryId));
+                                    }
+                                }
+                                return $query;
+                            })
+                            ->searchable()
+                            ->preload()
+                            ->live(),
                         Select::make('status')
                             ->label('Durum')
                             ->options([
@@ -140,6 +157,51 @@ class TicketForm
                         DatePicker::make('resolved_at')
                             ->label('Çözüm Tarihi'),
                     ])->columns(2),
+
+                Section::make('Dahili Notlar')
+                    ->description('Sadece teknisyenlerin görebileceği özel notlar.')
+                    ->collapsible()
+                    ->schema([
+                        \Filament\Forms\Components\Repeater::make('notes')
+                            ->relationship()
+                            ->schema([
+                                Textarea::make('note')
+                                    ->label('Not')
+                                    ->required()
+                                    ->rows(2),
+                                \Filament\Forms\Components\Hidden::make('user_id')
+                                    ->default(Auth::id()),
+                            ])
+                            ->label('Notlar')
+                            ->createItemButtonLabel('Yeni Not Ekle')
+                            ->reorderable(false)
+                    ]),
+
+                Section::make('Talep Geçmişi')
+                    ->description('Talebin yaşam döngüsü ve yapılan işlemler.')
+                    ->collapsible()
+                    ->schema([
+                        \Filament\Forms\Components\Repeater::make('activities')
+                            ->relationship()
+                            ->schema([
+                                TextInput::make('description')
+                                    ->label('İşlem')
+                                    ->disabled(),
+                                TextInput::make('created_at')
+                                    ->label('Tarih')
+                                    ->formatStateUsing(fn ($state) => \Carbon\Carbon::parse($state)->format('d.m.Y H:i'))
+                                    ->disabled(),
+                                TextInput::make('user.name')
+                                    ->label('Yapan')
+                                    ->placeholder('Sistem')
+                                    ->disabled(),
+                            ])
+                            ->addable(false)
+                            ->deletable(false)
+                            ->reorderable(false)
+                            ->columns(3)
+                            ->label('İşlem Kayıtları')
+                    ]),
             ]);
     }
 }

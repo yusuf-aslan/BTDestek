@@ -12,6 +12,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Ticket;
 
 class TicketsTable
 {
@@ -64,12 +65,34 @@ class TicketsTable
                         'iptal' => 'danger',
                     })
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->label('Tarih')
-                    ->dateTime('d.m.Y H:i')
+                TextColumn::make('assignedTo.name')
+                    ->label('Atanan')
+                    ->placeholder('Atanmadı')
                     ->sortable(),
+                TextColumn::make('created_at')
+                    ->label('Bekleme Süresi')
+                    ->formatStateUsing(function ($state) {
+                        $diff = \Carbon\Carbon::parse($state)->diff(now());
+                        if ($diff->d > 0) return "{$diff->d} gün {$diff->h} sa";
+                        if ($diff->h > 0) return "{$diff->h} saat {$diff->i} dk";
+                        return "{$diff->i} dakika";
+                    })
+                    ->color(function ($record) {
+                        if ($record->status === 'çözüldü' || $record->status === 'iptal') return 'gray';
+                        $hours = \Carbon\Carbon::parse($record->created_at)->diffInHours(now());
+                        if ($hours >= 24) return 'danger';
+                        if ($hours >= 2) return 'warning';
+                        return 'success';
+                    })
+                    ->sortable()
+                    ->description(fn ($record) => $record->created_at->format('d.m.Y H:i')),
             ])
             ->filters([
+                SelectFilter::make('assigned_to')
+                    ->label('Atanan')
+                    ->relationship('assignedTo', 'name')
+                    ->searchable()
+                    ->preload(),
                 SelectFilter::make('category_id')
                     ->label('Kategori')
                     ->relationship('category', 'name')
@@ -117,6 +140,35 @@ class TicketsTable
             ])
             ->recordActions([
                 EditAction::make(),
+                Action::make('claim')
+                    ->label('Üzerime Al')
+                    ->icon('heroicon-o-hand-raised')
+                    ->color('success')
+                    ->action(fn (Ticket $record) => $record->update(['assigned_to' => auth()->id()]))
+                    ->visible(fn (Ticket $record) => $record->assigned_to !== auth()->id() && $record->status !== 'çözüldü' && $record->status !== 'iptal'),
+                Action::make('assign')
+                    ->label('Bileti Ata')
+                    ->icon('heroicon-o-user-plus')
+                    ->color('info')
+                    ->form([
+                        \Filament\Forms\Components\Select::make('assigned_to')
+                            ->label('Teknisyen Seç')
+                            ->options(function (Ticket $record) {
+                                $users = \App\Models\User::whereHas('categories', fn ($query) => $query->where('categories.id', $record->category_id))
+                                    ->pluck('name', 'id');
+                                
+                                if ($users->isEmpty()) {
+                                    return \App\Models\User::all()->pluck('name', 'id');
+                                }
+                                
+                                return $users;
+                            })
+                            ->required()
+                            ->searchable()
+                            ->preload(),
+                    ])
+                    ->action(fn (Ticket $record, array $data) => $record->update($data))
+                    ->visible(fn (Ticket $record) => $record->status !== 'çözüldü' && $record->status !== 'iptal'),
                 Action::make('print')
                     ->label('Yazdır')
                     ->icon('heroicon-o-printer')

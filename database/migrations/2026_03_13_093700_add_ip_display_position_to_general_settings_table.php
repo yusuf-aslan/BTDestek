@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('device_templates', function (Blueprint $table) {
-            $table->string('model')->nullable()->after('name');
+        Schema::table('general_settings', function (Blueprint $table) {
+            $table->string('ip_display_position')->default('footer')->after('show_email_on_ticket_form');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('device_templates', function (Blueprint $table) {
-            $table->dropColumn('model');
+        Schema::table('general_settings', function (Blueprint $table) {
+            $table->dropColumn('ip_display_position');
         });
     }
 };

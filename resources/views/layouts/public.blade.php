@@ -71,6 +71,16 @@
                     </div>
                 @endif
             </a>
+
+            @if($settings->ip_display_position === 'header')
+            <div class="hidden lg:flex px-4 py-2 bg-blue-50 dark:bg-blue-900/30 rounded-2xl border-2 border-blue-100 dark:border-blue-800/50 items-center gap-3 ml-6 shadow-sm">
+                <div class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+                </div>
+                <span class="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-tighter">IP ADRESİNİZ: <span class="text-blue-700 dark:text-blue-400 ml-1 text-sm antialiased">{{ request()->ip() }}</span></span>
+            </div>
+            @endif
             
             <div class="flex items-center gap-8">
                 <nav class="hidden md:flex items-center gap-8 text-xs font-bold text-slate-600 @if($settings->is_dark_mode_enabled) dark:text-slate-300 @endif uppercase tracking-widest">
@@ -124,10 +134,12 @@
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi</p>
             
-            <div class="px-4 py-2 bg-slate-100 @if($settings->is_dark_mode_enabled) dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 @else rounded-full border border-slate-200 @endif flex items-center gap-2">
+            @if($settings->ip_display_position === 'footer')
+            <div class="px-4 py-2 bg-slate-100 @if($settings->is_dark_mode_enabled) dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 @else rounded-full border border-slate-200 @endif flex items-center gap-2 shrink-0">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 <span class="text-xs font-bold text-slate-600 @if($settings->is_dark_mode_enabled) dark:text-slate-300 @endif tracking-wider">IP Adresiniz: <span class="text-blue-700 @if($settings->is_dark_mode_enabled) dark:text-blue-400 @endif">{{ request()->ip() }}</span></span>
             </div>
+            @endif
 
             <div class="flex gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
                 <a href="/admin" class="hover:text-blue-600 @if($settings->is_dark_mode_enabled) dark:hover:text-blue-400 @endif">Teknisyen Girişi</a>
@@ -217,5 +229,17 @@
             });
         });
     </script>
+
+    @if($settings->ip_display_position === 'fixed')
+    <div class="fixed bottom-10 left-10 z-[100] px-6 py-4 bg-white dark:bg-slate-800 rounded-3xl border-2 border-slate-200 dark:border-slate-700 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] flex items-center gap-4 transition-all hover:scale-105 group border-l-[12px] border-l-blue-600">
+        <div class="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] leading-none mb-1">CİHAZ IP ADRESİNİZ</span>
+            <span class="text-xl font-black text-blue-700 dark:text-blue-400 leading-none tracking-tight">{{ request()->ip() }}</span>
+        </div>
+    </div>
+    @endif
 </body>
 </html>

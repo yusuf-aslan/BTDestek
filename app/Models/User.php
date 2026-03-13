@@ -58,6 +58,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->belongsToMany(Category::class);
     }
 
+    public function tickets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Ticket::class, 'assigned_to');
+    }
+
+    public function resolvedTickets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Ticket::class, 'resolved_by');
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         // All registered users can access the admin panel, 
