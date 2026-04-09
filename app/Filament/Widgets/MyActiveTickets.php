@@ -54,7 +54,7 @@ class MyActiveTickets extends BaseWidget
                     ->limit(50),
 
                 Tables\Columns\TextColumn::make('department_room')
-                    ->label('Bölüm/Oda')
+                    ->label('Bölüm')
                     ->limit(30),
 
                 Tables\Columns\TextColumn::make('priority')

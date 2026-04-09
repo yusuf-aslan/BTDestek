@@ -104,7 +104,7 @@
             <td>{{ $ticket->name }}</td>
         </tr>
         <tr>
-            <th>Bölüm / Oda No</th>
+            <th>Bölüm</th>
             <td>{{ $ticket->department_room }}</td>
         </tr>
         <tr>
@@ -117,7 +117,7 @@
         </tr>
         @if($ticket->broken_pc_ip)
         <tr>
-            <th>Arızalı PC IP</th>
+            <th>Arızalı PC IP (Zorunlu Değil)</th>
             <td>{{ $ticket->broken_pc_ip }}</td>
         </tr>
         @endif

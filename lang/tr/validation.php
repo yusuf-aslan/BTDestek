@@ -186,10 +186,10 @@ return [
         'email' => 'E-Posta Adresi',
         'password' => 'Parola',
         'name' => 'Ad Soyad',
-        'department_room' => 'Bölüm / Oda',
+        'department_room' => 'Bölüm',
         'category_id' => 'Kategori',
-        'subject' => 'Konu',
-        'description' => 'Açıklama',
+        'subject' => 'Talep Başlığı',
+        'description' => 'Detaylı Açıklama',
     ],
 
 ];

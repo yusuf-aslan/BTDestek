@@ -33,7 +33,7 @@ class TicketForm
                             ->email()
                             ->disabled(),
                         TextInput::make('department_room')
-                            ->label('Bölüm / Oda')
+                            ->label('Bölüm')
                             ->disabled(),
                         TextInput::make('phone_number')
                             ->label('Dahili No / Tel')
@@ -56,15 +56,16 @@ class TicketForm
                             ->label('Talep Yazılan PC IP')
                             ->disabled(),
                         TextInput::make('broken_pc_ip')
-                            ->label('Arızalı PC IP')
+                            ->label('Arızalı PC IP (Zorunlu Değil)')
                             ->disabled(),
 
                         TextInput::make('subject')
-                            ->label('Konu')
+                            ->label('Talep Başlığı (Kısaca)')
+                            ->placeholder('Örn: Bilgisayar açılmıyor, Hasta taburcu edilemiyor vb.')
                             ->disabled()
                             ->columnSpanFull(),
                         Textarea::make('description')
-                            ->label('Açıklama')
+                            ->label('Detaylı Açıklama')
                             ->disabled()
                             ->rows(10)
                             ->columnSpanFull(),

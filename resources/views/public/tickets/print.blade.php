@@ -38,7 +38,7 @@
                 @if($ticket->email)
                     <p><span class="font-semibold text-slate-700">E-posta:</span> {{ $ticket->email }}</p>
                 @endif
-                <p><span class="font-semibold text-slate-700">Bölüm / Oda:</span> {{ $ticket->department_room }}</p>
+                <p><span class="font-semibold text-slate-700">Bölüm:</span> {{ $ticket->department_room }}</p>
                 <p><span class="font-semibold text-slate-700">Dahili / Tel:</span> {{ $ticket->phone_number }}</p>
             </div>
             <div>

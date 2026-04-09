@@ -47,7 +47,7 @@
                         <p class="font-medium text-slate-700">{{ $ticket->name }}</p>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-slate-400 uppercase">Bölüm / Oda</label>
+                        <label class="text-xs font-bold text-slate-400 uppercase">Bölüm</label>
                         <p class="font-medium text-slate-700">{{ $ticket->department_room }}</p>
                     </div>
                     <div>

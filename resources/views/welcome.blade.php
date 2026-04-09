@@ -135,8 +135,7 @@
                             <p class="font-semibold text-slate-700 dark:text-slate-200">{{ $ticket->name }}</p>
                         </div>
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bölüm / Oda</label>
-                            <p class="font-semibold text-slate-700 dark:text-slate-200">{{ $ticket->department_room }}</p>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bölüm</label>                            <p class="font-semibold text-slate-700 dark:text-slate-200">{{ $ticket->department_room }}</p>
                         </div>
                         <div class="space-y-1">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Kategori</label>
@@ -267,7 +266,7 @@
                     
                     @if(session('success_data'))
                         @php $successData = session('success_data'); @endphp
-                        <div class="m-8 p-6 bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-100 dark:border-emerald-800/50 text-emerald-900 dark:text-emerald-300 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-500">
+                        <div class="mx-8 mt-6 mb-2 p-6 bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-100 dark:border-emerald-800/50 text-emerald-900 dark:text-emerald-300 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-500">
                             <div class="flex items-start gap-5">
                                 <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center shrink-0 mt-1">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -323,7 +322,7 @@
                     @endif
 
                     @if($errors->has('error'))
-                        <div class="m-8 p-5 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/50 text-red-900 dark:text-red-300 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                        <div class="mx-8 mt-6 mb-2 p-5 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/50 text-red-900 dark:text-red-300 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
                             <div class="w-10 h-10 bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </div>
@@ -347,7 +346,7 @@
                             </div>
                             @endif
                             <div class="space-y-2">
-                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Bölüm / Oda No</label>
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Bölüm</label>
                                 <input type="text" name="department_room" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dahiliye - Kat 2">
                             </div>
                             <div class="space-y-2">
@@ -355,7 +354,7 @@
                                 <input type="text" name="phone_number" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 4455">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Arızalı PC IP (Opsiyonel)</label>
+                                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1 whitespace-nowrap">Arızalı PC IP (Zorunlu Değil)</label>
                                 <input type="text" name="broken_pc_ip" {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 10.10.10.20">
                             </div>
                         </div>
@@ -371,18 +370,30 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Konu Başlığı</label>
-                            <input type="text" name="subject" required maxlength="100" {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Kısaca sorununuz nedir?">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Talep Başlığı (Kısaca)</label>
+                            <input type="text" name="subject" required maxlength="100" {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Bilgisayar açılmıyor, Hasta taburcu edilemiyor vb.">
                             <p class="text-[10px] text-slate-400 ml-1 italic">* Lütfen kısa bir başlık yazın, detayları aşağıdaki kutucuğa ekleyin (Max. 100 Karakter).</p>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Detaylı Açıklama</label>
-                            <textarea name="description" rows="5" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Hata mesajı, cihaz markası vb. detayları belirtin..."></textarea>
+                            <textarea name="description" rows="5" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Yaşadığınız sorunu, varsa aldığınız hata mesajlarını ve cihazdaki belirtileri detaylıca buraya yazınız..."></textarea>
                         </div>
 
-                        <div class="space-y-2">
-                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Ekler (İsteğe Bağlı)</label>
+                        <div class="pt-4">
+                            <button type="submit" @if($isClosed) disabled @endif 
+                                    class="w-full {{ $isClosed ? 'bg-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200 dark:shadow-none animate-pulse-subtle' }} text-white font-extrabold py-5 rounded-2xl transition-all duration-300 shadow-2xl flex items-center justify-center gap-4 text-base uppercase tracking-[0.2em]">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                                {{ $isClosed ? 'Şu An Talep Alınmıyor' : 'Talebi Gönder (Buraya Tıklayın)' }}
+                            </button>
+                        </div>
+
+                        <div class="space-y-2 pt-6 border-t border-slate-100 dark:border-slate-800">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                Ekler (İsteğe Bağlı)
+                            </label>
+                            <p class="text-[10px] text-slate-400 ml-1 italic mb-2">Talebinize dair fotoğraf veya belge eklemek isterseniz aşağıyı kullanabilirsiniz (Zorunlu değildir).</p>
                             <div x-data="{ files: [] }" class="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition bg-slate-50/50 dark:bg-slate-900/50 text-center cursor-pointer group" @if(!$isClosed) @click="$refs.fileInput.click()" @endif>
                                 <input x-ref="fileInput" type="file" name="attachments[]" multiple class="hidden" @change="files = Array.from($event.target.files)" {{ $isClosed ? 'disabled' : '' }}>
                                 
@@ -403,12 +414,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button type="submit" @if($isClosed) disabled @endif 
-                                class="w-full {{ $isClosed ? 'bg-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200 dark:shadow-none animate-pulse-subtle' }} text-white font-extrabold py-5 rounded-2xl transition-all duration-300 shadow-2xl flex items-center justify-center gap-4 text-base uppercase tracking-[0.2em]">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                            {{ $isClosed ? 'Şu An Talep Alınmıyor' : 'Talebi Gönder (Buraya Tıklayın)' }}
-                        </button>
 
                         <style>
                             @keyframes pulse-subtle {
