@@ -46,11 +46,11 @@ class TicketController extends Controller
 
             // Check Work Hours
             if (!$settings->allow_tickets_outside_work_hours) {
-                $start = \Carbon\Carbon::parse($settings->work_hours_start)->format('H:i:s');
-                $end = \Carbon\Carbon::parse($settings->work_hours_end)->format('H:i:s');
+                $start = \Carbon\Carbon::parse($settings->work_hours_start)->format('H:i');
+                $end = \Carbon\Carbon::parse($settings->work_hours_end)->format('H:i');
 
                 if ($currentTime < $start || $currentTime > $end) {
-                    return redirect()->back()->withErrors(['error' => "Mesai saatleri ({$settings->work_hours_start} - {$settings->work_hours_end}) dışında sistem üzerinden talep kabul edilmemektedir."])->withInput();
+                    return redirect()->back()->withErrors(['error' => "Sistemimiz günlük talep kabul saatleri dışındadır. Taleplerinizi hafta içi {$start} - {$end} saatleri arasında iletebilirsiniz."])->withInput();
                 }
             }
         }
@@ -62,9 +62,11 @@ class TicketController extends Controller
             'phone_number' => 'required|string|max:255',
             'broken_pc_ip' => 'nullable|ip',
             'category_id' => 'required|exists:categories,id',
-            'subject' => 'required|string|max:255',
+            'subject' => 'required|string|max:100',
             'description' => 'required|string',
             'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf,txt,log|max:5120',
+        ], [
+            'subject.max' => 'Konu başlığı çok uzun. Lütfen kısa bir başlık yazıp detayları "Detaylı Açıklama" kısmına ekleyin (Maksimum 100 karakter).',
         ]);
 
         $trackingNumber = 'BT-' . date('Y') . '-' . strtoupper(Str::random(6));
@@ -99,6 +101,13 @@ class TicketController extends Controller
             'message' => 'Talebiniz başarıyla alındı. Talep numaranızı ve aşağıdaki yazdırma seçeneğini kullanarak talebinizin bir kopyasını saklamanızı öneririz.',
             'tracking_number' => $ticket->tracking_number,
             'ticket_id' => $ticket->id,
+            'copy_data' => [
+                'name' => $ticket->name,
+                'email' => $ticket->email,
+                'department_room' => $ticket->department_room,
+                'phone_number' => $ticket->phone_number,
+                'category_id' => $ticket->category_id,
+            ]
         ]);
     }
 

@@ -71,8 +71,9 @@ class TicketsTable
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Bekleme Süresi')
-                    ->formatStateUsing(function ($state) {
-                        $diff = \Carbon\Carbon::parse($state)->diff(now());
+                    ->formatStateUsing(function ($state, $record) {
+                        $endTime = ($record->status === 'çözüldü' || $record->status === 'iptal') ? ($record->resolved_at ?? $record->updated_at) : now();
+                        $diff = \Carbon\Carbon::parse($state)->diff($endTime);
                         if ($diff->d > 0) return "{$diff->d} gün {$diff->h} sa";
                         if ($diff->h > 0) return "{$diff->h} saat {$diff->i} dk";
                         return "{$diff->i} dakika";

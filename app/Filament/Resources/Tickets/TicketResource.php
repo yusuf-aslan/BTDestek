@@ -30,30 +30,38 @@ class TicketResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) static::getEloquentQuery()
+        $count = static::getEloquentQuery()
             ->whereNotIn('status', ['çözüldü', 'iptal'])
             ->count();
+
+        return $count > 0 ? (string) $count : null;
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return static::getEloquentQuery()
-            ->whereNotIn('status', ['çözüldü', 'iptal'])
-            ->count() > 0 ? 'warning' : 'gray';
+        return 'warning';
     }
 
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        $user = Auth::user();
+        $user = \Filament\Facades\Filament::auth()->user();
 
-        if ($user && !$user->is_admin) {
-            // Filter tickets where the category is assigned to the user
-            $query->whereHas('category', function (Builder $query) use ($user) {
-                $query->whereHas('users', function (Builder $query) use ($user) {
-                    $query->where('users.id', $user->id);
+        if ($user) {
+            // Check if the user has any assigned categories
+            $hasAssignedCategories = $user->categories()->exists();
+            
+            if ($hasAssignedCategories) {
+                // Filter tickets where the category is assigned to the user
+                $query->whereHas('category', function (Builder $query) use ($user) {
+                    $query->whereHas('users', function (Builder $query) use ($user) {
+                        $query->where('users.id', $user->id);
+                    });
                 });
-            });
+            } elseif (!$user->is_admin) {
+                // If not admin and no categories, they shouldn't see anything
+                $query->whereRaw('1 = 0');
+            }
         }
 
         return $query;

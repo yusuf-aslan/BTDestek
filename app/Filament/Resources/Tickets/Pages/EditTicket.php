@@ -19,6 +19,14 @@ class EditTicket extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('save_top')
+                ->label('Değişiklikleri Kaydet')
+                ->color('primary')
+                ->action('save'),
+            Action::make('cancel_top')
+                ->label('İptal')
+                ->color('gray')
+                ->url($this->getResource()::getUrl('index')),
             Action::make('print')
                 ->label('Yazdır')
                 ->icon('heroicon-o-printer')

@@ -66,6 +66,7 @@ class TicketForm
                         Textarea::make('description')
                             ->label('Açıklama')
                             ->disabled()
+                            ->rows(10)
                             ->columnSpanFull(),
                     ])->columns(2),
 
@@ -151,7 +152,7 @@ class TicketForm
                             
                         Textarea::make('resolution_note')
                             ->label('Çözüm Notu / Açıklama')
-                            ->rows(4)
+                            ->rows(10)
                             ->columnSpanFull(),
 
                         DatePicker::make('resolved_at')

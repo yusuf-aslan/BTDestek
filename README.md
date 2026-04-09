@@ -107,12 +107,18 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
-*   **v1.11 - Sistem Güvenliği ve Kullanıcı Deneyimi Geliştirmeleri:**
-    *   **Sistem Yedekleme ve Geri Yükleme (JSON):** Tüm veritabanı tablolarını (Talepler, Envanterler, Ayarlar, Kullanıcılar vb.) tek bir JSON dosyası olarak yedekleme ve geri yükleme özelliği eklendi. Geri yükleme işlemi sırasında veri bütünlüğünü korumak için otomatik tablo temizleme (truncate) mekanizması kuruldu.
-    *   **Dinamik IP Adresi Gösterimi:** Kullanıcı IP adresinin sayfa üzerinde nerede görüneceği (Üst Menü, Alt Bilgi, Sol Alt Sabit Kart veya Gizli) artık panelden dinamik olarak ayarlanabiliyor. 'Sabit' ve 'Üst Menü' modlarında yüksek görünürlük için animasyonlu tasarımlar eklendi.
-    *   **Teknisyen Atama ve Çözüm Mantığı İyileştirmesi:** Talepler çözüldüğünde, çözümü yapan kişi (`assigned_to`) olarak atanmamışsa otomatik olarak atama yapılması ve çözüm kredisinin (`resolved_by`) doğru kişiye yazılması sağlandı.
-    *   **Filament v4 Uyumluluğu:** Tüm yönetim paneli bileşenleri ve form şemaları en güncel Filament v4 standartlarına (Schema ve Actions sınıfları) taşındı.
-    *   **Veritabanı Bildirimleri:** Teknikerlere yeni talep atandığında veya durum değiştiğinde panel üzerinden anlık bildirim gitmesi sağlandı.
+*   **v1.12 - Kullanıcı Deneyimi ve Sığır-Savar (Görünürlük) Güncellemeleri:**
+    *   **"Kör Gözler" İçin Ultra Görünür Buton:** Talep gönder butonu, dikkat çekici Yeşil (Emerald) renge dönüştürüldü, boyutu büyütüldü ve üzerine hafif bir nabız (pulse) animasyonu eklendi. Ayrıca üzerine açıkça "(BURAYA TIKLAYIN)" ibaresi eklendi.
+    *   **Talep No Kopyalama:** Talep başarıyla oluşturulduktan sonra ekrana gelen takip numarasını tek tıkla panoya kopyalayan "Talep No Kopyala" butonu eklendi.
+    *   **Kategori Bazlı Yetki Kısıtlaması (Admin Dahil):** Admin kullanıcıları dahi olsalar, eğer bir kategoriye atanmışlarsa sadece o kategorinin taleplerini görecek şekilde kısıtlandılar. Bu kısıtlama Dashboard (Bekleyen Talepler) ve yan menüdeki sayaçlara (badge) da yansıtıldı.
+    *   **Akıllı Bekleme Süresi:** Taleplerin bekleme süresi artık 'çözüldü' veya 'iptal' durumuna geçtiğinde duruyor. Hesaplama `now()` yerine çözüm tarihini baz alacak şekilde düzeltildi.
+    *   **Gelişmiş Form Alanları:** Admin panelindeki "Açıklama" ve "Çözüm Notu" alanları 10 satır yüksekliğine çıkarılarak daha geniş bir görüş alanı sağlandı.
+    *   **Talep Kabul Saatleri Kontrolü:** "Mesai Saatleri" ifadesi "Talep Kabul Saatleri" olarak güncellendi. Kullanıcı formu doldurmaya başlamadan önce sistemin kapalı olup olmadığı kontrol ediliyor ve erken uyarı gösteriliyor.
+    *   **Sığır-Savar Başlık Kısıtlaması:** Konu başlığına 100 karakter sınırı getirildi ve tüm detayın başlığa yazılmasını engelleyen hem ön yüz hem arka yüz doğrulamaları eklendi.
+    *   **Hızlı Kaydet:** Talep düzenleme sayfasının en üstüne "Değişiklikleri Kaydet" butonu eklendi.
+    *   **Versiyon Bilgisi:** Footer alanına sistem versiyonu (v1.12) eklendi.
+
+*   **v1.11 - Sistem Güvenliği ve Yedekleme:**
 
 *   **v1.10 - Detaylı Envanter Yönetimi Geliştirmeleri:**
     *   **PDF Raporuna Teknik Özellikler:** Envanter sorgulama PDF raporuna RAM ve Monitör teknik özellikleri eklendi.

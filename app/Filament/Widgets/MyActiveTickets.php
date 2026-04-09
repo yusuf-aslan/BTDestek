@@ -25,12 +25,17 @@ class MyActiveTickets extends BaseWidget
                     ->whereNotIn('status', ['çözüldü', 'iptal'])
                     ->where(function (Builder $query) {
                         $user = Auth::user();
-                        if (!$user->is_admin) {
-                            $query->whereHas('category', function (Builder $q) use ($user) {
-                                $q->whereHas('users', function (Builder $sq) use ($user) {
-                                    $sq->where('users.id', $user->id);
+                        if ($user) {
+                            $hasAssignedCategories = $user->categories()->exists();
+                            if ($hasAssignedCategories) {
+                                $query->whereHas('category', function (Builder $q) use ($user) {
+                                    $q->whereHas('users', function (Builder $sq) use ($user) {
+                                        $sq->where('users.id', $user->id);
+                                    });
                                 });
-                            });
+                            } elseif (!$user->is_admin) {
+                                $query->whereRaw('1 = 0');
+                            }
                         }
                     })
                     ->latest()

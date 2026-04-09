@@ -220,10 +220,49 @@
             
             <!-- Submit Form -->
             <div class="lg:col-span-8 space-y-8" id="submit">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+                @php
+                    $isClosed = false;
+                    $closedReason = '';
+                    if ($settings) {
+                        $now = now();
+                        if ($now->isWeekend() && !$settings->weekend_tickets_allowed) {
+                            $isClosed = true;
+                            $closedReason = 'Hafta sonları sistem üzerinden talep kabul edilmemektedir. Acil durumlar için lütfen nöbetçi amirliği arayınız.';
+                        } elseif (!$settings->allow_tickets_outside_work_hours) {
+                            $currentTime = $now->format('H:i');
+                            $start = \Carbon\Carbon::parse($settings->work_hours_start)->format('H:i');
+                            $end = \Carbon\Carbon::parse($settings->work_hours_end)->format('H:i');
+                            if ($currentTime < $start || $currentTime > $end) {
+                                $isClosed = true;
+                                $closedReason = "Sistemimiz günlük talep kabul saatleri dışındadır. Taleplerinizi hafta içi {$start} - {$end} saatleri arasında iletebilirsiniz.";
+                            }
+                        }
+                    }
+                @endphp
+
+                @if($isClosed)
+                    <div class="bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-100 dark:border-amber-800/50 p-6 rounded-2xl flex items-center gap-5 animate-in fade-in slide-in-from-top-4 duration-500">
+                        <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 rounded-full flex items-center justify-center shrink-0">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-amber-800 dark:text-amber-200 mb-1">Şu Anda Talep Alınmamaktadır</h4>
+                            <p class="font-medium text-sm text-amber-700 dark:text-amber-300/90 leading-relaxed">
+                                {{ $closedReason }}
+                            </p>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300 {{ $isClosed ? 'opacity-75 grayscale-[0.5]' : '' }}">
                     <div class="p-8 border-b border-slate-100 dark:border-slate-700 bg-slate-50/30 dark:bg-slate-900/20">
                         <h2 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-white">Destek Talebi Oluştur</h2>
-                        <p class="text-slate-500 dark:text-slate-400 mt-1">Hızlı çözüm için lütfen tüm alanları eksiksiz doldurun.</p>
+                        <div class="mt-2 flex items-start gap-2 text-slate-500 dark:text-slate-400">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p class="text-sm leading-relaxed">
+                                Hızlı çözüm için lütfen tüm alanları eksiksiz doldurun. Talebiniz oluşturulduktan sonra size verilecek olan <strong class="text-slate-700 dark:text-slate-200">Talep Numarasını</strong> (Örn: BT-2026-XXXXXX) mutlaka not ediniz. Bu numara ile talebinizin durumunu dilediğiniz zaman sorgulayabilirsiniz.
+                            </p>
+                        </div>
                     </div>
                     
                     @if(session('success_data'))
@@ -247,11 +286,37 @@
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                                             Yazdır
                                         </a>
-                                        <a href="{{ route('public.tickets.print', ['ticket' => $successData['ticket_id'], 'action' => 'pdf']) }}" target="_blank" class="flex items-center justify-center gap-2 bg-white/80 dark:bg-emerald-900/50 hover:bg-white dark:hover:bg-emerald-900 text-emerald-800 dark:text-white font-bold py-2 px-5 rounded-lg transition text-sm border border-emerald-200 dark:border-emerald-800">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                            PDF İndir
-                                        </a>
+                                        <button type="button" 
+                                                onclick="copyTrackingNumber('{{ $successData['tracking_number'] }}')" 
+                                                class="flex items-center justify-center gap-2 bg-white/80 dark:bg-emerald-900/50 hover:bg-white dark:hover:bg-emerald-900 text-emerald-800 dark:text-white font-bold py-2 px-5 rounded-lg transition text-sm border border-emerald-200 dark:border-emerald-800">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                            Talep No Kopyala
+                                        </button>
                                     </div>
+                                    <script>
+                                        function copyTrackingNumber(text) {
+                                            if (!navigator.clipboard) {
+                                                const el = document.createElement('textarea');
+                                                el.value = text;
+                                                document.body.appendChild(el);
+                                                el.select();
+                                                document.execCommand('copy');
+                                                document.body.removeChild(el);
+                                            } else {
+                                                navigator.clipboard.writeText(text);
+                                            }
+                                            
+                                            // Optional: Alert or feedback
+                                            const btn = event.currentTarget;
+                                            const originalText = btn.innerHTML;
+                                            btn.innerHTML = 'Kopyalandı!';
+                                            btn.classList.add('bg-emerald-100');
+                                            setTimeout(() => {
+                                                btn.innerHTML = originalText;
+                                                btn.classList.remove('bg-emerald-100');
+                                            }, 2000);
+                                        }
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -273,31 +338,31 @@
                         <div class="grid md:grid-cols-3 gap-6">
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Adınız Soyadınız</label>
-                                <input type="text" name="name" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dr. Ahmet Yılmaz">
+                                <input type="text" name="name" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dr. Ahmet Yılmaz">
                             </div>
                             @if($settings->show_email_on_ticket_form)
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">E-posta (İsteğe Bağlı)</label>
-                                <input type="email" name="email" class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="bildirim@ornek.com">
+                                <input type="email" name="email" {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="bildirim@ornek.com">
                             </div>
                             @endif
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Bölüm / Oda No</label>
-                                <input type="text" name="department_room" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dahiliye - Kat 2">
+                                <input type="text" name="department_room" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dahiliye - Kat 2">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Dahili No / Tel</label>
-                                <input type="text" name="phone_number" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 4455">
+                                <input type="text" name="phone_number" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 4455">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Arızalı PC IP (Opsiyonel)</label>
-                                <input type="text" name="broken_pc_ip" class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 10.10.10.20">
+                                <input type="text" name="broken_pc_ip" {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: 10.10.10.20">
                             </div>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Kategori</label>
-                            <select name="category_id" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white appearance-none">
+                            <select name="category_id" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white appearance-none">
                                 <option value="">Bir kategori seçin...</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -307,18 +372,19 @@
 
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Konu Başlığı</label>
-                            <input type="text" name="subject" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Kısaca sorununuz nedir?">
+                            <input type="text" name="subject" required maxlength="100" {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Kısaca sorununuz nedir?">
+                            <p class="text-[10px] text-slate-400 ml-1 italic">* Lütfen kısa bir başlık yazın, detayları aşağıdaki kutucuğa ekleyin (Max. 100 Karakter).</p>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Detaylı Açıklama</label>
-                            <textarea name="description" rows="5" required class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Hata mesajı, cihaz markası vb. detayları belirtin..."></textarea>
+                            <textarea name="description" rows="5" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Hata mesajı, cihaz markası vb. detayları belirtin..."></textarea>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Ekler (İsteğe Bağlı)</label>
-                            <div x-data="{ files: [] }" class="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition bg-slate-50/50 dark:bg-slate-900/50 text-center cursor-pointer group" @click="$refs.fileInput.click()">
-                                <input x-ref="fileInput" type="file" name="attachments[]" multiple class="hidden" @change="files = Array.from($event.target.files)">
+                            <div x-data="{ files: [] }" class="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition bg-slate-50/50 dark:bg-slate-900/50 text-center cursor-pointer group" @if(!$isClosed) @click="$refs.fileInput.click()" @endif>
+                                <input x-ref="fileInput" type="file" name="attachments[]" multiple class="hidden" @change="files = Array.from($event.target.files)" {{ $isClosed ? 'disabled' : '' }}>
                                 
                                 <div x-show="files.length === 0" class="flex flex-col items-center gap-2 text-slate-500 dark:text-slate-400 group-hover:text-blue-500 transition">
                                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
@@ -338,10 +404,21 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 rounded-xl transition shadow-xl shadow-blue-100 dark:shadow-none flex items-center justify-center gap-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                            Talebi Gönder
+                        <button type="submit" @if($isClosed) disabled @endif 
+                                class="w-full {{ $isClosed ? 'bg-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200 dark:shadow-none animate-pulse-subtle' }} text-white font-extrabold py-5 rounded-2xl transition-all duration-300 shadow-2xl flex items-center justify-center gap-4 text-base uppercase tracking-[0.2em]">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                            {{ $isClosed ? 'Şu An Talep Alınmıyor' : 'Talebi Gönder (Buraya Tıklayın)' }}
                         </button>
+
+                        <style>
+                            @keyframes pulse-subtle {
+                                0%, 100% { transform: scale(1); box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4); }
+                                50% { transform: scale(1.02); box-shadow: 0 20px 30px -5px rgba(16, 185, 129, 0.6); }
+                            }
+                            .animate-pulse-subtle:not(:disabled) {
+                                animation: pulse-subtle 3s infinite ease-in-out;
+                            }
+                        </style>
                     </form>
                 </div>
             </div>

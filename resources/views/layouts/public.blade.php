@@ -132,7 +132,7 @@
     <!-- Footer -->
     <footer class="mt-auto py-10 border-t border-slate-200 @if($settings->is_dark_mode_enabled) dark:border-slate-700 bg-white dark:bg-slate-800 @else bg-white @endif shrink-0 transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi</p>
+            <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi <span class="ml-2 opacity-50">v1.12</span></p>
             
             @if($settings->ip_display_position === 'footer')
             <div class="px-4 py-2 bg-slate-100 @if($settings->is_dark_mode_enabled) dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 @else rounded-full border border-slate-200 @endif flex items-center gap-2 shrink-0">
