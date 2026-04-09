@@ -107,14 +107,14 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
-*   **v1.12 - Kullanıcı Deneyimi ve Sığır-Savar (Görünürlük) Güncellemeleri:**
-    *   **"Kör Gözler" İçin Ultra Görünür Buton:** Talep gönder butonu, dikkat çekici Yeşil (Emerald) renge dönüştürüldü, boyutu büyütüldü ve üzerine hafif bir nabız (pulse) animasyonu eklendi. Ayrıca üzerine açıkça "(BURAYA TIKLAYIN)" ibaresi eklendi.
+*   **v1.12 - Kullanıcı Deneyimi ve Görünürlük Odaklı Güncellemeler:**
+    *   **Geliştirilmiş Form Gönderim Butonu:** Talep gönder butonu, dikkat çekici Yeşil (Emerald) renge dönüştürüldü, boyutu büyütüldü ve üzerine hafif bir nabız (pulse) animasyonu eklendi. Ayrıca üzerine açıkça "(BURAYA TIKLAYIN)" ibaresi eklenerek fark edilebilirliği artırıldı.
     *   **Talep No Kopyalama:** Talep başarıyla oluşturulduktan sonra ekrana gelen takip numarasını tek tıkla panoya kopyalayan "Talep No Kopyala" butonu eklendi.
     *   **Kategori Bazlı Yetki Kısıtlaması (Admin Dahil):** Admin kullanıcıları dahi olsalar, eğer bir kategoriye atanmışlarsa sadece o kategorinin taleplerini görecek şekilde kısıtlandılar. Bu kısıtlama Dashboard (Bekleyen Talepler) ve yan menüdeki sayaçlara (badge) da yansıtıldı.
     *   **Akıllı Bekleme Süresi:** Taleplerin bekleme süresi artık 'çözüldü' veya 'iptal' durumuna geçtiğinde duruyor. Hesaplama `now()` yerine çözüm tarihini baz alacak şekilde düzeltildi.
     *   **Gelişmiş Form Alanları:** Admin panelindeki "Açıklama" ve "Çözüm Notu" alanları 10 satır yüksekliğine çıkarılarak daha geniş bir görüş alanı sağlandı.
     *   **Talep Kabul Saatleri Kontrolü:** "Mesai Saatleri" ifadesi "Talep Kabul Saatleri" olarak güncellendi. Kullanıcı formu doldurmaya başlamadan önce sistemin kapalı olup olmadığı kontrol ediliyor ve erken uyarı gösteriliyor.
-    *   **Sığır-Savar Başlık Kısıtlaması:** Konu başlığına 100 karakter sınırı getirildi ve tüm detayın başlığa yazılmasını engelleyen hem ön yüz hem arka yüz doğrulamaları eklendi.
+    *   **Konu Başlığı Karakter Sınırı:** Konu başlığına 100 karakter sınırı getirildi ve tüm detayın başlığa yazılmasını engelleyen hem ön yüz hem arka yüz doğrulamaları eklendi.
     *   **Hızlı Kaydet:** Talep düzenleme sayfasının en üstüne "Değişiklikleri Kaydet" butonu eklendi.
     *   **Versiyon Bilgisi:** Footer alanına sistem versiyonu (v1.12) eklendi.
 
