@@ -394,7 +394,27 @@
                                 Ekler (İsteğe Bağlı)
                             </label>
                             <p class="text-[10px] text-slate-400 ml-1 italic mb-2">Talebinize dair fotoğraf veya belge eklemek isterseniz aşağıyı kullanabilirsiniz (Zorunlu değildir).</p>
-                            <div x-data="{ files: [] }" class="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition bg-slate-50/50 dark:bg-slate-900/50 text-center cursor-pointer group" @if(!$isClosed) @click="$refs.fileInput.click()" @endif>
+                            <div x-data="{ 
+                                files: [], 
+                                dragging: false,
+                                handleDrop(e) {
+                                    this.dragging = false;
+                                    const droppedFiles = Array.from(e.dataTransfer.files);
+                                    if (droppedFiles.length > 0) {
+                                        this.files = [...this.files, ...droppedFiles];
+                                        // Update the hidden file input
+                                        const dataTransfer = new DataTransfer();
+                                        this.files.forEach(file => dataTransfer.items.add(file));
+                                        this.$refs.fileInput.files = dataTransfer.files;
+                                    }
+                                }
+                            }" 
+                            class="relative border-2 border-dashed rounded-xl p-4 transition bg-slate-50/50 dark:bg-slate-900/50 text-center cursor-pointer group"
+                            :class="dragging ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500'"
+                            @dragover.prevent="dragging = true"
+                            @dragleave.prevent="dragging = false"
+                            @drop.prevent="handleDrop($event)"
+                            @if(!$isClosed) @click="$refs.fileInput.click()" @endif>
                                 <input x-ref="fileInput" type="file" name="attachments[]" multiple class="hidden" @change="files = Array.from($event.target.files)" {{ $isClosed ? 'disabled' : '' }}>
                                 
                                 <div x-show="files.length === 0" class="flex flex-col items-center gap-2 text-slate-500 dark:text-slate-400 group-hover:text-blue-500 transition">

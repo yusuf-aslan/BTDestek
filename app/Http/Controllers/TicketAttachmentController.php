@@ -10,10 +10,10 @@ class TicketAttachmentController extends Controller
 {
     public function download(TicketAttachment $attachment)
     {
-        if (! Storage::exists($attachment->file_path)) {
+        if (! Storage::disk('public')->exists($attachment->file_path)) {
             abort(404);
         }
 
-        return Storage::download($attachment->file_path, $attachment->file_name);
+        return Storage::disk('public')->download($attachment->file_path, $attachment->file_name);
     }
 }
