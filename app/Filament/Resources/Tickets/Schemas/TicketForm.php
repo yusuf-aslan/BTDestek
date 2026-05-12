@@ -55,25 +55,59 @@ class TicketForm
                             ->preload()
                             ->placeholder('Envanter Seçiniz (Opsiyonel)'),
                         TextInput::make('ip_address')
+                            ->id('ip_address_field')
                             ->label('Talep Yazılan PC IP')
-                            ->disabled()
+                            ->readOnly()
                             ->suffixAction(
                                 Action::make('copyIpAddress')
                                     ->icon('heroicon-m-clipboard')
                                     ->tooltip('IP Kopyala')
                                     ->extraAttributes([
-                                        'x-on:click' => "window.navigator.clipboard.writeText(\$el.closest('.fi-input-wrp').querySelector('input').value); new FilamentNotification().title('IP Kopyalandı').success().send()",
+                                        'x-on:click.stop.prevent' => "
+                                            const text = document.getElementById('ip_address_field').value;
+                                            if (!text) return;
+                                            if (navigator.clipboard && window.isSecureContext) {
+                                                navigator.clipboard.writeText(text).then(() => {
+                                                    new FilamentNotification().title('IP Kopyalandı: ' + text).success().send();
+                                                });
+                                            } else {
+                                                const textArea = document.createElement('textarea');
+                                                textArea.value = text;
+                                                document.body.appendChild(textArea);
+                                                textArea.select();
+                                                document.execCommand('copy');
+                                                document.body.removeChild(textArea);
+                                                new FilamentNotification().title('IP Kopyalandı: ' + text).success().send();
+                                            }
+                                        ",
                                     ])
                             ),
                         TextInput::make('broken_pc_ip')
+                            ->id('broken_pc_ip_field')
                             ->label('Arızalı PC IP (Zorunlu Değil)')
-                            ->disabled()
+                            ->readOnly()
                             ->suffixAction(
                                 Action::make('copyBrokenPcIp')
                                     ->icon('heroicon-m-clipboard')
                                     ->tooltip('IP Kopyala')
                                     ->extraAttributes([
-                                        'x-on:click' => "window.navigator.clipboard.writeText(\$el.closest('.fi-input-wrp').querySelector('input').value); new FilamentNotification().title('IP Kopyalandı').success().send()",
+                                        'x-on:click.stop.prevent' => "
+                                            const text = document.getElementById('broken_pc_ip_field').value;
+                                            if (!text) return;
+                                            if (navigator.clipboard && window.isSecureContext) {
+                                                navigator.clipboard.writeText(text).then(() => {
+                                                    new FilamentNotification().title('IP Kopyalandı: ' + text).success().send();
+                                                });
+                                            } else {
+                                                const textArea = document.createElement('textarea');
+                                                textArea.value = text;
+                                                document.body.appendChild(textArea);
+                                                textArea.select();
+                                                document.execCommand('copy');
+                                                document.body.removeChild(textArea);
+                                                new FilamentNotification().title('IP Kopyalandı: ' + text).success().send();
+                                            }
+                                        ",
                                     ])
                             ),
 

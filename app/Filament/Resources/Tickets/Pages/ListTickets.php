@@ -19,6 +19,11 @@ class ListTickets extends ListRecords
         ];
     }
 
+    public function getPollingInterval(): ?string
+    {
+        return '10s';
+    }
+
     public function getTabs(): array
     {
         return [

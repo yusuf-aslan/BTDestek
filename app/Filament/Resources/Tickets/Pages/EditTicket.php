@@ -11,6 +11,11 @@ class EditTicket extends EditRecord
 {
     protected static string $resource = TicketResource::class;
 
+    public function getPollingInterval(): ?string
+    {
+        return '15s';
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
