@@ -20,10 +20,9 @@ class AnnouncementResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-megaphone';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Duyuru Yönetimi';
-    }
+    protected static string|\UnitEnum|null $navigationGroup = 'Duyuru Yönetimi';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'title';
 

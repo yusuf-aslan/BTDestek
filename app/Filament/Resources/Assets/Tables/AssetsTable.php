@@ -10,6 +10,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\ImportAction;
 use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
@@ -112,6 +113,12 @@ class AssetsTable
                 TrashedFilter::make(),
             ])
             ->recordActions([
+                Action::make('printQr')
+                    ->label('QR Yazdır')
+                    ->icon('heroicon-o-qr-code')
+                    ->color('gray')
+                    ->url(fn (Asset $record): string => route('admin.assets.print-qr', $record))
+                    ->openUrlInNewTab(),
                 EditAction::make(),
             ])
             ->headerActions([

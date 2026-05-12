@@ -26,10 +26,7 @@ class AnnouncementTemplateResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-duplicate';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Duyuru Yönetimi';
-    }
+    protected static string|\UnitEnum|null $navigationGroup = 'Duyuru Yönetimi';
 
     protected static ?string $navigationLabel = 'Duyuru Şablonları';
 

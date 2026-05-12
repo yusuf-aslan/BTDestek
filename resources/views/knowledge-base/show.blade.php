@@ -12,7 +12,7 @@
 
         <article class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="p-8 md:p-12 border-b border-slate-100 bg-slate-50/30">
-                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800 mb-6">{{ $article->title }}</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800 mb-6">{{ html_entity_decode($article->title) }}</h2>
                 <div class="flex flex-wrap items-center gap-6 text-sm text-slate-500">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
@@ -34,6 +34,17 @@
             <div class="p-8 md:p-12 prose max-w-none">
                 {!! $article->content !!}
             </div>
+
+            @if($article->tags->count() > 0)
+                <div class="px-8 md:px-12 pb-10 flex flex-wrap gap-2">
+                    @foreach($article->tags as $tag)
+                        <a href="{{ route('kb.index', ['tag' => $tag->slug]) }}" 
+                            class="px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:border-blue-300 hover:text-blue-600 transition">
+                            #{{ $tag->name }}
+                        </a>
+                    @endforeach
+                </div>
+            @endif
         </article>
 
         <div class="mt-12 bg-blue-700 rounded-3xl p-8 md:p-12 text-white shadow-2xl shadow-blue-200 flex flex-col md:flex-row items-center justify-between gap-8">

@@ -107,6 +107,14 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.13 - Akıllı Bildirimler, QR Kod ve UI Özelleştirme:**
+    *   **Envanter QR Kod:** Tüm cihazlar için 80x50mm boyutlarında, detay sayfasına yönlendiren QR barkod yazdırma özelliği eklendi.
+    *   **Dinamik Menü Yerleşimi:** Admin paneli için Yatay (Modern) ve Dikey (Klasik) menü seçenekleri getirildi.
+    *   **Akıllı Bildirim Sistemi:** Yeni talep geldiğinde çalan "Sesli Uyarı" ve Talep Listesi'ndeyken otomatik sayfa yenileme (Auto-Refresh) özelliği eklendi.
+    *   **Bilgi Bankası Etiketleri:** Makaleler için etiket (Tag) sistemi ve etiket bazlı arama/filtreleme özelliği eklendi.
+    *   **Gelişmiş Formlar:** IP adresi kopyalama butonları, isteğe bağlı bölüm alanı ve daha geniş makale editörü ile kullanım kolaylığı sağlandı.
+    *   **Menü Gruplandırma:** Admin paneli hiyerarşisi yeniden düzenlenerek sadeleştirildi.
+
 *   **v1.12 - Kullanıcı Deneyimi ve Görünürlük Odaklı Güncellemeler:**
     *   **Geliştirilmiş Form Gönderim Butonu:** Talep gönder butonu, dikkat çekici Yeşil (Emerald) renge dönüştürüldü, boyutu büyütüldü ve üzerine hafif bir nabız (pulse) animasyonu eklendi. Ayrıca üzerine açıkça "(BURAYA TIKLAYIN)" ibaresi eklenerek fark edilebilirliği artırıldı.
     *   **Talep No Kopyalama:** Talep başarıyla oluşturulduktan sonra ekrana gelen takip numarasını tek tıkla panoya kopyalayan "Talep No Kopyala" butonu eklendi.

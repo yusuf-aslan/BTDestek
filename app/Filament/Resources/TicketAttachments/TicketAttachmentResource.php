@@ -22,18 +22,17 @@ class TicketAttachmentResource extends Resource
 
     protected static ?string $navigationLabel = 'Ortam Kütüphanesi';
 
-    protected static ?string $modelLabel = 'Dosya';
+    protected static string|\UnitEnum|null $navigationGroup = 'Ayarlar';
+
+    protected static ?string $modelLabel = 'Ek / Dosya';
+
 
     protected static ?string $pluralModelLabel = 'Ortam Kütüphanesi';
 
     protected static ?int $navigationSort = 2;
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Sistem';
-    }
+    public static function canAccess(): bool
 
-    public static function canCreate(): bool
     {
         return true;
     }

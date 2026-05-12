@@ -20,6 +20,9 @@ class ArticleResource extends Resource
 
     protected static ?string $navigationLabel = 'Bilgi Bankası';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Talep Yönetimi';
+    protected static ?int $navigationSort = 5;
+
     protected static ?string $modelLabel = 'Makale';
 
     protected static ?string $pluralModelLabel = 'Makaleler';

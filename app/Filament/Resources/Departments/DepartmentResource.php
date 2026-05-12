@@ -20,6 +20,9 @@ class DepartmentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-office-2';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Talep Yönetimi';
+    protected static ?int $navigationSort = 4;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $modelLabel = 'Bölüm';

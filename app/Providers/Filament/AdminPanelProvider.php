@@ -27,13 +27,23 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        return $panel
+        $settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
+            return \App\Models\GeneralSetting::first();
+        });
+
+        $panel = $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
-            ->databaseNotifications()
-            ->brandName(fn () => \Illuminate\Support\Facades\Cache::get('general_settings')?->site_title ?? 'Hastane BT Destek')
+            ->databaseNotifications();
+        
+        if ($settings && $settings->menu_layout === 'horizontal') {
+            $panel->topNavigation();
+        }
+
+        return $panel
+            ->brandName($settings->site_title ?? 'Hastane BT Destek')
             ->renderHook(
                 PanelsRenderHook::BODY_END,
                 fn (): string => Blade::render('@livewire(\'TicketWatcher\')'),
@@ -50,10 +60,17 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 //
             ])
+            ->navigationGroups([
+                'Talep Yönetimi',
+                'Duyuru Yönetimi',
+                'Envanter Yönetimi',
+                'Ayarlar',
+            ])
             ->navigationItems([
                 NavigationItem::make('Anasayfa')
                     ->url('/')
                     ->icon('heroicon-o-globe-alt')
+                    ->sort(99)
                     ->openUrlInNewTab(),
             ])
             ->middleware([

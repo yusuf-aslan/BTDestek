@@ -28,6 +28,9 @@ class UserResource extends Resource
     protected static ?string $pluralModelLabel = 'Personeller';
     protected static ?string $navigationLabel = 'Personel Yönetimi';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Ayarlar';
+    protected static ?int $navigationSort = 4;
+
     public static function canAccess(): bool
     {
         return auth()->user()->hasModuleAccess('users');

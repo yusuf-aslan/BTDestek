@@ -16,6 +16,12 @@ class EditAsset extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('printQr')
+                ->label('QR Yazdır')
+                ->icon('heroicon-o-qr-code')
+                ->color('gray')
+                ->url(fn ($record) => route('admin.assets.print-qr', $record))
+                ->openUrlInNewTab(),
             Action::make('back')
                 ->label('Listeye Dön')
                 ->url(AssetResource::getUrl('index'))

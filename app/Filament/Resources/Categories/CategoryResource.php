@@ -26,6 +26,9 @@ class CategoryResource extends Resource
     protected static ?string $pluralModelLabel = 'Kategoriler';
     protected static ?string $navigationLabel = 'Kategoriler';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Talep Yönetimi';
+    protected static ?int $navigationSort = 3;
+
     public static function canAccess(): bool
     {
         return auth()->user()->is_admin;

@@ -24,10 +24,8 @@ class DeviceTemplateResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-duplicate';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Envanter Yönetimi';
-    }
+    protected static string|\UnitEnum|null $navigationGroup = 'Envanter Yönetimi';
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $modelLabel = 'Cihaz Şablonu';
 

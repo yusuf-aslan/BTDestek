@@ -76,28 +76,24 @@ class TicketWatcher extends Component
         return <<<'BLADE'
             <div x-data="{
                 baseTitle: '',
+                audio: null,
                 init() {
                     this.baseTitle = document.title.replace(/^(\d+)\s/, '');
+                    this.audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
                     
-                    if ('Notification' in window && Notification.permission === 'default') {
+                    if ('Notification' in window && Notification.permission === 'default' && window.location.protocol === 'https:') {
                         Notification.requestPermission();
                     }
 
                     this.$wire.checkNewTickets();
                     setInterval(() => this.$wire.checkNewTickets(), 20000);
 
-                    window.addEventListener('storage', (e) => {
-                        if (e.key === 'last_seen_ticket_count') {
-                            this.updateDisplay(parseInt(localStorage.getItem('current_total_count') || 0), false);
-                        }
-                    });
-
                     window.addEventListener('ticket-count-updated', (event) => {
                         this.updateDisplay(event.detail.count, event.detail.isNew);
                     });
                 },
                 updateDisplay(totalCount, isNew) {
-                    const isTicketsPage = window.location.pathname.includes('/admin/tickets');
+                    const isTicketsPage = window.location.pathname.includes('/admin/tickets') && !window.location.pathname.includes('/edit') && !window.location.pathname.includes('/create');
                     localStorage.setItem('current_total_count', totalCount);
 
                     if (isTicketsPage) {
@@ -113,25 +109,34 @@ class TicketWatcher extends Component
                         document.title = this.baseTitle;
                     }
 
-                    if (isNew && document.hidden && Notification.permission === 'granted') {
-                        new Notification('🔔 YENİ TALEP!', {
-                            body: 'Sisteme yeni bir destek talebi düştü.',
-                            icon: '/favicon.ico'
-                        }).onclick = () => { window.focus(); };
+                    if (isNew) {
+                        // Sesli bildirim (HTTP/HTTPS farketmez)
+                        this.audio.play().catch(e => console.log('Ses çalınamadı, etkileşim gerekiyor.'));
+
+                        // Tarayıcı bildirimi (Sadece HTTPS)
+                        if (document.hidden && window.location.protocol === 'https:' && Notification.permission === 'granted') {
+                            new Notification('🔔 YENİ TALEP!', {
+                                body: 'Sisteme yeni bir destek talebi düştü.',
+                                icon: '/favicon.ico'
+                            }).onclick = () => { window.focus(); };
+                        }
+
+                        // Otomatik Sayfa Yenileme (Eğer Talepler listesindeyse)
+                        if (isTicketsPage) {
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        }
                     }
 
-                    // Sidebar Badge
+                    // Sidebar Badge güncelleme
                     const ticketsLink = document.querySelector('a[href*=\'/admin/tickets\']');
                     if (ticketsLink) {
                         const badge = ticketsLink.querySelector('.fi-sidebar-item-badge, .fi-badge');
                         if (badge) {
                             badge.innerText = totalCount;
-                            if (totalCount > 0) {
-                                badge.classList.remove('hidden');
-                                badge.style.display = '';
-                            } else {
-                                badge.classList.add('hidden');
-                            }
+                            badge.classList.toggle('hidden', totalCount === 0);
+                            if (totalCount > 0) badge.style.display = '';
                         }
                     }
                 }

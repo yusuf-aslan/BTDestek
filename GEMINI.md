@@ -2,7 +2,14 @@
 
 Bu dosya, Gemini CLI'ın proje durumunu ve geçmişini her oturumda hatırlaması için oluşturulmuştur.
 
-## 🚀 Son Durum: v1.12 (12 Nisan 2026)
+## 🚀 Son Durum: v1.13 (11 Mayıs 2026)
+- **Akıllı Bildirimler:** HTTP sunucular için sesli uyarı ve otomatik sayfa yenileme desteği eklendi.
+- **QR Kod Sistemi:** Envanterdeki ürünler için QR kodlu barkod yazdırma (80x50mm) özelliği getirildi.
+- **Dinamik UI:** Admin paneli için Yatay ve Dikey menü seçenekleri eklendi.
+- **Veri Organizasyonu:** Bilgi bankasına etiket sistemi ve gelişmiş arama entegre edildi.
+- **Hiyerarşik Düzen:** Admin menüleri (Talep Yönetimi, Envanter, Ayarlar vb.) yeniden yapılandırıldı.
+
+## 🚀 Önceki Durum: v1.12 (12 Nisan 2026)
 - **Ek Yönetimi:** Admin panelinde görseller için Galeri ve Lightbox (tam boy önizleme) özelliği eklendi.
 - **Sürükle-Bırak:** Talep oluşturma sayfasındaki ekler kısmına sürükle-bırak desteği kazandırıldı.
 - **Hata Düzeltmeleri:** Dosya indirme işlemlerindeki 404 hatası (disk uyuşmazlığı) giderildi.
@@ -25,3 +32,8 @@ Sunucuya yükleme yaparken şu adımlar izlenmelidir (Permission denied hatası 
 ## 📋 Gelecek Planlar
 - **Çözüm Süresi Raporları:** Tekniker bazlı ortalama çözüm süreleri (Resolution Time).
 - **Otomatik Yedekleme:** Scheduled (zamanlanmış) yedekleme rutinleri.
+
+## 🛠️ Teknik Standartlar & Kurallar
+- **Filament v4 Namespace:** `Action` sınıfı için her zaman `Filament\Actions\Action` kullanılmalıdır. `Filament\Forms\Components\Actions\Action` hatalıdır ve kullanılmamalıdır.
+- **Form Bileşenleri:** Filament formlarında `suffixAction` veya `prefixAction` gibi bileşenlerde kullanılan `Action` sınıfı da yukarıdaki kurala tabidir.
+- **Veri Güvenliği:** IP adresi gibi hassas veriler kopyalanırken kullanıcıya bildirim verilmelidir.

@@ -18,6 +18,7 @@ class GeneralSetting extends Model
         'is_dark_mode_enabled',
         'show_email_on_ticket_form',
         'ip_display_position',
+        'menu_layout',
         'mail_mailer',
         'mail_host',
         'mail_port',

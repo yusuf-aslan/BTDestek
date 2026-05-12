@@ -22,10 +22,7 @@ class AssetResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-computer-desktop';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Envanter Yönetimi';
-    }
+    protected static string|\UnitEnum|null $navigationGroup = 'Envanter Yönetimi';
 
     protected static ?int $navigationSort = 1;
 

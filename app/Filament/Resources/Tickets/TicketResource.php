@@ -27,6 +27,8 @@ class TicketResource extends Resource
     protected static ?string $modelLabel = 'Talep';
     protected static ?string $pluralModelLabel = 'Talepler';
     protected static ?string $navigationLabel = 'Talepler';
+    protected static string|\UnitEnum|null $navigationGroup = 'Talep Yönetimi';
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationBadge(): ?string
     {

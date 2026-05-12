@@ -27,7 +27,8 @@ class AssetQuery extends Page implements HasTable, HasForms
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-magnifying-glass';
     protected static ?string $title = 'Envanter Sorgulama';
     protected static ?string $navigationLabel = 'Envanter Sorgula';
-    protected static ?int $navigationSort = 2;
+    protected static string|\UnitEnum|null $navigationGroup = 'Envanter Yönetimi';
+    protected static ?int $navigationSort = 3;
     
     protected string $view = 'filament.pages.asset-query';
 
@@ -100,11 +101,6 @@ class AssetQuery extends Page implements HasTable, HasForms
                     ->columns(2),
             ])
             ->statePath('data');
-    }
-
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Envanter Yönetimi';
     }
 
     public function table(Table $table): Table

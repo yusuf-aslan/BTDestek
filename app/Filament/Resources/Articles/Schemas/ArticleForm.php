@@ -47,6 +47,26 @@ class ArticleForm
                             ->label('Yayında')
                             ->default(false)
                             ->inline(false),
+
+                        Select::make('tags')
+                            ->label('Etiketler')
+                            ->relationship('tags', 'name')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->label('Etiket Adı')
+                                    ->required()
+                                    ->unique('tags', 'name'),
+                            ])
+                            ->createOptionUsing(function (array $data): int {
+                                return \App\Models\Tag::create([
+                                    'name' => $data['name'],
+                                    'slug' => Str::slug($data['name']),
+                                ])->id;
+                            })
+                            ->columnSpanFull(),
                     ])->columns(2),
 
                 Section::make('Makale İçeriği')
@@ -56,8 +76,8 @@ class ArticleForm
                             ->hiddenLabel()
                             ->required()
                             ->columnSpanFull()
-                            ->extraInputAttributes(['style' => 'min-height: 400px;']),
-                    ])->collapsible(),
+                            ->extraInputAttributes(['style' => 'min-height: 600px;']),
+                    ]),
             ]);
     }
 }

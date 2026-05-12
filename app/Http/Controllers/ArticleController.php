@@ -17,7 +17,16 @@ class ArticleController extends Controller
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('content', 'like', "%{$search}%");
+                  ->orWhere('content', 'like', "%{$search}%")
+                  ->orWhereHas('tags', function ($tagQuery) use ($search) {
+                      $tagQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->has('tag')) {
+            $query->whereHas('tags', function ($q) use ($request) {
+                $q->where('slug', $request->get('tag'));
             });
         }
 
@@ -29,8 +38,12 @@ class ArticleController extends Controller
         $categories = Category::whereHas('articles', function ($q) {
             $q->where('is_published', true);
         })->get();
+        
+        $tags = \App\Models\Tag::whereHas('articles', function ($q) {
+            $q->where('is_published', true);
+        })->get();
 
-        return view('knowledge-base.index', compact('articles', 'categories'));
+        return view('knowledge-base.index', compact('articles', 'categories', 'tags'));
     }
 
     public function show(string $slug)

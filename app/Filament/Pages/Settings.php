@@ -36,10 +36,7 @@ class Settings extends Page implements HasForms
 
     protected static ?string $navigationLabel = 'Ayarlar';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Sistem';
-    }
+    protected static string|\UnitEnum|null $navigationGroup = 'Ayarlar';
 
     protected static ?int $navigationSort = 1;
 
@@ -148,8 +145,20 @@ class Settings extends Page implements HasForms
                                             ->default(true),
                                         Toggle::make('show_email_on_ticket_form')
                                             ->label('Talep Formunda E-posta Alanını Göster')
-                                            ->helperText('Açık ise talep oluşturma formunda e-posta alanı gösterilir.')
-                                            ->default(false),
+                                            ->default(true),
+
+                                        \Filament\Forms\Components\Radio::make('menu_layout')
+                                            ->label('Menü Yerleşimi')
+                                            ->options([
+                                                'vertical' => 'Dikey Menü (Mevcut)',
+                                                'horizontal' => 'Yatay Menü (Modern)',
+                                            ])
+                                            ->descriptions([
+                                                'vertical' => 'Solda dikey bir menü çubuğu olarak görünür.',
+                                                'horizontal' => 'En üstte yatay, simgeli bir bar olarak görünür.',
+                                            ])
+                                            ->default('vertical')
+                                            ->inline(),
                                         Select::make('ip_display_position')
                                             ->label('IP Adresi Gösterim Konumu')
                                             ->options([
@@ -305,7 +314,6 @@ class Settings extends Page implements HasForms
     public function save(): void
     {
         $data = $this->form->getState();
-        
         GeneralSetting::first()->update($data);
 
         \Illuminate\Support\Facades\Cache::forget('general_settings');
@@ -314,5 +322,9 @@ class Settings extends Page implements HasForms
             ->success()
             ->title('Ayarlar kaydedildi.')
             ->send();
+
+        // Refresh the page to apply layout changes immediately
+        $this->js('window.location.reload()');
     }
+
 }

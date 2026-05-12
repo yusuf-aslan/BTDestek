@@ -22,14 +22,11 @@ class MenuResource extends Resource
 
     protected static ?string $navigationLabel = 'Menü Ayarları';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Ayarlar';
+
     protected static ?string $modelLabel = 'Menü';
 
     protected static ?string $pluralModelLabel = 'Menü Ayarları';
-
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Sistem';
-    }
 
     protected static ?int $navigationSort = 3;
 

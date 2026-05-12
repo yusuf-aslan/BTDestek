@@ -20,6 +20,10 @@ Route::get('/admin/tickets/{ticket}/print', [\App\Http\Controllers\Admin\TicketP
     ->name('admin.tickets.print')
     ->middleware('auth');
 
+Route::get('/admin/envanter/{asset}/yazdir', [\App\Http\Controllers\Admin\AssetPrintController::class, 'show'])
+    ->name('admin.assets.print-qr')
+    ->middleware('auth');
+
 Route::get('/admin/varlik-sorgula/yazdir', [\App\Http\Controllers\Admin\AssetQueryPrintController::class, 'show'])
     ->name('asset-query.print')
     ->middleware('auth');

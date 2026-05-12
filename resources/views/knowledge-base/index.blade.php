@@ -19,7 +19,7 @@
                 <div>
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Kategoriler</h3>
                     <div class="space-y-1">
-                        <a href="{{ route('kb.index') }}" class="block px-4 py-2 rounded-lg text-sm font-medium {{ !request('category') ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100' }}">Tümü</a>
+                        <a href="{{ route('kb.index') }}" class="block px-4 py-2 rounded-lg text-sm font-medium {{ !request('category') && !request('tag') ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100' }}">Tümü</a>
                         @foreach($categories as $category)
                             <a href="{{ route('kb.index', ['category' => $category->id]) }}" 
                                 class="block px-4 py-2 rounded-lg text-sm font-medium {{ request('category') == $category->id ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100' }}">
@@ -28,6 +28,20 @@
                         @endforeach
                     </div>
                 </div>
+
+                @if($tags->count() > 0)
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Etiketler</h3>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach($tags as $tag)
+                                <a href="{{ route('kb.index', ['tag' => $tag->slug]) }}" 
+                                    class="px-3 py-1 rounded-full text-xs font-medium transition {{ request('tag') == $tag->slug ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                                    #{{ $tag->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </aside>
 
             <!-- Articles Grid -->
@@ -44,7 +58,7 @@
                                     </span>
                                 </div>
                                 <h3 class="font-bold text-slate-800 group-hover:text-blue-700 transition mb-2">{{ $article->title }}</h3>
-                                <p class="text-sm text-slate-500 line-clamp-2">{{ Str::limit(strip_tags($article->content), 120) }}</p>
+                                <p class="text-sm text-slate-500 line-clamp-2">{{ Str::limit(html_entity_decode(strip_tags($article->content)), 120) }}</p>
                             </a>
                         @endforeach
                     </div>

@@ -30,6 +30,9 @@ class Reports extends Page implements HasTable
 
     protected static ?string $navigationLabel = 'Raporlar';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Ayarlar';
+    protected static ?int $navigationSort = 5;
+
     protected string $view = 'filament.pages.reports';
 
     public static function canAccess(): bool

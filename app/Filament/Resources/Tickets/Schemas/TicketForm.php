@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Tickets\Schemas;
 
 use App\Models\CannedResponse;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Schemas\Components\Section;
@@ -33,7 +35,7 @@ class TicketForm
                             ->email()
                             ->disabled(),
                         TextInput::make('department_room')
-                            ->label('Bölüm')
+                            ->label('Bölüm (İsteğe Bağlı)')
                             ->disabled(),
                         TextInput::make('phone_number')
                             ->label('Dahili No / Tel')
@@ -54,10 +56,26 @@ class TicketForm
                             ->placeholder('Envanter Seçiniz (Opsiyonel)'),
                         TextInput::make('ip_address')
                             ->label('Talep Yazılan PC IP')
-                            ->disabled(),
+                            ->disabled()
+                            ->suffixAction(
+                                Action::make('copyIpAddress')
+                                    ->icon('heroicon-m-clipboard')
+                                    ->tooltip('IP Kopyala')
+                                    ->extraAttributes([
+                                        'x-on:click' => "window.navigator.clipboard.writeText(\$el.closest('.fi-input-wrp').querySelector('input').value); new FilamentNotification().title('IP Kopyalandı').success().send()",
+                                    ])
+                            ),
                         TextInput::make('broken_pc_ip')
                             ->label('Arızalı PC IP (Zorunlu Değil)')
-                            ->disabled(),
+                            ->disabled()
+                            ->suffixAction(
+                                Action::make('copyBrokenPcIp')
+                                    ->icon('heroicon-m-clipboard')
+                                    ->tooltip('IP Kopyala')
+                                    ->extraAttributes([
+                                        'x-on:click' => "window.navigator.clipboard.writeText(\$el.closest('.fi-input-wrp').querySelector('input').value); new FilamentNotification().title('IP Kopyalandı').success().send()",
+                                    ])
+                            ),
 
                         TextInput::make('subject')
                             ->label('Talep Başlığı (Kısaca)')
