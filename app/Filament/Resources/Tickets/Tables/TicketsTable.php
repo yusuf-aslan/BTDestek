@@ -19,6 +19,7 @@ class TicketsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->poll('10s')
             ->columns([
                 TextColumn::make('tracking_number')
                     ->label('Takip No')
