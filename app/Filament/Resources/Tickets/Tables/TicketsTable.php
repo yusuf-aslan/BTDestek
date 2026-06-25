@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -21,10 +22,15 @@ class TicketsTable
         return $table
             ->poll('10s')
             ->columns([
+                TextColumn::make('name')
+                    ->label('Açan Kullanıcı')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('tracking_number')
                     ->label('Takip No')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('subject')
                     ->label('Konu')
                     ->searchable()
@@ -41,7 +47,7 @@ class TicketsTable
                     ->searchable()
                     ->placeholder('-')
                     ->limit(20)
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('phone_number')
                     ->label('Dahili')
                     ->searchable(),
@@ -141,43 +147,50 @@ class TicketsTable
                     })
             ])
             ->recordActions([
-                EditAction::make(),
-                Action::make('claim')
-                    ->label('Üzerime Al')
-                    ->icon('heroicon-o-hand-raised')
-                    ->color('success')
-                    ->action(fn (Ticket $record) => $record->update(['assigned_to' => auth()->id()]))
-                    ->visible(fn (Ticket $record) => $record->assigned_to !== auth()->id() && $record->status !== 'çözüldü' && $record->status !== 'iptal'),
-                Action::make('assign')
-                    ->label('Bileti Ata')
-                    ->icon('heroicon-o-user-plus')
-                    ->color('info')
-                    ->form([
-                        \Filament\Forms\Components\Select::make('assigned_to')
-                            ->label('Teknisyen Seç')
-                            ->options(function (Ticket $record) {
-                                $users = \App\Models\User::whereHas('categories', fn ($query) => $query->where('categories.id', $record->category_id))
-                                    ->pluck('name', 'id');
-                                
-                                if ($users->isEmpty()) {
-                                    return \App\Models\User::all()->pluck('name', 'id');
-                                }
-                                
-                                return $users;
-                            })
-                            ->required()
-                            ->searchable()
-                            ->preload(),
-                    ])
-                    ->action(fn (Ticket $record, array $data) => $record->update($data))
-                    ->visible(fn (Ticket $record) => $record->status !== 'çözüldü' && $record->status !== 'iptal'),
-                Action::make('print')
-                    ->label('Yazdır')
-                    ->icon('heroicon-o-printer')
-                    ->color('gray')
-                    ->url(fn ($record) => route('admin.tickets.print', $record))
-                    ->openUrlInNewTab(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    Action::make('claim')
+                        ->label('Üzerime Al')
+                        ->icon('heroicon-o-hand-raised')
+                        ->color('success')
+                        ->action(fn (Ticket $record) => $record->update(['assigned_to' => auth()->id()]))
+                        ->visible(fn (Ticket $record) => $record->assigned_to !== auth()->id() && $record->status !== 'çözüldü' && $record->status !== 'iptal'),
+                    Action::make('assign')
+                        ->label('Bileti Ata')
+                        ->icon('heroicon-o-user-plus')
+                        ->color('info')
+                        ->form([
+                            \Filament\Forms\Components\Select::make('assigned_to')
+                                ->label('Teknisyen Seç')
+                                ->options(function (Ticket $record) {
+                                    $users = \App\Models\User::whereHas('categories', fn ($query) => $query->where('categories.id', $record->category_id))
+                                        ->pluck('name', 'id');
+                                    
+                                    if ($users->isEmpty()) {
+                                        return \App\Models\User::all()->pluck('name', 'id');
+                                    }
+                                    
+                                    return $users;
+                                })
+                                ->required()
+                                ->searchable()
+                                ->preload(),
+                        ])
+                        ->action(fn (Ticket $record, array $data) => $record->update($data))
+                        ->visible(fn (Ticket $record) => $record->status !== 'çözüldü' && $record->status !== 'iptal'),
+                    Action::make('print')
+                        ->label('Yazdır')
+                        ->icon('heroicon-o-printer')
+                        ->color('gray')
+                        ->url(fn ($record) => route('admin.tickets.print', $record))
+                        ->openUrlInNewTab(),
+                ])
+                ->label('İşlemler')
+                ->icon('heroicon-m-ellipsis-vertical')
+                ->color('primary')
+                ->button(),
             ])
+            ->recordAction(null)
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

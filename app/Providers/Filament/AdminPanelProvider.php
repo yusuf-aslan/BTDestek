@@ -36,7 +36,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->databaseNotifications();
+            ->databaseNotifications()
+            ->maxContentWidth('screen-2xl');
         
         if ($settings && $settings->menu_layout === 'horizontal') {
             $panel->topNavigation();
