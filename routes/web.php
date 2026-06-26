@@ -34,6 +34,14 @@ Route::get('/clear-cache', function() {
     }
     \Illuminate\Support\Facades\Artisan::call('view:clear');
     \Illuminate\Support\Facades\Artisan::call('cache:clear');
-    \Illuminate\Support\Facades\Artisan::call('filament:optimize-clear');
+    
+    try {
+        foreach (\Filament\Facades\Filament::getPanels() as $panel) {
+            $panel->clearCachedComponents();
+        }
+    } catch (\Exception $e) {
+        // Fallback if Filament is not fully initialized
+    }
+    
     return "Tüm önbellekler (OPcache, View, Cache, Filament) başarıyla temizlendi! <a href='/admin'>Admin Paneline Git</a>";
 });
