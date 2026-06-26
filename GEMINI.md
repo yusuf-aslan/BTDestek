@@ -3,7 +3,7 @@
 Bu dosya, Gemini CLI'ın proje durumunu ve geçmişini her oturumda hatırlaması için oluşturulmuştur.
 
 ## 🚀 Son Durum: v1.15 (26 Haziran 2026)
-- **Faaliyet Yönetimi (IT Activity Log):** BT personelinin bilet dışındaki plansız faaliyetlerini (saha çalışmaları, telefon destekleri, toplantılar) kolayca kaydedebilmesi için arayüzde Header kısmına (arama kutusunun yanı) "Hızlı Faaliyet Ekle" modalı entegre edildi.
+- **Faaliyet Yönetimi (IT Activity Log):** BT personelinin bilet dışındaki plansız faaliyetlerini (saha çalışmaları, telefon destekleri, toplantılar) kolayca kaydedebilmesi için arayüzde Header kısmına (kullanıcı profil menüsünün soluna) "Hızlı Faaliyet Ekle" modalı entegre edildi.
 - **Faaliyet Raporlama & Filtreleme:** Teknisyenlerin kendi faaliyetlerini takip edebileceği, yöneticilerin ise tüm faaliyetleri görüp tarih/teknisyen bazlı filtreleyebileceği ve Excel olarak dışa aktarabileceği "Faaliyetlerim" menüsü (Resource) oluşturuldu.
 
 ## 🚀 Önceki Durum: v1.14 (26 Haziran 2026)
