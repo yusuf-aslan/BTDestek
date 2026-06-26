@@ -432,6 +432,43 @@
             <!-- Sidebar -->
             <div class="lg:col-span-4 space-y-8">
                 
+                <!-- Recent Tickets from this IP -->
+                @if(isset($recentTickets) && $recentTickets->count() > 0)
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-300 animate-in fade-in slide-in-from-top-4 duration-500">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Son 24 Saatteki Talepleriniz
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Bu bilgisayardan son 24 saat içinde açılan talepleriniz aşağıda listelenmiştir. Detay için tıklayabilirsiniz.</p>
+                        
+                        <div class="space-y-3">
+                            @foreach($recentTickets as $recentTicket)
+                                <a href="{{ route('tickets.show', ['tracking_number' => $recentTicket->tracking_number]) }}" class="block p-3 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 hover:border-blue-200 dark:hover:border-blue-800 transition duration-200 group">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="min-w-0 flex-1">
+                                            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition truncate leading-snug">{{ $recentTicket->subject }}</h4>
+                                            <div class="flex items-center gap-2 mt-1">
+                                                <span class="text-[10px] font-mono text-slate-400 dark:text-slate-500">{{ $recentTicket->tracking_number }}</span>
+                                                <span class="text-[10px] text-slate-400 dark:text-slate-500">•</span>
+                                                <span class="text-[10px] text-slate-400 dark:text-slate-500">{{ $recentTicket->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+                                        <span class="px-2.5 py-0.5 text-[9px] font-bold rounded-full uppercase tracking-wider shrink-0
+                                            {{ $recentTicket->status === 'yeni' ? 'bg-slate-100 text-slate-700 dark:bg-slate-900/60 dark:text-slate-300' : '' }}
+                                            {{ $recentTicket->status === 'işlemde' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : '' }}
+                                            {{ $recentTicket->status === 'beklemede' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' : '' }}
+                                            {{ $recentTicket->status === 'çözüldü' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : '' }}
+                                            {{ $recentTicket->status === 'iptal' ? 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' : '' }}
+                                        ">
+                                            {{ $recentTicket->status }}
+                                        </span>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Track Card -->
                 <div class="bg-slate-900 dark:bg-slate-950 text-white rounded-2xl p-8 shadow-2xl relative overflow-hidden group" id="track">
                     <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition"></div>

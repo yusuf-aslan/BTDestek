@@ -107,6 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.14 - IP Tabanlı Talep Geçmişi ve Global Genişlik:**
+    *   **IP Tabanlı Son 24 Saat Talep Geçmişi:** Kullanıcıların talep numaralarını unutma ihtimaline karşı sorgulama alanının üstünde, son 24 saat içinde o IP'den açılan biletleri listeleyen dinamik ve tek tıkla sorgulama sağlayan alan eklendi.
+    *   **Global Genişlik & UI İyileştirmeleri:** Yönetim paneli genelinde varsayılan sayfa genişliği `screen-2xl` yapıldı. Talepler tablosunda satır eylemleri "İşlemler" dropdown butonu altında toplandı, Takip No sütunu varsayılan olarak gizlendi.
+    *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.14'e güncellendi.
+
 *   **v1.13 - Akıllı Bildirimler, QR Kod ve UI Özelleştirme:**
     *   **Envanter QR Kod:** Tüm cihazlar için 80x50mm boyutlarında, detay sayfasına yönlendiren QR barkod yazdırma özelliği eklendi.
     *   **Dinamik Menü Yerleşimi:** Admin paneli için Yatay (Modern) ve Dikey (Klasik) menü seçenekleri getirildi.

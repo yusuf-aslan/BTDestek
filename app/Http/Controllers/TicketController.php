@@ -30,8 +30,14 @@ class TicketController extends Controller
         $settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
             return \App\Models\GeneralSetting::first();
         });
+
+        // Get recent tickets from the current IP address in the last 24 hours
+        $recentTickets = Ticket::where('ip_address', request()->ip())
+            ->where('created_at', '>=', now()->subHours(24))
+            ->latest()
+            ->get();
         
-        return view('welcome', compact('announcements', 'categories', 'popularArticles', 'latestArticles', 'settings'));
+        return view('welcome', compact('announcements', 'categories', 'popularArticles', 'latestArticles', 'settings', 'recentTickets'));
     }
 
     public function store(Request $request)
