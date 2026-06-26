@@ -27,3 +27,13 @@ Route::get('/admin/envanter/{asset}/yazdir', [\App\Http\Controllers\Admin\AssetP
 Route::get('/admin/varlik-sorgula/yazdir', [\App\Http\Controllers\Admin\AssetQueryPrintController::class, 'show'])
     ->name('asset-query.print')
     ->middleware('auth');
+
+Route::get('/clear-cache', function() {
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    \Illuminate\Support\Facades\Artisan::call('filament:optimize-clear');
+    return "Tüm önbellekler (OPcache, View, Cache, Filament) başarıyla temizlendi! <a href='/admin'>Admin Paneline Git</a>";
+});
