@@ -107,6 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.15 - Faaliyet Yönetimi (IT Activity Log) Sistemi:**
+    *   **Hızlı Faaliyet Ekleme Modalı:** BT personelinin bilet dışındaki plansız faaliyetlerini (saha çalışmaları, telefon destekleri, toplantılar) kolayca kaydedebilmesi için arayüzde üst bar (Header) kısmına "Hızlı Faaliyet Ekle" modalı entegre edildi.
+    *   **Faaliyet Raporlama & Filtreleme:** Teknisyenlerin kendi faaliyetlerini takip edebileceği, yöneticilerin ise tüm faaliyetleri görüp tarih/teknisyen bazlı filtreleyebileceği ve Excel olarak dışa aktarabileceği "Faaliyetlerim" menüsü (Resource) oluşturuldu.
+    *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.15'e güncellendi.
+
 *   **v1.14 - IP Tabanlı Talep Geçmişi ve Global Genişlik:**
     *   **IP Tabanlı Son 24 Saat Talep Geçmişi:** Kullanıcıların talep numaralarını unutma ihtimaline karşı sorgulama alanının üstünde, son 24 saat içinde o IP'den açılan biletleri listeleyen dinamik ve tek tıkla sorgulama sağlayan alan eklendi.
     *   **Global Genişlik & UI İyileştirmeleri:** Yönetim paneli genelinde varsayılan sayfa genişliği `screen-2xl` yapıldı. Talepler tablosunda satır eylemleri "İşlemler" dropdown butonu altında toplandı, Takip No sütunu varsayılan olarak gizlendi.
