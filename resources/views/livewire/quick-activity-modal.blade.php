@@ -20,7 +20,7 @@
         </x-slot>
 
         <!-- Form -->
-        <form wire:submit.prevent="save" class="space-y-4">
+        <form id="quick-activity-form" wire:submit.prevent="save" class="space-y-4">
             <div class="grid grid-cols-2 gap-4">
                 <!-- Activity Type -->
                 <div class="col-span-2 space-y-1.5 text-left">
@@ -88,23 +88,25 @@
                             wire:model.defer="description"
                             rows="3"
                             required
-                            class="block w-full border-none bg-transparent px-3 py-1.5 text-gray-900 focus:ring-0 dark:text-white sm:text-sm sm:leading-6 outline-none"
+                            class="fi-input block w-full border-0 bg-transparent px-3 py-1.5 text-gray-900 focus:ring-0 dark:text-white sm:text-sm sm:leading-6 outline-none"
                             placeholder="Yapılan işlemi kısaca detaylandırın..."
                         ></textarea>
                     </x-filament::input.wrapper>
                     @error('description') <p class="text-xs text-red-500 mt-1 ml-0.5">{{ $message }}</p> @enderror
                 </div>
             </div>
+        </form>
 
-            <!-- Footer / Action Buttons -->
-            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
+        <!-- Footer Slot -->
+        <x-slot name="footer">
+            <div class="flex justify-end gap-3 w-full">
                 <x-filament::button color="gray" x-on:click="close" type="button">
                     Vazgeç
                 </x-filament::button>
-                <x-filament::button type="submit" color="primary" icon="heroicon-m-check">
+                <x-filament::button type="submit" color="primary" icon="heroicon-m-check" form="quick-activity-form">
                     Kaydet
                 </x-filament::button>
             </div>
-        </form>
+        </x-slot>
     </x-filament::modal>
 </div>
