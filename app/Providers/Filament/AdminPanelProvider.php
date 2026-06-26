@@ -50,8 +50,8 @@ class AdminPanelProvider extends PanelProvider
                 fn (): string => Blade::render('@livewire(\'TicketWatcher\')'),
             )
             ->renderHook(
-                PanelsRenderHook::GLOBAL_SEARCH_AFTER,
-                fn (): string => Blade::render('@livewire(\'QuickActivityModal\')'),
+                PanelsRenderHook::USER_MENU_BEFORE,
+                fn (): string => Blade::render('@livewire(\'quick-activity-modal\')'),
             )
             ->colors([
                 'primary' => Color::Amber,
