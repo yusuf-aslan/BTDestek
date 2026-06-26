@@ -67,6 +67,9 @@ class QuickActivityModal extends Component
         $this->reset(['duration', 'department', 'description']);
         $this->duration = 15;
 
+        // Close Filament modal
+        $this->dispatch('close-modal', id: 'quick-activity');
+
         // Dispatch browser notification or refresh event if needed
         $this->dispatch('activity-saved');
 

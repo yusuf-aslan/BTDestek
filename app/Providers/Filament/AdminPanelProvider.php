@@ -51,7 +51,7 @@ class AdminPanelProvider extends PanelProvider
             )
             ->renderHook(
                 PanelsRenderHook::USER_MENU_BEFORE,
-                fn (): string => Blade::render('@livewire(\'quick-activity-modal\')'),
+                fn (): string => Blade::render('@livewire(\App\Livewire\QuickActivityModal::class)'),
             )
             ->colors([
                 'primary' => Color::Amber,
