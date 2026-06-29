@@ -191,11 +191,6 @@ class TicketsTable
                 ->button(),
             ])
             ->recordAction(null)
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ])
             ->defaultSort('created_at', 'desc');
     }
 }
