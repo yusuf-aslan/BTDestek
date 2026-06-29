@@ -10,6 +10,8 @@ class AssetsWithMostTicketsChart extends ChartWidget
     protected ?string $heading = 'En Çok Arıza Kaydı Açılan Envanterler';
     protected static ?int $sort = 3;
 
+    public static function canView(): bool { return false; }
+
     protected function getData(): array
     {
         $data = Asset::query()

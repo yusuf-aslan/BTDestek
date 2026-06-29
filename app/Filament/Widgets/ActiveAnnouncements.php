@@ -17,7 +17,7 @@ class ActiveAnnouncements extends BaseWidget
 
     public static function canView(): bool
     {
-        return Announcement::where('is_active', true)->exists();
+        return false;
     }
 
     public function table(Table $table): Table

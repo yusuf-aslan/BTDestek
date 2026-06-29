@@ -17,6 +17,8 @@ class MyActiveTickets extends BaseWidget
 
     protected static ?int $sort = 1;
 
+    public static function canView(): bool { return false; }
+
     public function table(Table $table): Table
     {
         return $table

@@ -19,7 +19,7 @@ class TechnicianPerformanceTable extends BaseWidget
 
     public static function canView(): bool
     {
-        return Auth::user()->is_admin;
+        return false;
     }
 
     public function table(Table $table): Table

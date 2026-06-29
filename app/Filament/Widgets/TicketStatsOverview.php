@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class TicketStatsOverview extends BaseWidget
 {
+    public static function canView(): bool { return false; }
+
     protected function getStats(): array
     {
         $user = Auth::user();
