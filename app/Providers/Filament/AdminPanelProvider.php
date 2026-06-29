@@ -137,7 +137,8 @@ HTML
                 NavigationItem::make('Anasayfa')
                     ->url('/')
                     ->icon('heroicon-o-globe-alt')
-                    ->sort(99)
+                    ->group('Ayarlar')
+                    ->sort(999)
                     ->openUrlInNewTab(),
             ])
             ->middleware([
