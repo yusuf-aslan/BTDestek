@@ -1,17 +1,4 @@
-@php
-    $data = $this->getViewData();
-    $isAdmin = $data['isAdmin'];
-    $totalTickets    = $data['totalTickets'];
-    $pendingTickets  = $data['pendingTickets'];
-    $todayTickets    = $data['todayTickets'];
-    $resolvedTickets = $data['resolvedTickets'];
-    $urgentTickets   = $data['urgentTickets'];
-    $trendData       = $data['trendData'];
-    $trendMax        = $data['trendMax'];
-    $pendingList     = $data['pendingList'];
-    $techPerformance = $data['techPerformance'];
-    $announcements   = $data['announcements'];
-@endphp
+{{-- Variables ($isAdmin, $totalTickets, etc.) are injected by Filament from getViewData() --}}
 
 <style>
 /* ─── DASHBOARD OVERRIDE ─────────────────────────────────── */
