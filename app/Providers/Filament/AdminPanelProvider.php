@@ -53,6 +53,26 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
                 fn (): string => Blade::render('@livewire(\App\Livewire\QuickActivityModal::class)'),
             )
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): string => '
+                    <style>
+                        /* Primary (Amber/Orange) butonlarin yazi rengini okunurluk icin beyaz yap */
+                        .fi-btn.fi-color-primary,
+                        .fi-btn.fi-color-primary *,
+                        .fi-btn.fi-color-custom,
+                        .fi-btn.fi-color-custom *,
+                        button[class*="fi-color-primary"],
+                        button[class*="fi-color-primary"] *,
+                        a[class*="fi-color-primary"],
+                        a[class*="fi-color-primary"] *,
+                        .fi-color-amber,
+                        .fi-color-amber * {
+                            color: #ffffff !important;
+                        }
+                    </style>
+                ',
+            )
             ->colors([
                 'primary' => Color::Amber,
             ])
