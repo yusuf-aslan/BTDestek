@@ -41,6 +41,12 @@ class ActivityResource extends Resource
         return $query;
     }
 
+    public static function canAccess(): bool
+    {
+        $user = \Filament\Facades\Filament::auth()->user();
+        return $user && ($user->is_admin || $user->hasModuleAccess('activities'));
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ActivityForm::configure($schema);

@@ -48,6 +48,7 @@ class UserForm
                             ->label('Ekstra Modül Yetkileri')
                             ->helperText('Admin olmayan kullanıcıların erişebileceği ek modüller.')
                             ->options([
+                                'activities' => 'Faaliyetlerim',
                                 'announcements' => 'Duyurular',
                                 'announcement_templates' => 'Duyuru Şablonları',
                                 'articles' => 'Bilgi Bankası',

@@ -2,28 +2,15 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\User;
 use App\Models\Ticket;
-use App\Models\Category;
-use App\Filament\Widgets\TicketStatsOverview;
-use App\Filament\Pages\Reports\Widgets\TicketsChart;
-use App\Filament\Pages\Reports\Widgets\TicketsPerCategoryChart;
-use App\Filament\Pages\Reports\Widgets\TicketsPerDepartmentChart;
+use App\Models\Activity;
+use App\Exports\TechnicianReportExport;
 use Filament\Pages\Page;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\Filter;
-use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\TicketsExport;
 
-class Reports extends Page implements HasTable
+class Reports extends Page
 {
-    use InteractsWithTable;
-
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-chart-bar';
 
     protected static ?string $title = 'Raporlar ve İstatistikler';
@@ -35,108 +22,161 @@ class Reports extends Page implements HasTable
 
     protected string $view = 'filament.pages.reports';
 
+    // --- Filtreler ---
+    public ?int $selectedUserId = null;
+    public ?string $dateFrom = null;
+    public ?string $dateTo = null;
+
+    // --- Aktif sekme ---
+    public string $activeTab = 'tickets';
+
     public static function canAccess(): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->user()?->is_admin ?? false;
     }
 
-    protected function getHeaderWidgets(): array
+    public function mount(): void
     {
+        $this->dateFrom = now()->startOfMonth()->format('Y-m-d');
+        $this->dateTo = now()->format('Y-m-d');
+    }
+
+    // ----------------------------------------------------------------
+    // Computed: Seçili kullanıcı
+    // ----------------------------------------------------------------
+    public function getSelectedUserProperty(): ?User
+    {
+        if (!$this->selectedUserId) return null;
+        return User::find($this->selectedUserId);
+    }
+
+    // ----------------------------------------------------------------
+    // Özet kartlar için hesaplamalar
+    // ----------------------------------------------------------------
+    public function getStatsProperty(): array
+    {
+        if (!$this->selectedUserId) {
+            return [
+                'resolved_tickets'    => '-',
+                'total_tickets'       => '-',
+                'avg_resolution_mins' => '-',
+                'activity_count'      => '-',
+                'activity_total_mins' => '-',
+            ];
+        }
+
+        // Çözülen talepler (resolved_by)
+        $resolvedQuery = Ticket::where('resolved_by', $this->selectedUserId)
+            ->where('status', 'çözüldü')
+            ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
+            ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo));
+
+        $resolvedCount = $resolvedQuery->count();
+
+        // Atanan talepler (assigned_to) — tüm durumlar
+        $assignedCount = Ticket::where('assigned_to', $this->selectedUserId)
+            ->when($this->dateFrom, fn ($q) => $q->whereDate('created_at', '>=', $this->dateFrom))
+            ->when($this->dateTo,   fn ($q) => $q->whereDate('created_at', '<=', $this->dateTo))
+            ->count();
+
+        // Ortalama çözüm süresi (dakika cinsinden)
+        $avgMins = Ticket::where('resolved_by', $this->selectedUserId)
+            ->where('status', 'çözüldü')
+            ->whereNotNull('resolved_at')
+            ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
+            ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo))
+            ->get()
+            ->avg(fn ($t) => $t->created_at->diffInMinutes($t->resolved_at));
+
+        // Faaliyetler
+        $activityQuery = Activity::where('user_id', $this->selectedUserId)
+            ->when($this->dateFrom, fn ($q) => $q->whereDate('activity_date', '>=', $this->dateFrom))
+            ->when($this->dateTo,   fn ($q) => $q->whereDate('activity_date', '<=', $this->dateTo));
+
+        $activityCount    = $activityQuery->count();
+        $activityTotalMin = $activityQuery->sum('duration');
+
+        // Dakika → saat:dakika formatlama
+        $formatMins = function (?float $mins): string {
+            if ($mins === null || $mins == 0) return '-';
+            $h = floor($mins / 60);
+            $m = round($mins % 60);
+            return $h > 0 ? "{$h}s {$m}dk" : "{$m} dk";
+        };
+
         return [
-            // No header widgets
+            'resolved_tickets'    => $resolvedCount,
+            'total_tickets'       => $assignedCount,
+            'avg_resolution_mins' => $formatMins($avgMins),
+            'activity_count'      => $activityCount,
+            'activity_total_mins' => $formatMins($activityTotalMin),
         ];
     }
 
-    protected function getFooterWidgets(): array
+    // ----------------------------------------------------------------
+    // Talepler tablosu verisi
+    // ----------------------------------------------------------------
+    public function getTicketsProperty()
+    {
+        if (!$this->selectedUserId) return collect();
+
+        return Ticket::where('resolved_by', $this->selectedUserId)
+            ->where('status', 'çözüldü')
+            ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
+            ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo))
+            ->with('category.department')
+            ->orderByDesc('resolved_at')
+            ->get();
+    }
+
+    // ----------------------------------------------------------------
+    // Faaliyetler tablosu verisi
+    // ----------------------------------------------------------------
+    public function getActivitiesProperty()
+    {
+        if (!$this->selectedUserId) return collect();
+
+        return Activity::where('user_id', $this->selectedUserId)
+            ->when($this->dateFrom, fn ($q) => $q->whereDate('activity_date', '>=', $this->dateFrom))
+            ->when($this->dateTo,   fn ($q) => $q->whereDate('activity_date', '<=', $this->dateTo))
+            ->orderByDesc('activity_date')
+            ->get();
+    }
+
+    // ----------------------------------------------------------------
+    // Kullanıcı listesi (dropdown için)
+    // ----------------------------------------------------------------
+    public function getUsersProperty()
+    {
+        return User::orderBy('name')->pluck('name', 'id');
+    }
+
+    // ----------------------------------------------------------------
+    // Excel Export
+    // ----------------------------------------------------------------
+    public function exportReport()
+    {
+        if (!$this->selectedUserId) return;
+
+        $user = User::find($this->selectedUserId);
+        $filename = 'teknisyen-raporu-' . \Illuminate\Support\Str::slug($user->name) . '-' . now()->format('Y-m-d') . '.xlsx';
+
+        return Excel::download(
+            new TechnicianReportExport($user, $this->dateFrom, $this->dateTo),
+            $filename
+        );
+    }
+
+    // ----------------------------------------------------------------
+    // Genel istatistik kartları (kullanıcıdan bağımsız, sayfanın altı)
+    // ----------------------------------------------------------------
+    public function getGeneralStatsProperty(): array
     {
         return [
-            TicketStatsOverview::class,
-            TicketsChart::class,
-            TicketsPerCategoryChart::class,
-            TicketsPerDepartmentChart::class,
+            'total_tickets'     => Ticket::count(),
+            'open_tickets'      => Ticket::whereIn('status', ['yeni', 'işlemde', 'beklemede'])->count(),
+            'resolved_tickets'  => Ticket::where('status', 'çözüldü')->count(),
+            'total_activities'  => Activity::count(),
         ];
-    }
-
-    public function table(Table $table): Table
-    {
-        return $table
-            ->query(Ticket::query())
-            ->columns([
-                TextColumn::make('tracking_number')
-                    ->label('Takip No')
-                    ->searchable(),
-                TextColumn::make('name')
-                    ->label('Talep Sahibi')
-                    ->searchable(),
-                TextColumn::make('category.department.name')
-                    ->label('Bağlı Bölüm')
-                    ->sortable(),
-                TextColumn::make('category.name')
-                    ->label('Kategori')
-                    ->sortable(),
-                TextColumn::make('subject')
-                    ->label('Konu')
-                    ->limit(30),
-                TextColumn::make('status')
-                    ->label('Durum')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'yeni' => 'info',
-                        'işlemde' => 'warning',
-                        'beklemede' => 'gray',
-                        'çözüldü' => 'success',
-                        'iptal' => 'danger',
-                        default => 'gray',
-                    }),
-                TextColumn::make('resolver.name')
-                    ->label('Çözen Personel')
-                    ->placeholder('Henüz çözülmedi'),
-                TextColumn::make('created_at')
-                    ->label('Tarih')
-                    ->dateTime('d.m.Y H:i')
-                    ->sortable(),
-            ])
-            ->filters([
-                SelectFilter::make('department_id')
-                    ->label('Bölüm')
-                    ->relationship('category.department', 'name'),
-
-                SelectFilter::make('category_id')
-                    ->label('Kategori')
-                    ->multiple()
-                    ->options(Category::pluck('name', 'id')),
-                
-                SelectFilter::make('status')
-                    ->label('Durum')
-                    ->options([
-                        'yeni' => 'Yeni',
-                        'işlemde' => 'İşlemde',
-                        'beklemede' => 'Beklemede',
-                        'çözüldü' => 'Çözüldü',
-                        'iptal' => 'İptal',
-                    ]),
-
-                Filter::make('created_at')
-                    ->form([
-                        DatePicker::make('from')->label('Başlangıç'),
-                        DatePicker::make('until')->label('Bitiş'),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when($data['from'], fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date))
-                            ->when($data['until'], fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date));
-                    })
-            ])
-            ->headerActions([
-                \Filament\Actions\Action::make('export')
-                    ->label('Excel Olarak İndir')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->action('exportToExcel')
-            ]);
-    }
-
-    public function exportToExcel()
-    {
-        return Excel::download(new TicketsExport($this->getFilteredTableQuery()), 'talep-raporu-' . now()->format('d-m-Y') . '.xlsx');
     }
 }
