@@ -2,7 +2,10 @@
 
 Bu dosya, Gemini CLI'ın proje durumunu ve geçmişini her oturumda hatırlaması için oluşturulmuştur.
 
-## 🚀 Son Durum: v1.16 (29 Haziran 2026)
+## 🚀 Son Durum: v1.17 (29 Haziran 2026)
+- **Talep Başarı Ekranı & Akış İyileştirmesi:** Talep başarıyla oluşturulduktan sonra kafaları karıştırmaması için doldurulan form alanı ve başlık kısmı gizlendi. Sadece üretilen talep bilgilerini içeren başarı kartı gösterildi ve altına sayfayı ilk haline sıfırlayan "Yeni Talep Ekle" butonu eklendi.
+
+## 🚀 Önceki Durum: v1.16 (29 Haziran 2026)
 - **Hızlı Faaliyet Modalı — UI Düzeltmesi:** Modal içindeki alanlar arası boşluklar, textarea genişliği ve buton hizalaması düzeltildi. Tüm stiller Filament admin panel CSS uyumsuzluğunu aşmak için inline CSS'e dönüştürüldü.
 - **Faaliyet Yetkilendirmesi:** `accessible_modules` listesine `Faaliyetlerim` seçeneği eklendi; admin olmayan teknisyenlere de bu modül yetkisi verilebilir hale getirildi. `ActivityResource`'a `canAccess()` kontrolü eklendi.
 - **Teknisyen Bazlı Gelişmiş Rapor Sayfası:** Raporlar sayfası tamamen yeniden tasarlandı:

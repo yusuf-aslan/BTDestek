@@ -107,6 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.17 - Talep Başarı Ekranı ve Akış İyileştirmesi:**
+    *   **Talep Başarı Ekranı:** Kullanıcı yeni bir destek talebi oluşturduktan sonra, kafa karışıklığını önlemek adına form tamamen gizlenir. Sadece üretilen talep bilgilerini (Talep no, kopyalama ve yazdırma seçenekleri) içeren başarı ekranı gösterilir.
+    *   **Yeni Talep Ekle Butonu:** Başarı ekranının altına yerleştirilen buton ile kullanıcı tek tıkla sayfayı sıfırlayarak yeni bir talep formuna geri dönebilir.
+    *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.17'ye güncellendi.
+
 *   **v1.16 - Gelişmiş Raporlama, Faaliyet Yetkilendirme & Performans:**
     *   **Hızlı Faaliyet Modalı UI Düzeltmesi:** Modal içindeki alanlar arası boşluklar, textarea genişliği ve buton hizalaması düzeltildi. Tüm stiller Filament admin panel CSS uyumsuzluğunu aşmak için inline CSS'e dönüştürüldü.
     *   **Faaliyet Yetkilendirmesi:** `accessible_modules` listesine `Faaliyetlerim` seçeneği eklendi; admin olmayan teknisyenlere de bu modül yetkisi verilebilir hale getirildi.
