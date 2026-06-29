@@ -21,9 +21,9 @@
         </x-slot>
 
         <!-- Form Content (Inside Modal Body) -->
-        <div class="grid grid-cols-2 gap-4 py-2">
+        <div class="grid grid-cols-2 gap-y-6 gap-x-4 py-2">
             <!-- Activity Type -->
-            <div class="col-span-2 space-y-1.5 text-left">
+            <div class="col-span-2 space-y-2 text-left">
                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-0.5">Faaliyet Türü</label>
                 <x-filament::input.wrapper>
                     <x-filament::input.select wire:model.defer="activity_type" required>
@@ -39,7 +39,7 @@
             </div>
 
             <!-- Duration -->
-            <div class="col-span-1 space-y-1.5 text-left">
+            <div class="col-span-1 space-y-2 text-left">
                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-0.5">Harcanan Süre (Dk)</label>
                 <x-filament::input.wrapper>
                     <x-filament::input
@@ -54,7 +54,7 @@
             </div>
 
             <!-- Date -->
-            <div class="col-span-1 space-y-1.5 text-left">
+            <div class="col-span-1 space-y-2 text-left">
                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-0.5">Faaliyet Tarihi</label>
                 <x-filament::input.wrapper>
                     <x-filament::input
@@ -67,7 +67,7 @@
             </div>
 
             <!-- Department -->
-            <div class="col-span-2 space-y-1.5 text-left">
+            <div class="col-span-2 space-y-2 text-left">
                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-0.5">Bölüm</label>
                 <x-filament::input.wrapper>
                     <x-filament::input
@@ -81,31 +81,31 @@
             </div>
 
             <!-- Description -->
-            <div class="col-span-2 space-y-1.5 text-left">
+            <div class="col-span-2 space-y-2 text-left">
                 <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Yapılan İşin Açıklaması</label>
                 <x-filament::input.wrapper>
-                    <textarea
-                        wire:model.defer="description"
-                        rows="3"
-                        required
-                        class="fi-input block w-full border-0 bg-transparent px-3 py-1.5 text-gray-900 focus:ring-0 dark:text-white sm:text-sm sm:leading-6 outline-none"
-                        placeholder="Yapılan işlemi kısaca detaylandırın..."
-                    ></textarea>
+                    <div class="w-full">
+                        <textarea
+                            wire:model.defer="description"
+                            rows="4"
+                            required
+                            class="fi-input block w-full border-0 bg-transparent px-3 py-2 text-gray-900 focus:ring-0 dark:text-white sm:text-sm outline-none"
+                            placeholder="Yapılan işlemi kısaca detaylandırın..."
+                        ></textarea>
+                    </div>
                 </x-filament::input.wrapper>
                 @error('description') <p class="text-xs text-red-500 mt-1 ml-0.5">{{ $message }}</p> @enderror
             </div>
         </div>
 
-        <!-- Footer Slot (Native Filament Modal Footer) -->
-        <x-slot name="footer">
-            <div class="flex justify-end gap-3 w-full">
-                <x-filament::button color="gray" x-on:click="close" type="button">
-                    Vazgeç
-                </x-filament::button>
-                <x-filament::button type="submit" color="primary" icon="heroicon-m-check">
-                    Kaydet
-                </x-filament::button>
-            </div>
-        </x-slot>
+        <!-- Footer / Action Buttons (Manually styled for 100% visual layout control) -->
+        <div class="pt-5 mt-6 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3 w-full items-center">
+            <x-filament::button color="gray" x-on:click="close" type="button">
+                Vazgeç
+            </x-filament::button>
+            <x-filament::button type="submit" color="primary" icon="heroicon-m-check">
+                Kaydet
+            </x-filament::button>
+        </div>
     </x-filament::modal>
 </div>
