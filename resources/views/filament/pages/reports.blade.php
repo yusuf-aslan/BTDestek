@@ -339,7 +339,15 @@
                             <tbody>
                                 @foreach($this->tickets as $ticket)
                                     <tr class="rp-tr {{ $loop->odd ? 'rp-tr-odd' : 'rp-tr-even' }}">
-                                        <td class="rp-td rp-tracking">{{ $ticket->tracking_number }}</td>
+                                        <td class="rp-td rp-tracking">
+                                            <a href="{{ \App\Filament\Resources\Tickets\TicketResource::getUrl('edit', ['record' => $ticket->id]) }}" 
+                                               target="_blank" 
+                                               style="color:#0ea5e9;text-decoration:none;font-weight:600;" 
+                                               onmouseover="this.style.textDecoration='underline'" 
+                                               onmouseout="this.style.textDecoration='none'">
+                                                {{ $ticket->tracking_number }}
+                                            </a>
+                                        </td>
                                         <td class="rp-td">{{ $ticket->name }}</td>
                                         <td class="rp-td rp-td-muted">{{ $ticket->category?->department?->name ?? '-' }}</td>
                                         <td class="rp-td rp-td-muted">{{ $ticket->category?->name ?? '-' }}</td>

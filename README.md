@@ -117,6 +117,7 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
     *   **Faaliyet Yetkilendirmesi & Salt Okunur Sayfa:** Faaliyet kayıtlarının sadece o faaliyeti açan/oluşturan kişi tarafından silinebilmesini ve düzenlenebilmesini sağlayan `ActivityPolicy` entegre edildi. Başkasının faaliyetine tıklandığında düzenleme yerine salt-okunur (View) ekran açılır.
     *   **Faaliyet Sayfa Başlığı Kısaltma:** Faaliyet detay sayfasında ve ekmek kırıntısında (breadcrumbs) açıklama yerine `Faaliyet Türü (Tarih)` yapısı kullanılarak başlık uzunluğu kısaltıldı.
     *   **Talepleri Aktarma Komutu:** İhtiyaç fazlası veya mükerrer personellerin tüm taleplerini ve faaliyetlerini başka bir personele güvenle aktarıp eski kullanıcıyı silebilen `tickets:transfer` Artisan komutu geliştirildi.
+    *   **Raporlardan Taleplere Doğrudan Erişim:** Teknisyen Raporları sayfasında listelenen kapatılan taleplerin "Takip No" alanlarına tıklanabilir link özelliği eklendi; talepler yeni sekmede açılarak doğrudan düzenleme ekranına yönlendirilir.
     *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.17'ye güncellendi.
 
 *   **v1.16 - Gelişmiş Raporlama, Faaliyet Yetkilendirme & Performans:**
