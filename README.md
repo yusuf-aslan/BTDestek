@@ -118,6 +118,14 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
     *   **Faaliyet Sayfa Başlığı Kısaltma:** Faaliyet detay sayfasında ve ekmek kırıntısında (breadcrumbs) açıklama yerine `Faaliyet Türü (Tarih)` yapısı kullanılarak başlık uzunluğu kısaltıldı.
     *   **Talepleri Aktarma Komutu:** İhtiyaç fazlası veya mükerrer personellerin tüm taleplerini ve faaliyetlerini başka bir personele güvenle aktarıp eski kullanıcıyı silebilen `tickets:transfer` Artisan komutu geliştirildi.
     *   **Raporlardan Taleplere Doğrudan Erişim:** Teknisyen Raporları sayfasında listelenen kapatılan taleplerin "Takip No" alanlarına tıklanabilir link özelliği eklendi; talepler yeni sekmede açılarak doğrudan düzenleme ekranına yönlendirilir.
+    *   **Admin Panel Dashboard Yenileme:** Admin anasayfası (Panel) tamamen yeniden tasarlandı:
+        *   5 adet renkli gradyan istatistik kartı (Toplam Talep, Bekleyen, Bugün Gelen, Çözülen, Acil & Bekleyen).
+        *   Bekleyen acil talep varsa kırmızı uyarı bandı; tıklanınca filtreli talep listesine gider.
+        *   Aktif duyurular varsa renkli badge'lerle panelin üstünde gösterilir.
+        *   Bekleyen talepler listesi: tıklanabilir takip no, önceliğe göre renkli nokta ve badge, bölüm bilgisi.
+        *   Son 7 günlük talep trendi: gelen (mor) ve çözülen (yeşil) barlar yan yana; haftalık özet ve çözüm oranı.
+        *   Teknisyen performans tablosu: avatar, aktif iş / bugün çözülen / toplam çözülen, doluluk progress bar (sadece adminlere).
+        *   Dashboard tam sayfa genişliğine (`screen-2xl`) taşındı.
     *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.17'ye güncellendi.
 
 *   **v1.16 - Gelişmiş Raporlama, Faaliyet Yetkilendirme & Performans:**
