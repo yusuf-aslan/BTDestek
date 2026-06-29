@@ -107,14 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
-*   **v1.18 - E-posta ve Arızalı PC IP Görünürlük Kontrolleri:**
-    *   **Admin Panel E-posta Gizleme:** SMTP ayarları pasif durumdaysa, admin panel "Talep Düzenleme" (Edit) ekranındaki e-posta alanı da otomatik gizlenecek şekilde uyarlandı.
-    *   **Arızalı PC IP Alanı Toggle Ayarı:** Talep formundaki "Arızalı PC IP" alanını Genel Ayarlar / Görünüm sekmesinden tamamen açıp kapatabilme özelliği eklendi.
-    *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.18'e güncellendi.
-
-*   **v1.17 - Talep Başarı Ekranı ve Akış İyileştirmesi:**
+*   **v1.17 - Talep Başarı Ekranı, Görünürlük Kontrolleri ve Akış İyileştirmesi:**
     *   **Talep Başarı Ekranı:** Kullanıcı yeni bir destek talebi oluşturduktan sonra, kafa karışıklığını önlemek adına form tamamen gizlenir. Sadece üretilen talep bilgilerini (Talep no, kopyalama ve yazdırma seçenekleri) içeren başarı ekranı gösterilir.
     *   **Yeni Talep Ekle Butonu:** Başarı ekranının altına yerleştirilen buton ile kullanıcı tek tıkla sayfayı sıfırlayarak yeni bir talep formuna geri dönebilir.
+    *   **Admin Panel E-posta Gizleme:** SMTP ayarları pasif durumdaysa, admin panel "Talep Düzenleme" (Edit) ekranındaki e-posta alanı da otomatik gizlenecek şekilde uyarlandı.
+    *   **Arızalı PC IP Alanı Toggle Ayarı:** Talep formundaki "Arızalı PC IP" alanını Genel Ayarlar / Görünüm sekmesinden tamamen açıp kapatabilme özelliği eklendi. Pasifleştirildiğinde hem kullanıcı formundan hem de admin paneli talep detayından gizlenir.
     *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.17'ye güncellendi.
 
 *   **v1.16 - Gelişmiş Raporlama, Faaliyet Yetkilendirme & Performans:**

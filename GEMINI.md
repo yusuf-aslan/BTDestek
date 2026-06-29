@@ -2,13 +2,11 @@
 
 Bu dosya, Gemini CLI'ın proje durumunu ve geçmişini her oturumda hatırlaması için oluşturulmuştur.
 
-## 🚀 Son Durum: v1.18 (29 Haziran 2026)
+## 🚀 Son Durum: v1.17 (29 Haziran 2026)
+- **Talep Başarı Ekranı & Akış İyileştirmesi:** Talep başarıyla oluşturulduktan sonra kafaları karıştırmaması için doldurulan form alanı ve başlık kısmı gizlendi. Sadece üretilen talep bilgilerini içeren başarı kartı gösterildi ve altına sayfayı ilk haline sıfırlayan "Yeni Talep Ekle" butonu eklendi.
 - **E-posta & Arızalı PC IP Görünürlük Kontrolleri:** 
   - Yönetici Ayarlarında E-posta veya SMTP ayarları pasif olduğunda, sadece talep formunda değil, admin paneli "Talep Düzenleme" (Edit) ekranında da e-posta alanı gizlenecek şekilde güncellendi.
   - Talep formundaki "Arızalı PC IP (Zorunlu Değil)" alanını isteğe bağlı olarak tamamen açıp kapatabilmek için Genel Ayarlar / Görünüm sekmesine bir ayar toggle'ı eklendi. Pasifleştirildiğinde hem kullanıcı formundan hem de admin paneli talep detayından gizlenir.
-
-## 🚀 Önceki Durum: v1.17 (29 Haziran 2026)
-- **Talep Başarı Ekranı & Akış İyileştirmesi:** Talep başarıyla oluşturulduktan sonra kafaları karıştırmaması için doldurulan form alanı ve başlık kısmı gizlendi. Sadece üretilen talep bilgilerini içeren başarı kartı gösterildi ve altına sayfayı ilk haline sıfırlayan "Yeni Talep Ekle" butonu eklendi.
 
 ## 🚀 Önceki Durum: v1.16 (29 Haziran 2026)
 - **Hızlı Faaliyet Modalı — UI Düzeltmesi:** Modal içindeki alanlar arası boşluklar, textarea genişliği ve buton hizalaması düzeltildi. Tüm stiller Filament admin panel CSS uyumsuzluğunu aşmak için inline CSS'e dönüştürüldü.
