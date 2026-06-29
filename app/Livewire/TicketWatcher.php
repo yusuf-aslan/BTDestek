@@ -79,14 +79,14 @@ class TicketWatcher extends Component
                 audio: null,
                 init() {
                     this.baseTitle = document.title.replace(/^(\d+)\s/, '');
-                    this.audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                    this.audio = new Audio('/sounds/notification.mp3');
                     
                     if ('Notification' in window && Notification.permission === 'default' && window.location.protocol === 'https:') {
                         Notification.requestPermission();
                     }
 
                     this.$wire.checkNewTickets();
-                    setInterval(() => this.$wire.checkNewTickets(), 20000);
+                    setInterval(() => this.$wire.checkNewTickets(), 30000);
 
                     window.addEventListener('ticket-count-updated', (event) => {
                         this.updateDisplay(event.detail.count, event.detail.isNew);
