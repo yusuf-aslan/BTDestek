@@ -68,18 +68,24 @@
 
 /* ── TREND CHART ──────────────────────────────── */
 .db-trend-wrap { padding: 16px 20px 12px; }
-.db-trend-bars { display: flex; align-items: flex-end; gap: 8px; height: 100px; }
-.db-trend-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.db-trend-bar-wrap { flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; }
+/* Dış kapsayıcı: tüm günler yan yana, tabanları hizalı */
+.db-trend-bars { display: flex; align-items: flex-end; gap: 10px; height: 120px; }
+/* Her gün için sütun: barlar + etiket */
+.db-trend-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+/* İki barı yan yana tut, tabanlarından büyüsünler */
+.db-trend-bar-group { display: flex; align-items: flex-end; gap: 2px; width: 100%; justify-content: center; flex: 1; }
 .db-trend-bar {
-    border-radius: 6px 6px 0 0;
+    border-radius: 4px 4px 0 0;
     transition: height .4s ease;
-    min-height: 2px;
+    min-height: 3px;
+    width: 42%;
+    cursor: default;
 }
-.db-trend-bar-new      { background: linear-gradient(180deg, #6366f1, #8b5cf6); }
-.db-trend-bar-resolved { background: linear-gradient(180deg, #10b981, #059669); opacity: .7; }
-.dark .db-trend-bar-new      { background: linear-gradient(180deg, #818cf8, #a78bfa); }
-.dark .db-trend-bar-resolved { background: linear-gradient(180deg, #34d399, #10b981); }
+.db-trend-bar:hover { filter: brightness(1.15); }
+.db-trend-bar-new      { background: linear-gradient(180deg, #818cf8, #6366f1); }
+.db-trend-bar-resolved { background: linear-gradient(180deg, #34d399, #10b981); }
+.dark .db-trend-bar-new      { background: linear-gradient(180deg, #a5b4fc, #818cf8); }
+.dark .db-trend-bar-resolved { background: linear-gradient(180deg, #6ee7b7, #34d399); }
 .db-trend-label { font-size: 10px; color: #9ca3af; font-weight: 500; white-space: nowrap; }
 .db-trend-legend { display: flex; gap: 16px; padding: 10px 0 0; }
 .db-trend-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #6b7280; }
@@ -303,17 +309,17 @@
                     <div class="db-trend-bars">
                         @foreach($trendData as $day)
                         @php
-                            $newH  = $trendMax > 0 ? round(($day['count']    / $trendMax) * 80) : 0;
-                            $resH  = $trendMax > 0 ? round(($day['resolved'] / $trendMax) * 80) : 0;
+                            $newH = $trendMax > 0 ? max(round(($day['count']    / $trendMax) * 100), $day['count'] > 0 ? 3 : 0) : 0;
+                            $resH = $trendMax > 0 ? max(round(($day['resolved'] / $trendMax) * 100), $day['resolved'] > 0 ? 3 : 0) : 0;
                         @endphp
                         <div class="db-trend-col">
-                            <div class="db-trend-bar-wrap">
+                            <div class="db-trend-bar-group">
                                 <div class="db-trend-bar db-trend-bar-new"
-                                     style="height:{{ max($newH,2) }}px;"
-                                     title="Gelen: {{ $day['count'] }}"></div>
+                                     style="height:{{ $newH }}px;"
+                                     title="{{ $day['label'] }} — Gelen: {{ $day['count'] }}"></div>
                                 <div class="db-trend-bar db-trend-bar-resolved"
-                                     style="height:{{ max($resH,1) }}px;"
-                                     title="Çözülen: {{ $day['resolved'] }}"></div>
+                                     style="height:{{ $resH }}px;"
+                                     title="{{ $day['label'] }} — Çözülen: {{ $day['resolved'] }}"></div>
                             </div>
                             <div class="db-trend-label">{{ $day['label'] }}</div>
                         </div>

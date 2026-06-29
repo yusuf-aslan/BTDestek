@@ -17,10 +17,7 @@ class DashboardOverview extends Widget
 
     protected static ?int $sort = 0;
 
-    public function render(): \Illuminate\Contracts\View\View
-    {
-        return view($this->view, $this->getViewData());
-    }
+    protected static bool $isLazy = false;
 
     public function getViewData(): array
     {
