@@ -1,30 +1,28 @@
 <div>
-    <x-filament::modal 
-        id="quick-activity" 
-        width="lg" 
+    <x-filament::modal
+        id="quick-activity"
+        width="lg"
         icon="heroicon-o-clipboard-document-list"
         icon-color="primary"
         heading="Hızlı Faaliyet Ekle"
         description="Bilet dışı yapılan faaliyet kaydı"
         :close-by-clicking-away="true"
-        wire:submit.prevent="save"
     >
         <x-slot name="trigger">
-            <!-- Icon Button matching Filament Topbar -->
             <x-filament::icon-button
                 icon="heroicon-o-plus-circle"
                 color="primary"
                 size="lg"
                 title="Hızlı Faaliyet Ekle"
-                class="hover:scale-110 transition duration-200"
             />
         </x-slot>
 
-        <!-- Form Content (Inside Modal Body) -->
-        <div class="grid grid-cols-2 gap-y-6 gap-x-4 py-2">
-            <!-- Activity Type -->
-            <div class="col-span-2 space-y-2 text-left">
-                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-0.5">Faaliyet Türü</label>
+        <form wire:submit.prevent="save">
+            {{-- Faaliyet Türü --}}
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display:block; font-size:0.75rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">
+                    Faaliyet Türü
+                </label>
                 <x-filament::input.wrapper>
                     <x-filament::input.select wire:model.defer="activity_type" required>
                         <option value="Telefon Desteği">Telefon Desteği</option>
@@ -35,40 +33,47 @@
                         <option value="Diğer">Diğer</option>
                     </x-filament::input.select>
                 </x-filament::input.wrapper>
-                @error('activity_type') <p class="text-xs text-red-500 mt-1 ml-0.5">{{ $message }}</p> @enderror
+                @error('activity_type') <p style="font-size:0.75rem; color:#ef4444; margin-top:0.25rem;">{{ $message }}</p> @enderror
             </div>
 
-            <!-- Duration -->
-            <div class="col-span-1 space-y-2 text-left">
-                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-0.5">Harcanan Süre (Dk)</label>
-                <x-filament::input.wrapper>
-                    <x-filament::input
-                        type="number"
-                        wire:model.defer="duration"
-                        required
-                        min="1"
-                        placeholder="Örn: 15"
-                    />
-                </x-filament::input.wrapper>
-                @error('duration') <p class="text-xs text-red-500 mt-1 ml-0.5">{{ $message }}</p> @enderror
+            {{-- Süre ve Tarih (yan yana) --}}
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.25rem;">
+                <div>
+                    <label style="display:block; font-size:0.75rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">
+                        Harcanan Süre (Dk)
+                    </label>
+                    <x-filament::input.wrapper>
+                        <x-filament::input
+                            type="number"
+                            wire:model.defer="duration"
+                            required
+                            min="1"
+                            placeholder="Örn: 15"
+                        />
+                    </x-filament::input.wrapper>
+                    @error('duration') <p style="font-size:0.75rem; color:#ef4444; margin-top:0.25rem;">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label style="display:block; font-size:0.75rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">
+                        Faaliyet Tarihi
+                    </label>
+                    <x-filament::input.wrapper>
+                        <x-filament::input
+                            type="date"
+                            wire:model.defer="activity_date"
+                            required
+                        />
+                    </x-filament::input.wrapper>
+                    @error('activity_date') <p style="font-size:0.75rem; color:#ef4444; margin-top:0.25rem;">{{ $message }}</p> @enderror
+                </div>
             </div>
 
-            <!-- Date -->
-            <div class="col-span-1 space-y-2 text-left">
-                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-0.5">Faaliyet Tarihi</label>
-                <x-filament::input.wrapper>
-                    <x-filament::input
-                        type="date"
-                        wire:model.defer="activity_date"
-                        required
-                    />
-                </x-filament::input.wrapper>
-                @error('activity_date') <p class="text-xs text-red-500 mt-1 ml-0.5">{{ $message }}</p> @enderror
-            </div>
-
-            <!-- Department -->
-            <div class="col-span-2 space-y-2 text-left">
-                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-0.5">Bölüm</label>
+            {{-- Bölüm --}}
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display:block; font-size:0.75rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">
+                    Bölüm
+                </label>
                 <x-filament::input.wrapper>
                     <x-filament::input
                         type="text"
@@ -77,35 +82,44 @@
                         placeholder="Örn: Kardiyoloji Polikliniği 3. Oda"
                     />
                 </x-filament::input.wrapper>
-                @error('department') <p class="text-xs text-red-500 mt-1 ml-0.5">{{ $message }}</p> @enderror
+                @error('department') <p style="font-size:0.75rem; color:#ef4444; margin-top:0.25rem;">{{ $message }}</p> @enderror
             </div>
 
-            <!-- Description -->
-            <div class="col-span-2 space-y-2 text-left">
-                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Yapılan İşin Açıklaması</label>
+            {{-- Açıklama --}}
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; font-size:0.75rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">
+                    Yapılan İşin Açıklaması
+                </label>
                 <x-filament::input.wrapper>
-                    <div class="w-full">
-                        <textarea
-                            wire:model.defer="description"
-                            rows="4"
-                            required
-                            class="fi-input block w-full border-0 bg-transparent px-3 py-2 text-gray-900 focus:ring-0 dark:text-white sm:text-sm outline-none"
-                            placeholder="Yapılan işlemi kısaca detaylandırın..."
-                        ></textarea>
-                    </div>
+                    <textarea
+                        wire:model.defer="description"
+                        rows="4"
+                        required
+                        placeholder="Yapılan işlemi kısaca detaylandırın..."
+                        style="display:block; width:100%; background:transparent; border:none; padding:0.5rem 0.75rem; font-size:0.875rem; line-height:1.5; color:inherit; outline:none; resize:vertical; box-sizing:border-box;"
+                    ></textarea>
                 </x-filament::input.wrapper>
-                @error('description') <p class="text-xs text-red-500 mt-1 ml-0.5">{{ $message }}</p> @enderror
+                @error('description') <p style="font-size:0.75rem; color:#ef4444; margin-top:0.25rem;">{{ $message }}</p> @enderror
             </div>
-        </div>
 
-        <!-- Footer / Action Buttons (Manually styled for 100% visual layout control) -->
-        <div class="pt-5 mt-6 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3 w-full items-center">
-            <x-filament::button color="gray" x-on:click="close" type="button">
-                Vazgeç
-            </x-filament::button>
-            <x-filament::button type="submit" color="primary" icon="heroicon-m-check">
-                Kaydet
-            </x-filament::button>
-        </div>
+            {{-- Butonlar --}}
+            <div style="display:flex; justify-content:flex-end; align-items:center; gap:0.75rem; padding-top:1.25rem; margin-top:0.5rem; border-top:1px solid #e2e8f0;">
+                <x-filament::button
+                    color="gray"
+                    type="button"
+                    x-on:click="$dispatch('close-modal', { id: 'quick-activity' })"
+                >
+                    Vazgeç
+                </x-filament::button>
+
+                <x-filament::button
+                    type="submit"
+                    color="primary"
+                    icon="heroicon-m-check"
+                >
+                    Kaydet
+                </x-filament::button>
+            </div>
+        </form>
     </x-filament::modal>
 </div>
