@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DashboardOverview extends Widget
 {
-    protected static string $view = 'filament.widgets.dashboard-overview';
+    protected string $view = 'filament.widgets.dashboard-overview';
 
     protected int|string|array $columnSpan = 'full';
 
