@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Activities;
 use App\Filament\Resources\Activities\Pages\CreateActivity;
 use App\Filament\Resources\Activities\Pages\EditActivity;
 use App\Filament\Resources\Activities\Pages\ListActivities;
+use App\Filament\Resources\Activities\Pages\ViewActivity;
 use App\Filament\Resources\Activities\Schemas\ActivityForm;
 use App\Filament\Resources\Activities\Tables\ActivitiesTable;
 use App\Models\Activity;
@@ -21,7 +22,12 @@ class ActivityResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-check';
 
-    protected static ?string $recordTitleAttribute = 'description';
+    protected static ?string $recordTitleAttribute = 'activity_type';
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        return $record ? "{$record->activity_type} (" . \Carbon\Carbon::parse($record->activity_date)->format('d.m.Y') . ")" : null;
+    }
 
     protected static ?string $modelLabel = 'Faaliyet';
     protected static ?string $pluralModelLabel = 'Faaliyetlerim';
@@ -69,6 +75,7 @@ class ActivityResource extends Resource
         return [
             'index' => ListActivities::route('/'),
             'create' => CreateActivity::route('/create'),
+            'view' => ViewActivity::route('/{record}'),
             'edit' => EditActivity::route('/{record}/edit'),
         ];
     }

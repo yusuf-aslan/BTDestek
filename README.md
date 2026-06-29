@@ -114,7 +114,8 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
     *   **Arızalı PC IP Alanı Toggle Ayarı:** Talep formundaki "Arızalı PC IP" alanını Genel Ayarlar / Görünüm sekmesinden tamamen açıp kapatabilme özelliği eklendi. Pasifleştirildiğinde hem kullanıcı formundan hem de admin paneli talep detayından gizlenir.
     *   **Teknisyen Çözüm Kontrolü:** Çözüm notu doldurulup durumun "çözüldü" seçilmediği durumlarda sistemin orijinal onay modalı (popup) tetiklenerek durumun otomatik "çözüldü" olarak işaretlenip kaydedilmesi sağlandı.
     *   **Turuncu Buton Renk Dengesi:** Turuncu/Amber butonlardaki beyaz yazı rengi özelleştirmesi, açık modda varsayılan görünümü bozmamak için sadece karanlık modda (dark mode) aktif olacak şekilde sınırlandırıldı.
-    *   **Faaliyet Silme Yetkilendirmesi:** Faaliyet kayıtlarının sadece o faaliyeti açan/oluşturan kişi tarafından silinebilmesini sağlayan `ActivityPolicy` entegre edildi. Adminler dahil kimse başkasının faaliyetini silemez.
+    *   **Faaliyet Yetkilendirmesi & Salt Okunur Sayfa:** Faaliyet kayıtlarının sadece o faaliyeti açan/oluşturan kişi tarafından silinebilmesini ve düzenlenebilmesini sağlayan `ActivityPolicy` entegre edildi. Başkasının faaliyetine tıklandığında düzenleme yerine salt-okunur (View) ekran açılır.
+    *   **Faaliyet Sayfa Başlığı Kısaltma:** Faaliyet detay sayfasında ve ekmek kırıntısında (breadcrumbs) açıklama yerine `Faaliyet Türü (Tarih)` yapısı kullanılarak başlık uzunluğu kısaltıldı.
     *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.17'ye güncellendi.
 
 *   **v1.16 - Gelişmiş Raporlama, Faaliyet Yetkilendirme & Performans:**
