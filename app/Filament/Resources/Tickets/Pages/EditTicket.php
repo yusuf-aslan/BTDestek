@@ -41,4 +41,28 @@ class EditTicket extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
+    {
+        $data = $this->form->getState();
+        
+        if (!empty($data['resolution_note']) && !in_array($data['status'], ['çözüldü', 'iptal'])) {
+            $this->dispatch('open-resolve-confirmation-modal');
+            return;
+        }
+
+        parent::save($shouldRedirect, $shouldSendSavedNotification);
+    }
+
+    #[\Livewire\Attributes\On('confirm-resolve-save')]
+    public function forceSaveAsResolved(): void
+    {
+        $state = $this->form->getState();
+        $state['status'] = 'çözüldü';
+        
+        // Update form state
+        $this->form->fill($state);
+        
+        parent::save(true, true);
+    }
 }

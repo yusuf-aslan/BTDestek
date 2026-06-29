@@ -47,7 +47,15 @@ class AdminPanelProvider extends PanelProvider
             ->brandName($settings->site_title ?? 'Hastane BT Destek')
             ->renderHook(
                 PanelsRenderHook::BODY_END,
-                fn (): string => Blade::render('@livewire(\'TicketWatcher\')'),
+                fn (): string => Blade::render('@livewire(\'TicketWatcher\')') . '
+                    <script>
+                        window.addEventListener("open-resolve-confirmation-modal", () => {
+                            if (confirm("Çözüm notu girilmiş fakat durum \"çözüldü\" olarak işaretlenmemiş. Durum otomatik olarak \"çözüldü\" yapılarak kaydedilsin mi?")) {
+                                Livewire.dispatch("confirm-resolve-save");
+                            }
+                        });
+                    </script>
+                ',
             )
             ->renderHook(
                 PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
@@ -57,17 +65,17 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::HEAD_END,
                 fn (): string => '
                     <style>
-                        /* Primary (Amber/Orange) butonlarin yazi rengini okunurluk icin beyaz yap */
-                        .fi-btn.fi-color-primary,
-                        .fi-btn.fi-color-primary *,
-                        .fi-btn.fi-color-custom,
-                        .fi-btn.fi-color-custom *,
-                        button[class*="fi-color-primary"],
-                        button[class*="fi-color-primary"] *,
-                        a[class*="fi-color-primary"],
-                        a[class*="fi-color-primary"] *,
-                        .fi-color-amber,
-                        .fi-color-amber * {
+                        /* Dark modda primary (Amber/Orange) butonlarin yazi rengini okunurluk icin beyaz yap */
+                        .dark .fi-btn.fi-color-primary,
+                        .dark .fi-btn.fi-color-primary *,
+                        .dark .fi-btn.fi-color-custom,
+                        .dark .fi-btn.fi-color-custom *,
+                        .dark button[class*="fi-color-primary"],
+                        .dark button[class*="fi-color-primary"] *,
+                        .dark a[class*="fi-color-primary"],
+                        .dark a[class*="fi-color-primary"] *,
+                        .dark .fi-color-amber,
+                        .dark .fi-color-amber * {
                             color: #ffffff !important;
                         }
                     </style>

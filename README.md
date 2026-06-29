@@ -112,6 +112,8 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
     *   **Yeni Talep Ekle Butonu:** Başarı ekranının altına yerleştirilen buton ile kullanıcı tek tıkla sayfayı sıfırlayarak yeni bir talep formuna geri dönebilir.
     *   **Admin Panel E-posta Gizleme:** SMTP ayarları pasif durumdaysa, admin panel "Talep Düzenleme" (Edit) ekranındaki e-posta alanı da otomatik gizlenecek şekilde uyarlandı.
     *   **Arızalı PC IP Alanı Toggle Ayarı:** Talep formundaki "Arızalı PC IP" alanını Genel Ayarlar / Görünüm sekmesinden tamamen açıp kapatabilme özelliği eklendi. Pasifleştirildiğinde hem kullanıcı formundan hem de admin paneli talep detayından gizlenir.
+    *   **Teknisyen Çözüm Kontrolü:** Çözüm notu doldurulup durumun "çözüldü" seçilmediği durumlarda otomatik uyarı (confirm popup) tetiklenerek durumun otomatik "çözüldü" olarak işaretlenip kaydedilmesi sağlandı.
+    *   **Turuncu Buton Renk Dengesi:** Turuncu/Amber butonlardaki beyaz yazı rengi özelleştirmesi, açık modda varsayılan görünümü bozmamak için sadece karanlık modda (dark mode) aktif olacak şekilde sınırlandırıldı.
     *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.17'ye güncellendi.
 
 *   **v1.16 - Gelişmiş Raporlama, Faaliyet Yetkilendirme & Performans:**
