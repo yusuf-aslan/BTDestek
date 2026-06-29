@@ -55,7 +55,7 @@ class DashboardOverview extends Widget
         // Bekleyen talepler (en son 8 adet)
         $pendingList = (clone $scopedQuery())
             ->whereNotIn('status', ['çözüldü', 'iptal'])
-            ->with(['category.department', 'assignedUser'])
+            ->with(['category.department', 'assignedTo'])
             ->latest()
             ->limit(8)
             ->get();
