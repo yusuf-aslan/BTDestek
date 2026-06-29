@@ -273,7 +273,7 @@
         <div style="background:linear-gradient(135deg,#0ea5e9,#0284c7);border-radius:.75rem;padding:1.1rem 1.25rem;color:#fff;box-shadow:0 4px 12px rgba(14,165,233,.25);">
             <p style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.85;margin-bottom:.4rem;">Çözülen Talep</p>
             <p style="font-size:1.9rem;font-weight:700;line-height:1;margin:0;">{{ $stats['resolved_tickets'] }}</p>
-            <p style="font-size:.68rem;opacity:.7;margin-top:.3rem;">resolved_by — tarih aralığı</p>
+            <p style="font-size:.68rem;opacity:.7;margin-top:.3rem;">Seçili tarih aralığında çözülen</p>
         </div>
 
         <div style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);border-radius:.75rem;padding:1.1rem 1.25rem;color:#fff;box-shadow:0 4px 12px rgba(139,92,246,.25);">
