@@ -17,6 +17,7 @@ class GeneralSetting extends Model
         'weekend_tickets_allowed',
         'is_dark_mode_enabled',
         'show_email_on_ticket_form',
+        'show_broken_pc_ip_on_ticket_form',
         'ip_display_position',
         'menu_layout',
         'mail_mailer',
@@ -34,6 +35,8 @@ class GeneralSetting extends Model
         'allow_tickets_outside_work_hours' => 'boolean',
         'weekend_tickets_allowed' => 'boolean',
         'is_dark_mode_enabled' => 'boolean',
+        'show_email_on_ticket_form' => 'boolean',
+        'show_broken_pc_ip_on_ticket_form' => 'boolean',
     ];
 
     protected static function booted()

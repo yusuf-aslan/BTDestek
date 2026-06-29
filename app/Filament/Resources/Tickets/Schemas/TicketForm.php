@@ -20,6 +20,19 @@ class TicketForm
 {
     public static function configure(Schema $schema): Schema
     {
+        $settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
+            return \App\Models\GeneralSetting::first();
+        });
+
+        $showEmail = $settings && 
+                     $settings->show_email_on_ticket_form && 
+                     !empty($settings->mail_host) && 
+                     !empty($settings->mail_port) && 
+                     !empty($settings->mail_username) && 
+                     !empty($settings->mail_password);
+
+        $showBrokenPcIp = $settings && $settings->show_broken_pc_ip_on_ticket_form;
+
         return $schema
             ->components([
                 Section::make('Talep Bilgileri')
@@ -33,7 +46,8 @@ class TicketForm
                         TextInput::make('email')
                             ->label('E-posta')
                             ->email()
-                            ->disabled(),
+                            ->disabled()
+                            ->visible($showEmail),
                         TextInput::make('department_room')
                             ->label('Bölüm (İsteğe Bağlı)')
                             ->disabled(),
@@ -109,7 +123,8 @@ class TicketForm
                                             }
                                         ",
                                     ])
-                            ),
+                            )
+                            ->visible($showBrokenPcIp),
 
                         TextInput::make('subject')
                             ->label('Talep Başlığı (Kısaca)')

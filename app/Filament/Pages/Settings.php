@@ -143,6 +143,10 @@ class Settings extends Page implements HasForms
                                             ->label('Gece/Gündüz Modu')
                                             ->helperText('Açık ise kullanıcılar sağ üst köşeden karanlık moda geçiş yapabilir.')
                                             ->default(true),
+                                        Toggle::make('show_broken_pc_ip_on_ticket_form')
+                                            ->label('Talep Formunda "Arızalı PC IP" Alanını Göster')
+                                            ->helperText('Aktif edilirse, talep formunda kullanıcılardan arızalı bilgisayarın IP adresi talep edilir.')
+                                            ->default(true),
 
                                         \Filament\Forms\Components\Radio::make('menu_layout')
                                             ->label('Menü Yerleşimi')

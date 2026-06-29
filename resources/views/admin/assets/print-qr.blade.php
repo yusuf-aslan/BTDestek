@@ -113,7 +113,7 @@
     </div>
 
     <div class="footer">
-        ID: #{{ $asset->id }} | BT Destek v1.17
+        ID: #{{ $asset->id }} | BT Destek v1.18
     </div>
 
 </body>
