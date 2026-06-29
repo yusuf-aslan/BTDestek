@@ -9,12 +9,13 @@
         :close-by-clicking-away="true"
     >
         <x-slot name="trigger">
-            <x-filament::icon-button
+            <x-filament::button
                 icon="heroicon-o-plus-circle"
                 color="primary"
-                size="lg"
-                title="Hızlı Faaliyet Ekle"
-            />
+                size="sm"
+            >
+                Faaliyet Ekle
+            </x-filament::button>
         </x-slot>
 
         <form wire:submit.prevent="save">
