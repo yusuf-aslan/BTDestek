@@ -107,6 +107,16 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.16 - Gelişmiş Raporlama, Faaliyet Yetkilendirme & Performans:**
+    *   **Hızlı Faaliyet Modalı UI Düzeltmesi:** Modal içindeki alanlar arası boşluklar, textarea genişliği ve buton hizalaması düzeltildi. Tüm stiller Filament admin panel CSS uyumsuzluğunu aşmak için inline CSS'e dönüştürüldü.
+    *   **Faaliyet Yetkilendirmesi:** `accessible_modules` listesine `Faaliyetlerim` seçeneği eklendi; admin olmayan teknisyenlere de bu modül yetkisi verilebilir hale getirildi.
+    *   **Teknisyen Bazlı Gelişmiş Rapor Sayfası:** Raporlar sayfası tamamen yeniden tasarlandı. Teknisyen + tarih aralığı filtresi, 5 özet kart (Çözülen Talep, Atanan Talep, Ort. Çözüm Süresi, Faaliyet Sayısı, Toplam Faaliyet Süresi), iki sekme (Kapatılan Talepler + Faaliyetler) ve Excel export (iki ayrı sheet) eklendi.
+    *   **Raporlar Karanlık Tema Desteği:** `<style>` bloğu + `.dark` CSS selector yöntemi ile her iki tema için tam uyum sağlandı.
+    *   **Veritabanı Performans İndexleri:** `tickets` tablosuna 7 index, `activities` tablosuna 3 index eklenerek sorgu performansı önemli ölçüde artırıldı.
+    *   **Ses Dosyası Yerelleştirildi:** TicketWatcher bildirimi için dış CDN yerine `public/sounds/notification.mp3` kullanılmaya başlandı.
+    *   **Polling Optimizasyonu:** TicketWatcher kontrol aralığı 20sn → 30sn olarak güncellendi, sunucu yükü %33 azaltıldı.
+    *   **Sistem Sürümü:** Footer alanındaki sürüm numarası v1.16'ya güncellendi.
+
 *   **v1.15 - Faaliyet Yönetimi (IT Activity Log) Sistemi:**
     *   **Hızlı Faaliyet Ekleme Modalı:** BT personelinin bilet dışındaki plansız faaliyetlerini (saha çalışmaları, telefon destekleri, toplantılar) kolayca kaydedebilmesi için arayüzde üst bar (Header) kısmına "Hızlı Faaliyet Ekle" modalı entegre edildi.
     *   **Faaliyet Raporlama & Filtreleme:** Teknisyenlerin kendi faaliyetlerini takip edebileceği, yöneticilerin ise tüm faaliyetleri görüp tarih/teknisyen bazlı filtreleyebileceği ve Excel olarak dışa aktarabileceği "Faaliyetlerim" menüsü (Resource) oluşturuldu.
