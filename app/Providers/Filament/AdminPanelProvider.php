@@ -47,15 +47,49 @@ class AdminPanelProvider extends PanelProvider
             ->brandName($settings->site_title ?? 'Hastane BT Destek')
             ->renderHook(
                 PanelsRenderHook::BODY_END,
-                fn (): string => Blade::render('@livewire(\'TicketWatcher\')') . '
+                fn (): string => Blade::render(<<<'HTML'
+                    @livewire(\App\Livewire\TicketWatcher::class)
+                    
                     <script>
                         window.addEventListener("open-resolve-confirmation-modal", () => {
-                            if (confirm("Çözüm notu girilmiş fakat durum \"çözüldü\" olarak işaretlenmemiş. Durum otomatik olarak \"çözüldü\" yapılarak kaydedilsin mi?")) {
-                                Livewire.dispatch("confirm-resolve-save");
-                            }
+                            window.dispatchEvent(new CustomEvent("open-modal", { detail: { id: "confirm-resolve-modal" } }));
                         });
                     </script>
-                ',
+                    
+                    <x-filament::modal
+                        id="confirm-resolve-modal"
+                        width="md"
+                        icon="heroicon-o-exclamation-triangle"
+                        icon-color="warning"
+                        heading="Durum Güncelleme Uyarısı"
+                    >
+                        <div class="text-sm text-slate-600 dark:text-slate-400 text-left">
+                            Çözüm notu girilmiş fakat durum "çözüldü" olarak işaretlenmemiş. Durum otomatik olarak "çözüldü" yapılarak kaydedilsin mi?
+                        </div>
+                        
+                        <x-slot name="footer">
+                            <div class="flex justify-end gap-3">
+                                <x-filament::button
+                                    color="gray"
+                                    x-on:click="$dispatch('close-modal', { id: 'confirm-resolve-modal' })"
+                                >
+                                    Vazgeç
+                                </x-filament::button>
+                                
+                                <x-filament::button
+                                    color="primary"
+                                    x-on:click="
+                                        $dispatch('close-modal', { id: 'confirm-resolve-modal' });
+                                        Livewire.dispatch('confirm-resolve-save');
+                                    "
+                                >
+                                    Tamam, Çözüldü Olarak Kaydet
+                                </x-filament::button>
+                            </div>
+                        </x-slot>
+                    </x-filament::modal>
+HTML
+                ),
             )
             ->renderHook(
                 PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
