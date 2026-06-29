@@ -143,9 +143,6 @@ class Settings extends Page implements HasForms
                                             ->label('Gece/Gündüz Modu')
                                             ->helperText('Açık ise kullanıcılar sağ üst köşeden karanlık moda geçiş yapabilir.')
                                             ->default(true),
-                                        Toggle::make('show_email_on_ticket_form')
-                                            ->label('Talep Formunda E-posta Alanını Göster')
-                                            ->default(true),
 
                                         \Filament\Forms\Components\Radio::make('menu_layout')
                                             ->label('Menü Yerleşimi')
@@ -227,23 +224,28 @@ class Settings extends Page implements HasForms
                                 Section::make('SMTP Sunucu Ayarları')
                                     ->description('Sistem bildirimlerinin gönderileceği sunucu ayarları.')
                                     ->schema([
-                                                                TextInput::make('mail_host')
-                                                                    ->label('SMTP Sunucusu')
-                                                                    ->placeholder('smtp.example.com'),
+                                        TextInput::make('mail_host')
+                                            ->label('SMTP Sunucusu')
+                                            ->placeholder('smtp.example.com')
+                                            ->live(),
                                                                 
-                                                                TextInput::make('mail_port')
-                                                                    ->label('SMTP Port')
-                                                                    ->placeholder('587')
-                                                                    ->numeric(),
+                                        TextInput::make('mail_port')
+                                            ->label('SMTP Port')
+                                            ->placeholder('587')
+                                            ->numeric()
+                                            ->live(),
+
                                         TextInput::make('mail_username')
                                             ->label('Kullanıcı Adı')
-                                            ->placeholder('user@example.com'),
+                                            ->placeholder('user@example.com')
+                                            ->live(),
 
                                         TextInput::make('mail_password')
                                             ->label('Şifre')
                                             ->password()
-                                            ->revealable(),
-                                        
+                                            ->revealable()
+                                            ->live(),
+                                         
                                         TextInput::make('mail_encryption')
                                             ->label('Şifreleme')
                                             ->placeholder('tls'),
@@ -257,6 +259,21 @@ class Settings extends Page implements HasForms
                                             ->label('Gönderen Adı')
                                             ->placeholder('BT Destek Sistemi'),
                                     ])->columns(2),
+
+                                Section::make('E-posta Bildirim ve Form Ayarı')
+                                    ->schema([
+                                        Toggle::make('show_email_on_ticket_form')
+                                            ->label('E-posta Bildirimlerini ve Form Alanını Aktif Et')
+                                            ->helperText('Aktif edilirse, talep formunda e-posta alanı gösterilir ve kullanıcılara bildirim maili gönderilir. Bu seçeneğin aktif edilebilmesi için yukarıdaki SMTP bilgilerinin (sunucu, port, kullanıcı adı ve şifre) doldurulmuş olması gerekir.')
+                                            ->disabled(fn ($get) => 
+                                                blank($get('mail_host')) || 
+                                                blank($get('mail_port')) || 
+                                                blank($get('mail_username')) || 
+                                                blank($get('mail_password'))
+                                            )
+                                            ->dehydrated()
+                                            ->live()
+                                    ]),
                             ]),
 
                         \Filament\Schemas\Components\Tabs\Tab::make('Yedekleme')
@@ -314,6 +331,12 @@ class Settings extends Page implements HasForms
     public function save(): void
     {
         $data = $this->form->getState();
+        
+        // Force show_email_on_ticket_form to false if SMTP configuration is incomplete
+        if (empty($data['mail_host']) || empty($data['mail_port']) || empty($data['mail_username']) || empty($data['mail_password'])) {
+            $data['show_email_on_ticket_form'] = false;
+        }
+
         GeneralSetting::first()->update($data);
 
         \Illuminate\Support\Facades\Cache::forget('general_settings');

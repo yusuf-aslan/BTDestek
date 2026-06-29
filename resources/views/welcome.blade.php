@@ -349,7 +349,7 @@
                                     <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Adınız Soyadınız</label>
                                     <input type="text" name="name" required {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="Örn: Dr. Ahmet Yılmaz">
                                 </div>
-                                @if($settings->show_email_on_ticket_form)
+                                @if($settings->show_email_on_ticket_form && !empty($settings->mail_host) && !empty($settings->mail_port) && !empty($settings->mail_username) && !empty($settings->mail_password))
                                 <div class="space-y-2">
                                     <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">E-posta (İsteğe Bağlı)</label>
                                     <input type="email" name="email" {{ $isClosed ? 'disabled' : '' }} class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/20 focus:border-blue-500 outline-none transition bg-slate-50/50 dark:bg-slate-900/50 dark:text-white" placeholder="bildirim@ornek.com">
