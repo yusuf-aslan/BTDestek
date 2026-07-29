@@ -44,6 +44,17 @@ class Settings extends Page implements HasForms
 
     public ?array $data = [];
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('save_settings')
+                ->label('Ayarları Kaydet')
+                ->icon('heroicon-o-check')
+                ->color('primary')
+                ->action('save'),
+        ];
+    }
+
     public function mount(): void
     {
         $settings = GeneralSetting::firstOrCreate([]);
@@ -105,6 +116,32 @@ class Settings extends Page implements HasForms
                 ->title('Geri yükleme işlemi başarısız oldu.')
                 ->send();
         }
+    }
+
+    public function clearCaches(): void
+    {
+        abort_unless(auth()->user()?->is_admin, 403);
+
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+
+        try {
+            foreach (\Filament\Facades\Filament::getPanels() as $panel) {
+                $panel->clearCachedComponents();
+            }
+        } catch (\Throwable) {
+            // The main application cache has already been cleared.
+        }
+
+        Notification::make()
+            ->success()
+            ->title('Önbellekler temizlendi.')
+            ->body('Uygulama, görünüm, Filament ve uygun olduğunda OPcache önbelleği temizlendi.')
+            ->send();
     }
 
     public function form(Schema $schema): Schema
@@ -317,19 +354,30 @@ class Settings extends Page implements HasForms
                                         ]),
                                     ]),
                             ]),
+
+                        \Filament\Schemas\Components\Tabs\Tab::make('Bakım')
+                            ->icon('heroicon-o-wrench-screwdriver')
+                            ->visible(fn (): bool => (bool) auth()->user()?->is_admin)
+                            ->schema([
+                                Section::make('Önbellek Temizleme')
+                                    ->description('Ayar, görünüm ve Filament önbelleklerini temizler. Ayar değişiklikleri hemen yansımıyorsa kullanın.')
+                                    ->schema([
+                                        \Filament\Schemas\Components\Actions::make([
+                                            Action::make('clear_caches')
+                                                ->label('Önbellekleri Temizle')
+                                                ->icon('heroicon-o-arrow-path')
+                                                ->color('warning')
+                                                ->requiresConfirmation()
+                                                ->modalHeading('Önbellekler temizlensin mi?')
+                                                ->modalDescription('Bu işlem uygulama önbelleğini temizler; veri kaybına neden olmaz.')
+                                                ->action('clearCaches'),
+                                        ]),
+                                    ]),
+                            ]),
                     ])
                     ->columnSpan('full'),
             ])
             ->statePath('data');
-    }
-
-    protected function getFormActions(): array
-    {
-        return [
-            Action::make('save')
-                ->label('Ayarları Kaydet')
-                ->submit('save'),
-        ];
     }
 
     public function save(): void

@@ -192,6 +192,99 @@ class TicketForm
                             ->columnSpanFull(),
                             
                         Textarea::make('resolution_note')
+                            ->id('resolution_note_field')
+                            ->hintAction(
+                                Action::make('dictateResolutionNote')
+                                    ->label('Mikrofonla Yaz')
+                                    ->icon('heroicon-o-microphone')
+                                    ->tooltip('Konuşarak çözüm notu ekle')
+                                    ->extraAttributes([
+                                        'x-on:click.stop.prevent' => <<<'JS'
+                                            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                                            if (!SpeechRecognition) {
+                                                alert('Tarayıcınız sesle yazmayı desteklemiyor. Lütfen güncel Chrome veya Edge kullanın.');
+                                                return;
+                                            }
+
+                                            const field = document.getElementById('resolution_note_field');
+                                            if (!field) return;
+
+                                            if (window.ticketResolutionRecognition) {
+                                                window.ticketResolutionRecognition.stop();
+                                            }
+
+                                            const recognition = new SpeechRecognition();
+                                            window.ticketResolutionRecognition = recognition;
+                                            recognition.lang = 'tr-TR';
+                                            recognition.continuous = true;
+                                            recognition.interimResults = true;
+
+                                            let committedText = field.value ? `${field.value}${field.value.endsWith(' ') ? '' : ' '}` : '';
+                                            let isListening = true;
+                                            const updateField = (text) => {
+                                                field.value = text;
+                                                field.dispatchEvent(new Event('input', { bubbles: true }));
+                                            };
+
+                                            recognition.onresult = (event) => {
+                                                let finalText = '';
+                                                let interimText = '';
+                                                for (let index = event.resultIndex; index < event.results.length; index++) {
+                                                    const transcript = event.results[index][0].transcript;
+                                                    if (event.results[index].isFinal) {
+                                                        finalText += transcript;
+                                                    } else {
+                                                        interimText += transcript;
+                                                    }
+                                                }
+                                                if (finalText) committedText += finalText.trim() + ' ';
+                                                updateField(committedText + interimText);
+                                            };
+
+                                            recognition.onerror = (event) => {
+                                                if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                                                    alert('Mikrofon izni verilmedi. Tarayıcıdan mikrofon erişimine izin verin.');
+                                                }
+                                            };
+
+                                            recognition.onend = () => {
+                                                if (isListening) {
+                                                    isListening = false;
+                                                    updateField(committedText.trim());
+                                                }
+
+                                                if (window.ticketResolutionRecognition === recognition) {
+                                                    window.ticketResolutionRecognition = null;
+                                                }
+                                            };
+
+                                            try {
+                                                recognition.start();
+                                                setTimeout(() => {
+                                                    if (window.ticketResolutionRecognition === recognition) {
+                                                        recognition.stop();
+                                                    }
+                                                }, 60000);
+                                            } catch (error) {
+                                                alert('Ses kaydı başlatılamadı. Açık bir mikrofon kaydı olabilir.');
+                                            }
+                                        JS,
+                                    ])
+                            )
+                            ->hintAction(
+                                Action::make('stopDictatingResolutionNote')
+                                    ->label('Durdur')
+                                    ->icon('heroicon-o-stop-circle')
+                                    ->color('danger')
+                                    ->tooltip('Mikrofonla yazmayi durdur')
+                                    ->extraAttributes([
+                                        'x-on:click.stop.prevent' => <<<'JS'
+                                            if (window.ticketResolutionRecognition) {
+                                                window.ticketResolutionRecognition.stop();
+                                            }
+                                        JS,
+                                    ])
+                            )
                             ->label('Çözüm Notu / Açıklama')
                             ->rows(10)
                             ->columnSpanFull(),

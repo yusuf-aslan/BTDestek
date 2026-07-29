@@ -2,7 +2,13 @@
 
 Bu dosya, Gemini CLI'ın proje durumunu ve geçmişini her oturumda hatırlaması için oluşturulmuştur.
 
-## 🚀 Son Durum: v1.17 (29 Haziran 2026)
+## 🚀 Son Durum: v1.18 (29 Temmuz 2026)
+- **Yönetim Paneli Bakım & Güvenlik:** Herkese açık `/clear-cache` adresi kaldırıldı. Önbellek temizleme, yalnızca adminlerin görebildiği Ayarlar / Bakım sekmesindeki onaylı eyleme taşındı.
+- **Mikrofonla Çözüm Notu:** Talep düzenleme formundaki çözüm notuna Chrome/Edge ses tanıma ile Türkçe metin ekleme özelliği eklendi. “Durdur” düğmesi konuşmayı anında sonlandırır; sisteme ses dosyası değil yalnızca oluşan metin kaydedilir.
+- **Ayarlar UX:** “Ayarları Kaydet” eylemi, sayfanın altından kaldırılıp standart Filament başlık eylemi olarak sağ üst köşeye taşındı.
+- **Kompakt Admin Markası:** Admin üst çubuğunda favicon/amblem + “BT Destek” kısa adı kullanılır. Tam site adı kısa adın üzerine gelindiğinde görünür; public portal logosu değişmedi.
+
+## 🚀 Önceki Durum: v1.17 (29 Haziran 2026)
 - **Talep Başarı Ekranı & Akış İyileştirmesi:** Talep başarıyla oluşturulduktan sonra kafaları karıştırmaması için doldurulan form alanı ve başlık kısmı gizlendi. Sadece üretilen talep bilgilerini içeren başarı kartı gösterildi ve altına sayfayı ilk haline sıfırlayan "Yeni Talep Ekle" butonu eklendi.
 - **E-posta & Arızalı PC IP Görünürlük Kontrolleri:** 
   - Yönetici Ayarlarında E-posta veya SMTP ayarları pasif olduğunda, sadece talep formunda değil, admin paneli "Talep Düzenleme" (Edit) ekranında da e-posta alanı gizlenecek şekilde güncellendi.
@@ -64,18 +70,20 @@ Bu dosya, Gemini CLI'ın proje durumunu ve geçmişini her oturumda hatırlamas�
 - **UI & Terminoloji:** "Bölüm/Oda" ifadesi "Bölüm" olarak güncellendi, talep başlığına yönlendirici örnekler eklendi ve buton yerleşimleri optimize edildi.
 - **Sistem Bağımsızlığı:** Captive portal ve internet kesintilerinden etkilenmemek için CDN bağımlılıkları azaltıldı ve yerelleştirme adımları atıldı.
 
-## 🛠️ Özel Dağıtım (Deployment) Süreci
-Sunucuya yükleme yaparken şu adımlar izlenmelidir (Permission denied hatası için `sudo chown -R $USER:$USER .` gerekebilir):
-1. `docker-compose down`
-2. `git restore .`
-3. `git pull origin master`
-4. `docker-compose build --no-cache`
-5. `chmod +x docker-entrypoint.sh`
-6. `docker-compose up -d`
-7. `docker-compose exec app php artisan migrate --force`
-8. `docker-compose exec app php artisan optimize`
-9. `docker-compose exec app php artisan filament:assets --force`
-10. `docker-compose exec app php artisan cache:clear`
+## 🛠️ Docker Dağıtım Süreci
+Sunucuda proje dizinine geçin. Yerel sunucu ayarları `.env` dosyasında tutulduğu için bu dosyayı Git ile geri almayın veya silmeyin.
+
+1. Güncel kodu alın: `git pull origin master`
+2. İmajı güncelleyin: `docker-compose build --no-cache`
+3. Uygulamayı başlatın: `docker-compose up -d`
+4. Şema değişikliklerini uygulayın: `docker-compose exec app php artisan migrate --force`
+5. Uygulama ve Filament önbelleklerini yenileyin: `docker-compose exec app php artisan optimize && docker-compose exec app php artisan filament:assets --force && docker-compose exec app php artisan cache:clear`
+6. Durumu doğrulayın: `docker-compose ps` ve ardından uygulamayı tarayıcıda açın.
+
+Notlar:
+- İlk kurulumda `chmod +x docker-entrypoint.sh` komutu gerekebilir.
+- İzin hatasında yalnızca proje dizininde sahipliği düzeltin: `sudo chown -R $USER:$USER .`
+- Veri kaybı riski nedeniyle üretim sunucusunda `git restore .`, `docker-compose down -v` ve `migrate:fresh` kullanmayın.
 
 ## 📋 Gelecek Planlar
 - **SLA Sistemi:** Öncelik bazlı hedef çözüm süreleri ve aşım bildirimleri.

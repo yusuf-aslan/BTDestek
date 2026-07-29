@@ -22,6 +22,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Support\HtmlString;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -30,6 +31,20 @@ class AdminPanelProvider extends PanelProvider
         $settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
             return \App\Models\GeneralSetting::first();
         });
+
+        $siteTitle = $settings?->site_title ?? 'Hastane BT Destek';
+        $faviconUrl = $settings?->site_favicon
+            ? asset('storage/' . $settings->site_favicon)
+            : null;
+
+        $adminBrand = new HtmlString(
+            '<span style="display:inline-flex;align-items:center;gap:.625rem;height:100%;white-space:nowrap;">'
+            . ($faviconUrl
+                ? '<img src="' . e($faviconUrl) . '" alt="" style="width:2rem;height:2rem;object-fit:contain;flex:none;">'
+                : '')
+            . '<span title="' . e($siteTitle) . '" style="font-size:1rem;font-weight:700;letter-spacing:-.01em;">BT Destek</span>'
+            . '</span>'
+        );
 
         $panel = $panel
             ->default()
@@ -44,7 +59,9 @@ class AdminPanelProvider extends PanelProvider
         }
 
         return $panel
-            ->brandName($settings->site_title ?? 'Hastane BT Destek')
+            ->brandName($siteTitle)
+            ->brandLogo($adminBrand)
+            ->brandLogoHeight('2.25rem')
             ->renderHook(
                 PanelsRenderHook::BODY_END,
                 fn (): string => Blade::render(<<<'HTML'

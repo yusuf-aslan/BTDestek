@@ -107,6 +107,12 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.18 - Yönetim Paneli Bakım ve Sesli Notlar:**
+    *   **Güvenli Önbellek Temizleme:** Herkese açık `/clear-cache` adresi kaldırıldı. Önbellek temizleme işlemi, yalnızca yöneticilerin erişebildiği Ayarlar / Bakım sekmesine taşındı.
+    *   **Mikrofonla Çözüm Notu:** Talep düzenleme ekranındaki “Çözüm Notu / Açıklama” alanına Türkçe ses tanıma ile metin ekleme ve kaydı istenildiğinde durdurma kontrolleri eklendi.
+    *   **Ayarlar Sayfası Akışı:** “Ayarları Kaydet” eylemi, standart Filament sayfalarındaki gibi üst başlığın sağına taşındı.
+    *   **Kompakt Admin Markası:** Yönetim paneli üst çubuğunda uzun site adı yerine favicon/amblem, kısa “BT Destek” adı ve tam kurum adı için ipucu kullanılmaya başlandı. Public portalın logo düzeni korunmuştur.
+
 *   **v1.17 - Talep Başarı Ekranı, Görünürlük Kontrolleri ve Akış İyileştirmesi:**
     *   **Talep Başarı Ekranı:** Kullanıcı yeni bir destek talebi oluşturduktan sonra, kafa karışıklığını önlemek adına form tamamen gizlenir. Sadece üretilen talep bilgilerini (Talep no, kopyalama ve yazdırma seçenekleri) içeren başarı ekranı gösterilir.
     *   **Yeni Talep Ekle Butonu:** Başarı ekranının altına yerleştirilen buton ile kullanıcı tek tıkla sayfayı sıfırlayarak yeni bir talep formuna geri dönebilir.

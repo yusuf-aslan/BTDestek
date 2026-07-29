@@ -2,10 +2,5 @@
     <form wire:submit="save">
         {{ $this->form }}
 
-        <div class="mt-6 flex justify-start gap-3">
-            @foreach($this->getFormActions() as $action)
-                {{ $action }}
-            @endforeach
-        </div>
     </form>
 </x-filament-panels::page>
