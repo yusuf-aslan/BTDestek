@@ -107,6 +107,14 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.19 - Rich Editor ve Çözüm Görselleri:**
+    *   **Teknisyen Rich Editor:** Dahili notlar hariç teknik açıklama alanları Filament Rich Editor ile yenilendi. Çözüm notuna biçimlendirilmiş metin ve görsel eklenebilir.
+    *   **Kullanıcıya Görsel Çözüm:** Teknisyenin çözüm notuna eklediği görseller, talep durum sorgulama sonucunda kullanıcıya gösterilir. Görsele tıklanınca yeni sekme açılmadan lightbox içinde büyütülür.
+    *   **Geniş Sorgulama Ekranı:** Talep sorgulama penceresi görsel ve uzun çözüm notlarını rahat görüntülemek için genişletildi.
+    *   **Talep Düzenleme İyileştirmeleri:** Uzun başlıklar kısaltıldı, açılış tarihi Talep Bilgileri kartına eklendi ve tekniker işlemleri üç sütunlu hale getirildi.
+    *   **Ek Galerisi ve Sesle Yazı:** Eklerdeki görsellerin lightbox görünümü düzeltildi; mikrofonla yazma kontrolleri Rich Editor ile uyumlu hale getirildi.
+    *   **Hızlı Dağıtım:** Bu sürümde yeni paket veya veritabanı migrasyonu yoktur; Docker image build gerektirmeden uygulanabilir.
+
 *   **v1.18 - Yönetim Paneli Bakım ve Sesli Notlar:**
     *   **Güvenli Önbellek Temizleme:** Herkese açık `/clear-cache` adresi kaldırıldı. Önbellek temizleme işlemi, yalnızca yöneticilerin erişebildiği Ayarlar / Bakım sekmesine taşındı.
     *   **Mikrofonla Çözüm Notu:** Talep düzenleme ekranındaki “Çözüm Notu / Açıklama” alanına Türkçe ses tanıma ile metin ekleme ve kaydı istenildiğinde durdurma kontrolleri eklendi.
