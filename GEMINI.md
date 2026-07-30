@@ -2,6 +2,14 @@
 
 Bu dosya, Gemini CLI'ın proje durumunu ve geçmişini her oturumda hatırlaması için oluşturulmuştur.
 
+## 🚀 Son Durum: v1.19 (30 Temmuz 2026)
+- **Rich Editor Standardizasyonu:** Dahili notlar haricindeki teknik açıklama alanları Filament Rich Editor ile yenilendi. Teknisyenler çözüm notuna biçimlendirilmiş metin ve görsel ekleyebilir.
+- **Çözüm Görselleri:** Rich Editor ile eklenen görseller, kullanıcının talep durum sorgulama ekranında görünür. Sorgulama penceresi görseller için genişletildi; görsele tıklandığında sayfadan ayrılmadan lightbox içinde büyür.
+- **Talep Düzenleme Akışı:** Uzun talep başlıkları admin sayfa başlığında kısaltılır. Talebin açılış tarihi Talep Bilgileri kartının başlığında gösterilir; tekniker işlemleri alanında üç sütunlu yerleşim kullanılır.
+- **Sesle Yazı:** Mikrofon kontrolleri Rich Editor ile uyumlu ayrı bir alana taşındı. Konuşma metni doğrudan çözüm notu editörüne eklenir ve 60 saniye sonunda otomatik durur.
+- **Ek Galerisi:** Mevcut talep eklerindeki görseller tıklanınca yerleşik lightbox ile açılır; gereksiz mercek simgesi kaldırıldı.
+- **Dağıtım Notu:** Bu sürümde yeni paket veya veritabanı şeması yoktur. Sunucuda Docker image build gerekmeden yalnızca kod çekilip uygulama önbellekleri yenilenir.
+
 ## 🚀 Son Durum: v1.18 (29 Temmuz 2026)
 - **Yönetim Paneli Bakım & Güvenlik:** Herkese açık `/clear-cache` adresi kaldırıldı. Önbellek temizleme, yalnızca adminlerin görebildiği Ayarlar / Bakım sekmesindeki onaylı eyleme taşındı.
 - **Mikrofonla Çözüm Notu:** Talep düzenleme formundaki çözüm notuna Chrome/Edge ses tanıma ile Türkçe metin ekleme özelliği eklendi. “Durdur” düğmesi konuşmayı anında sonlandırır; sisteme ses dosyası değil yalnızca oluşan metin kaydedilir.

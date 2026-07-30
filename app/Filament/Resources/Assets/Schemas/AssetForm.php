@@ -7,7 +7,7 @@ use Filament\Forms\Components\KeyValue;
 use Filament\Schemas\Components\Section;
 use App\Models\DeviceTemplate;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use App\Models\Asset;
@@ -114,9 +114,9 @@ class AssetForm
                             ->label('Satın Alma Tarihi'),
                         DatePicker::make('warranty_expires_at')
                             ->label('Garanti Bitiş Tarihi'),
-                        Textarea::make('notes')
+                        RichEditor::make('notes')
                             ->label('Notlar')
-                            ->rows(3)
+                            ->extraInputAttributes(['style' => 'min-height: 10rem;'])
                             ->columnSpanFull(),
                     ])->columns(2)
                     ->collapsible(),

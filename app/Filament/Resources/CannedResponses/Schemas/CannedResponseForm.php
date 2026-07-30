@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\CannedResponses\Schemas;
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Schema;
 
 class CannedResponseForm
@@ -16,7 +16,7 @@ class CannedResponseForm
                     ->label('Başlık')
                     ->required()
                     ->maxLength(255),
-                Textarea::make('content')
+                RichEditor::make('content')
                     ->label('Hazır Cevap İçeriği')
                     ->required()
                     ->columnSpanFull(),

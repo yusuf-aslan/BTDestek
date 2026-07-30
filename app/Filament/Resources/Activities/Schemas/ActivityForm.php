@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Activities\Schemas;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Schema;
 
 class ActivityForm
@@ -45,7 +45,7 @@ class ActivityForm
                     ->label('Faaliyet Tarihi')
                     ->default(now())
                     ->required(),
-                Textarea::make('description')
+                RichEditor::make('description')
                     ->label('Yapılan İşin Açıklaması')
                     ->required()
                     ->columnSpanFull(),

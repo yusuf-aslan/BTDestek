@@ -62,9 +62,9 @@
                                     <span class="text-[10px] text-slate-400 font-medium">{{ $announcement->created_at->diffForHumans() }}</span>
                                 </div>
                                 <h3 class="font-bold text-slate-800 dark:text-white group-hover:text-blue-600 transition duration-300">{{ $announcement->title }}</h3>
-                                <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mt-2 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700">
-                                    {{ $announcement->content }}
-                                </p>
+                                <div class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mt-2 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700 prose dark:prose-invert max-w-none">
+                                    {!! $announcement->content !!}
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -85,7 +85,7 @@
         @php $ticket = session('queried_ticket'); @endphp
         <div x-data="{ showStatus: true }" x-show="showStatus" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;">
             <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-md" @click="showStatus = false"></div>
-            <div class="relative bg-white dark:bg-slate-800 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+            <div class="relative bg-white dark:bg-slate-800 w-full max-w-5xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
                 
                 <!-- Modal Header -->
                 <div class="bg-slate-900 dark:bg-slate-950 p-10 text-white relative">
@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- Modal Body -->
-                <div class="p-10 max-h-[50vh] overflow-y-auto custom-scrollbar bg-white dark:bg-slate-800">
+                <div class="p-10 max-h-[65vh] overflow-y-auto custom-scrollbar bg-white dark:bg-slate-800">
                     <div class="grid md:grid-cols-2 gap-8 mb-8 pb-8 border-b border-slate-100 dark:border-slate-700">
                         <div class="space-y-1">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Talep Sahibi</label>
@@ -145,11 +145,12 @@
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 Teknisyen Çözüm Notu
                             </label>
-                            <div class="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 rounded-2xl text-blue-900 dark:text-blue-300 text-sm font-medium leading-relaxed shadow-sm shadow-blue-100">
-                                {{ $ticket->resolution_note }}
+                            <div class="lightbox-images prose max-w-none p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 rounded-2xl text-blue-900 dark:text-blue-300 text-sm font-medium leading-relaxed shadow-sm shadow-blue-100">
+                                {!! $ticket->resolution_note !!}
                             </div>
                         </div>
                     @endif
+
                 </div>
 
                 <!-- Modal Footer -->
@@ -187,7 +188,7 @@
                             </div>
                             <div>
                                 <h3 class="font-bold text-sm">{{ $announcement->title }}</h3>
-                                <p class="text-xs opacity-80 mt-0.5">{{ $announcement->content }}</p>
+                                <div class="text-xs opacity-80 mt-0.5 line-clamp-2">{!! $announcement->content !!}</div>
                             </div>
                         </div>
                     @endforeach

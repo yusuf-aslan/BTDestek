@@ -12,7 +12,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -60,10 +60,10 @@ class AnnouncementTemplateResource extends Resource
                     ])
                     ->required()
                     ->native(false),
-                Textarea::make('content')
+                RichEditor::make('content')
                     ->label('İçerik')
                     ->required()
-                    ->rows(3)
+                    ->extraInputAttributes(['style' => 'min-height: 10rem;'])
                     ->columnSpanFull(),
             ]);
     }

@@ -77,10 +77,11 @@
                     <div class="pt-6 border-t border-slate-100">
                         <label class="text-xs font-bold text-blue-600 uppercase block mb-2">Teknisyen Notu / Çözüm Açıklaması</label>
                         <div class="p-4 bg-blue-50 border border-blue-100 rounded-lg text-blue-800">
-                            {{ $ticket->resolution_note }}
+                            {!! $ticket->resolution_note !!}
                         </div>
                     </div>
                 @endif
+
             </div>
 
             <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-center">

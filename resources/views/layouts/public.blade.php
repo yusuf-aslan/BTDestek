@@ -27,7 +27,14 @@
         .clinical-shadow { shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] }
         
         /* Knowledge Base Typography */
-        .prose img { border-radius: 1rem; margin: 2rem auto; }
+        .prose img, .lightbox-images img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            margin: 1.5rem auto;
+            cursor: zoom-in;
+        }
         .prose ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1.5rem; }
         .prose ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 1.5rem; }
         .prose h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
@@ -211,12 +218,11 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Find all images inside the article content area (prose class)
-            const articleImages = document.querySelectorAll('.prose img');
+            // Metin editöründen gelen görselleri sayfadan ayrılmadan büyütür.
+            const articleImages = document.querySelectorAll('.prose img, .lightbox-images img');
             
             articleImages.forEach(img => {
                 // Add styling to indicate clickability
-                img.style.cursor = 'zoom-in';
                 img.classList.add('hover:opacity-90', 'transition', 'duration-300');
                 
                 // Add click event

@@ -6,6 +6,7 @@ use App\Filament\Resources\Tickets\TicketResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditTicket extends EditRecord
 {
@@ -14,6 +15,16 @@ class EditTicket extends EditRecord
     public function getPollingInterval(): ?string
     {
         return '15s';
+    }
+
+    public function getTitle(): string
+    {
+        return Str::limit($this->record->subject, 55);
+    }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Düzenle';
     }
 
     protected function getRedirectUrl(): string

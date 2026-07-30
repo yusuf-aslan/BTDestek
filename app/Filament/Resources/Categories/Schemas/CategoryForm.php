@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Categories\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Schema;
 
 class CategoryForm
@@ -23,7 +23,7 @@ class CategoryForm
                     ->searchable()
                     ->preload()
                     ->required(),
-                Textarea::make('description')
+                RichEditor::make('description')
                     ->label('Açıklama')
                     ->maxLength(65535)
                     ->columnSpanFull(),

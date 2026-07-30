@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Announcements\Schemas;
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -64,10 +64,10 @@ class AnnouncementForm
                             ->default(true)
                             ->inline(false),
                             
-                        Textarea::make('content')
+                        RichEditor::make('content')
                             ->label('İçerik')
                             ->required()
-                            ->rows(5)
+                            ->extraInputAttributes(['style' => 'min-height: 12rem;'])
                             ->columnSpanFull(),
 
                         \Filament\Forms\Components\Checkbox::make('save_as_template')

@@ -70,7 +70,7 @@
             <div class="border-t border-slate-200 mt-8 pt-8">
                 <h3 class="text-sm font-bold text-blue-600 uppercase tracking-wider mb-2">Çözüm Notu</h3>
                 <div class="prose max-w-none text-slate-700 bg-blue-50 p-4 rounded-lg">
-                    {!! nl2br(e($ticket->resolution_note)) !!}
+                    {!! $ticket->resolution_note !!}
                 </div>
             </div>
         @endif

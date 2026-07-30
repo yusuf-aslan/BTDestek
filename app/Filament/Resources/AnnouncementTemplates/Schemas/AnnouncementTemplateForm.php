@@ -4,7 +4,7 @@ namespace App\Filament\Resources\AnnouncementTemplates\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Schema;
 
 class AnnouncementTemplateForm
@@ -15,7 +15,7 @@ class AnnouncementTemplateForm
             ->components([
                 TextInput::make('title')
                     ->required(),
-                Textarea::make('content')
+                RichEditor::make('content')
                     ->required()
                     ->columnSpanFull(),
                 Select::make('type')
