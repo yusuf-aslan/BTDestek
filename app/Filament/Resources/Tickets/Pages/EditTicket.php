@@ -57,7 +57,7 @@ class EditTicket extends EditRecord
     {
         $data = $this->form->getState();
         
-        if (!empty($data['resolution_note']) && !in_array($data['status'], ['çözüldü', 'iptal'])) {
+        if (!empty($data['resolution_note']) && !in_array($data['status'], ['işlem yapıldı', 'çözüldü', 'iptal'])) {
             $this->dispatch('open-resolve-confirmation-modal');
             return;
         }

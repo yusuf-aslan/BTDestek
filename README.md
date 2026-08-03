@@ -107,6 +107,13 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.20 - Uzak Destek ve Yeni Talep Durumu:**
+    *   **Uzak Destek Kartı:** Kullanıcı portalında, sabit cihaz IP kartının üzerine TightVNC uzak destek kartı eklendi. Kart açık ve koyu temayla uyumlu, mobil ekranlarda taşmayacak ve daha az alan kaplayacak şekilde tasarlandı.
+    *   **Yönetilebilir Bağlantılar:** TightVNC indirme bağlantısı, Bilgi Bankası kurulum rehberi bağlantısı ve kart açıklaması Ayarlar / Uzak Destek sekmesinden değiştirilebilir hale getirildi. Boş bırakılan bağlantının butonu kullanıcıya gösterilmez.
+    *   **Kompakt Eylemler:** Uzak destek kartındaki “İndir” ve “Kurulum” butonları daha küçük ikon, yazı ve boşluklarla sadeleştirildi.
+    *   **İşlem Yapıldı Durumu:** Taleplere “İşlem Yapıldı” durumu eklendi. Bu durum admin tablolarında, kullanıcı sorgulamasında ve yazdırma ekranında mor renkle ayırt edilir; çözüm notu kaydedilirken otomatik olarak “Çözüldü”ye çevrilmez.
+    *   **Dağıtım Notu:** Yeni paket veya Docker image değişikliği yoktur. Üç veritabanı migrasyonu bulunduğu için kod çekildikten sonra `php artisan migrate --force` çalıştırılmalıdır.
+
 *   **v1.19 - Rich Editor ve Çözüm Görselleri:**
     *   **Teknisyen Rich Editor:** Dahili notlar hariç teknik açıklama alanları Filament Rich Editor ile yenilendi. Çözüm notuna biçimlendirilmiş metin ve görsel eklenebilir.
     *   **Kullanıcıya Görsel Çözüm:** Teknisyenin çözüm notuna eklediği görseller, talep durum sorgulama sonucunda kullanıcıya gösterilir. Görsele tıklanınca yeni sekme açılmadan lightbox içinde büyütülür.

@@ -139,7 +139,7 @@
     <!-- Footer -->
     <footer class="mt-auto py-10 border-t border-slate-200 @if($settings->is_dark_mode_enabled) dark:border-slate-700 bg-white dark:bg-slate-800 @else bg-white @endif shrink-0 transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi <span class="ml-2 opacity-50">v1.19</span></p>
+            <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi <span class="ml-2 opacity-50">v1.20</span></p>
             
             @if($settings->ip_display_position === 'footer')
             <div class="px-4 py-2 bg-slate-100 @if($settings->is_dark_mode_enabled) dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 @else rounded-full border border-slate-200 @endif flex items-center gap-2 shrink-0">
@@ -237,13 +237,44 @@
     </script>
 
     @if($settings->ip_display_position === 'fixed')
-    <div class="fixed bottom-10 left-10 z-[100] px-6 py-4 bg-white dark:bg-slate-800 rounded-3xl border-2 border-slate-200 dark:border-slate-700 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] flex items-center gap-4 transition-all hover:scale-105 group border-l-[12px] border-l-blue-600">
-        <div class="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
-            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-        </div>
-        <div class="flex flex-col">
-            <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] leading-none mb-1">CİHAZ IP ADRESİNİZ</span>
-            <span class="text-xl font-black text-blue-700 dark:text-blue-400 leading-none tracking-tight">{{ request()->ip() }}</span>
+    <div class="fixed bottom-4 left-4 z-[100] flex w-[min(19rem,calc(100vw-2rem))] flex-col gap-2.5 sm:bottom-10 sm:left-10">
+        @if(filled($settings->remote_support_download_url) || filled($settings->remote_support_guide_url))
+            <div class="px-4 py-3.5 bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-[0_20px_45px_-15px_rgba(0,0,0,0.3)] border-l-[10px] border-l-emerald-500">
+                <div class="flex items-center gap-2.5 mb-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5m9.25-11.396v5.714c0 .597.237 1.169.659 1.591L19 14.5M5 14.5h14m-14 0a2.5 2.5 0 00-2.5 2.5v.5A2.5 2.5 0 005 20h14a2.5 2.5 0 002.5-2.5V17a2.5 2.5 0 00-2.5-2.5"></path></svg>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] leading-none mb-1">UZAK DESTEK</span>
+                        <span class="block text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">{{ $settings->remote_support_title ?: 'TightVNC ile bağlantı kurun' }}</span>
+                    </div>
+                </div>
+
+                <div class="grid gap-2 {{ filled($settings->remote_support_download_url) && filled($settings->remote_support_guide_url) ? 'grid-cols-2' : 'grid-cols-1' }}">
+                    @if(filled($settings->remote_support_download_url))
+                        <a href="{{ $settings->remote_support_download_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-2.5 py-2 text-[11px] font-bold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"></path></svg>
+                            İndir
+                        </a>
+                    @endif
+                    @if(filled($settings->remote_support_guide_url))
+                        <a href="{{ $settings->remote_support_guide_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-2.5 py-2 text-[11px] font-bold text-slate-700 dark:text-slate-100 transition hover:bg-slate-100 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
+                            Kurulum
+                        </a>
+                    @endif
+                </div>
+            </div>
+        @endif
+
+        <div class="px-4 py-3.5 bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-[0_20px_45px_-12px_rgba(0,0,0,0.25)] flex items-center gap-3 transition-all hover:scale-[1.02] group border-l-[10px] border-l-blue-600">
+            <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] leading-none mb-1">CİHAZ IP ADRESİNİZ</span>
+                <span class="text-xl font-black text-blue-700 dark:text-blue-400 leading-none tracking-tight">{{ request()->ip() }}</span>
+            </div>
         </div>
     </div>
     @endif

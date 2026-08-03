@@ -169,6 +169,7 @@ class TicketForm
                                 'yeni' => 'Yeni',
                                 'işlemde' => 'İşlemde',
                                 'beklemede' => 'Beklemede',
+                                'işlem yapıldı' => 'İşlem Yapıldı',
                                 'çözüldü' => 'Çözüldü',
                                 'iptal' => 'İptal',
                             ])

@@ -34,7 +34,8 @@
                     $ticket->status === 'yeni' ? 'bg-slate-100 text-slate-600' : (
                     $ticket->status === 'işlemde' ? 'bg-amber-100 text-amber-600' : (
                     $ticket->status === 'beklemede' ? 'bg-blue-100 text-blue-600' : (
-                    $ticket->status === 'çözüldü' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600')))
+                    $ticket->status === 'işlem yapıldı' ? 'bg-violet-100 text-violet-600' : (
+                    $ticket->status === 'çözüldü' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'))))
                 }}">
                     {{ $ticket->status }}
                 </div>

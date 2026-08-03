@@ -259,6 +259,37 @@ class Settings extends Page implements HasForms
                                     ]),
                             ]),
 
+                        \Filament\Schemas\Components\Tabs\Tab::make('Uzak Destek')
+                            ->icon('heroicon-o-lifebuoy')
+                            ->schema([
+                                Section::make('Uzak Destek Bağlantıları')
+                                    ->description('Kullanıcı portalında, sol alttaki cihaz IP kartının üzerinde gösterilecek bağlantılar.')
+                                    ->schema([
+                                        TextInput::make('remote_support_title')
+                                            ->label('Kart Açıklaması')
+                                            ->placeholder('TightVNC ile bağlantı kurun')
+                                            ->helperText('Uzak Destek kartında butonların üzerinde gösterilecek kısa açıklama.')
+                                            ->default('TightVNC ile bağlantı kurun')
+                                            ->required()
+                                            ->maxLength(80)
+                                            ->columnSpanFull(),
+
+                                        TextInput::make('remote_support_download_url')
+                                            ->label('TightVNC İndirme Bağlantısı')
+                                            ->placeholder('https://.../tightvnc-setup.exe')
+                                            ->helperText('TightVNC kurulum dosyasının indirileceği tam bağlantıyı yazın.')
+                                            ->url()
+                                            ->prefixIcon('heroicon-o-arrow-down-tray'),
+
+                                        TextInput::make('remote_support_guide_url')
+                                            ->label('Nasıl Kurulur? Bağlantısı')
+                                            ->placeholder('https://.../bilgi-bankasi/tightvnc-kurulumu')
+                                            ->helperText('Bilgi Bankası içindeki TightVNC kurulum rehberinin tam bağlantısını yazın.')
+                                            ->url()
+                                            ->prefixIcon('heroicon-o-book-open'),
+                                    ])->columns(2),
+                            ]),
+
                         \Filament\Schemas\Components\Tabs\Tab::make('E-Posta (SMTP)')
                             ->icon('heroicon-o-envelope')
                             ->schema([

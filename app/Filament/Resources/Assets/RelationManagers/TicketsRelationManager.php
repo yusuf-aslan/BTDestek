@@ -35,6 +35,7 @@ class TicketsRelationManager extends RelationManager
                         'yeni' => 'gray',
                         'işlemde' => 'warning',
                         'beklemede' => 'info',
+                        'işlem yapıldı' => 'primary',
                         'çözüldü' => 'success',
                         'iptal' => 'danger',
                     }),

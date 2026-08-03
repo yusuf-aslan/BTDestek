@@ -48,6 +48,7 @@
                     {{ $ticket->status === 'yeni' ? 'bg-blue-100 text-blue-800' : '' }}
                     {{ $ticket->status === 'işlemde' ? 'bg-amber-100 text-amber-800' : '' }}
                     {{ $ticket->status === 'beklemede' ? 'bg-slate-200 text-slate-800' : '' }}
+                    {{ $ticket->status === 'işlem yapıldı' ? 'bg-violet-100 text-violet-800' : '' }}
                     {{ $ticket->status === 'çözüldü' ? 'bg-emerald-100 text-emerald-800' : '' }}
                 ">{{ $ticket->status }}</span></p>
                 <p><span class="font-semibold text-slate-700">Öncelik:</span> <span class="capitalize">{{ $ticket->priority }}</span></p>
