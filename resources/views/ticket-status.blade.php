@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talep Durumu - {{ $ticket->tracking_number }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('fonts/filament/filament/inter/index.css') }}">
+    @vite('resources/css/app.css')
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter Variable', ui-sans-serif, system-ui, sans-serif; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">

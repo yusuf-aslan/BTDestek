@@ -7,23 +7,10 @@
     @if($settings->site_favicon)
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $settings->site_favicon) }}">
     @endif
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('fonts/filament/filament/inter/index.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter Variable', ui-sans-serif, system-ui, sans-serif; }
         .clinical-shadow { shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] }
         
         /* Knowledge Base Typography */
@@ -237,7 +224,7 @@
     </script>
 
     @if($settings->ip_display_position === 'fixed')
-    <div class="fixed bottom-4 left-4 z-[100] flex w-[min(19rem,calc(100vw-2rem))] flex-col gap-2.5 sm:bottom-10 sm:left-10">
+    <div class="fixed bottom-4 right-4 z-[100] flex w-[min(19rem,calc(100vw-2rem))] flex-col gap-2.5 sm:bottom-10 sm:right-10">
         @if(filled($settings->remote_support_download_url) || filled($settings->remote_support_guide_url))
             <div class="px-4 py-3.5 bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-[0_20px_45px_-15px_rgba(0,0,0,0.3)] border-l-[10px] border-l-emerald-500">
                 <div class="flex items-center gap-2.5 mb-2.5">

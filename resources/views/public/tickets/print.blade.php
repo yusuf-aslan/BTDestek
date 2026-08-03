@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talep Çıktısı - {{ $ticket->tracking_number }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('fonts/filament/filament/inter/index.css') }}">
+    @vite('resources/css/app.css')
     <style>
         @media print {
             .no-print {
