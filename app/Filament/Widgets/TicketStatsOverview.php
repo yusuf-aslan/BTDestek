@@ -33,7 +33,7 @@ class TicketStatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success'),
 
-            Stat::make('Bekleyen Talepler', (clone $baseQuery)->whereNotIn('status', ['çözüldü', 'iptal'])->count())
+            Stat::make('Bekleyen Talepler', (clone $baseQuery)->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal'])->count())
                 ->description('İşlem bekleyen')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color('warning'),

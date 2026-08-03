@@ -33,7 +33,7 @@ class TicketResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         $count = static::getEloquentQuery()
-            ->whereNotIn('status', ['çözüldü', 'iptal'])
+            ->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal'])
             ->count();
 
         return $count > 0 ? (string) $count : null;

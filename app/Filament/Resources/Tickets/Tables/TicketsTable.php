@@ -80,14 +80,14 @@ class TicketsTable
                 TextColumn::make('created_at')
                     ->label('Bekleme Süresi')
                     ->formatStateUsing(function ($state, $record) {
-                        $endTime = ($record->status === 'çözüldü' || $record->status === 'iptal') ? ($record->resolved_at ?? $record->updated_at) : now();
+                        $endTime = in_array($record->status, ['işlem yapıldı', 'çözüldü', 'iptal'], true) ? ($record->resolved_at ?? $record->updated_at) : now();
                         $diff = \Carbon\Carbon::parse($state)->diff($endTime);
                         if ($diff->d > 0) return "{$diff->d} gün {$diff->h} sa";
                         if ($diff->h > 0) return "{$diff->h} saat {$diff->i} dk";
                         return "{$diff->i} dakika";
                     })
                     ->color(function ($record) {
-                        if ($record->status === 'çözüldü' || $record->status === 'iptal') return 'gray';
+                        if (in_array($record->status, ['işlem yapıldı', 'çözüldü', 'iptal'], true)) return 'gray';
                         $hours = \Carbon\Carbon::parse($record->created_at)->diffInHours(now());
                         if ($hours >= 24) return 'danger';
                         if ($hours >= 2) return 'warning';
@@ -155,7 +155,7 @@ class TicketsTable
                         ->icon('heroicon-o-hand-raised')
                         ->color('success')
                         ->action(fn (Ticket $record) => $record->update(['assigned_to' => auth()->id()]))
-                        ->visible(fn (Ticket $record) => $record->assigned_to !== auth()->id() && $record->status !== 'çözüldü' && $record->status !== 'iptal'),
+                        ->visible(fn (Ticket $record) => $record->assigned_to !== auth()->id() && !in_array($record->status, ['işlem yapıldı', 'çözüldü', 'iptal'], true)),
                     Action::make('assign')
                         ->label('Bileti Ata')
                         ->icon('heroicon-o-user-plus')
@@ -178,7 +178,7 @@ class TicketsTable
                                 ->preload(),
                         ])
                         ->action(fn (Ticket $record, array $data) => $record->update($data))
-                        ->visible(fn (Ticket $record) => $record->status !== 'çözüldü' && $record->status !== 'iptal'),
+                        ->visible(fn (Ticket $record) => !in_array($record->status, ['işlem yapıldı', 'çözüldü', 'iptal'], true)),
                     Action::make('print')
                         ->label('Yazdır')
                         ->icon('heroicon-o-printer')

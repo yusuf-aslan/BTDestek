@@ -67,7 +67,7 @@ class Reports extends Page
 
         // Çözülen talepler (resolved_by)
         $resolvedQuery = Ticket::where('resolved_by', $this->selectedUserId)
-            ->where('status', 'çözüldü')
+            ->whereIn('status', ['işlem yapıldı', 'çözüldü'])
             ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
             ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo));
 
@@ -81,7 +81,7 @@ class Reports extends Page
 
         // Ortalama çözüm süresi (dakika cinsinden)
         $avgMins = Ticket::where('resolved_by', $this->selectedUserId)
-            ->where('status', 'çözüldü')
+            ->whereIn('status', ['işlem yapıldı', 'çözüldü'])
             ->whereNotNull('resolved_at')
             ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
             ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo))
@@ -121,7 +121,7 @@ class Reports extends Page
         if (!$this->selectedUserId) return collect();
 
         return Ticket::where('resolved_by', $this->selectedUserId)
-            ->where('status', 'çözüldü')
+            ->whereIn('status', ['işlem yapıldı', 'çözüldü'])
             ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
             ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo))
             ->with('category.department')
@@ -175,7 +175,7 @@ class Reports extends Page
         return [
             'total_tickets'     => Ticket::count(),
             'open_tickets'      => Ticket::whereIn('status', ['yeni', 'işlemde', 'beklemede'])->count(),
-            'resolved_tickets'  => Ticket::where('status', 'çözüldü')->count(),
+            'resolved_tickets'  => Ticket::whereIn('status', ['işlem yapıldı', 'çözüldü'])->count(),
             'total_activities'  => Activity::count(),
         ];
     }

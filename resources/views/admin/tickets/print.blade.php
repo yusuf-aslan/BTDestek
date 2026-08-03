@@ -139,7 +139,7 @@
         </tr>
     </table>
 
-    @if($ticket->status === 'çözüldü')
+    @if(in_array($ticket->status, ['işlem yapıldı', 'çözüldü'], true))
     <div class="section-title">Çözüm Bilgileri</div>
     <table class="content-table">
         <tr>

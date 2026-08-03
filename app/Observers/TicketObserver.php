@@ -42,7 +42,7 @@ class TicketObserver
             $newStatus = $ticket->status;
             
             try {
-                if ($newStatus === 'çözüldü') {
+                if (in_array($newStatus, ['işlem yapıldı', 'çözüldü'], true)) {
                     Mail::to($ticket->email)->send(new TicketResolved($ticket));
                 } else {
                     Mail::to($ticket->email)->send(new TicketStatusUpdated($ticket));

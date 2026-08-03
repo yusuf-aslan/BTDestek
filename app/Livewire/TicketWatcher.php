@@ -22,7 +22,7 @@ class TicketWatcher extends Component
         $user = Auth::user();
         if (!$user) return 0;
 
-        $query = Ticket::query()->whereNotIn('status', ['çözüldü', 'iptal']);
+        $query = Ticket::query()->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal']);
         
         if (!$user->is_admin) {
             $query->whereHas('category', function ($q) use ($user) {

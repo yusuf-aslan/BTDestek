@@ -5,7 +5,7 @@ Bu dosya, Gemini CLI'ın proje durumunu ve geçmişini her oturumda hatırlamas�
 ## 🚀 Son Durum: v1.20 (3 Ağustos 2026)
 - **Uzak Destek Kartı:** Kullanıcı portalındaki sabit cihaz IP kartının üzerine TightVNC uzak destek kartı eklendi. Kart kompakt, responsive ve açık/koyu tema uyumludur.
 - **Yönetilebilir Uzak Destek Ayarları:** İndirme bağlantısı, Bilgi Bankası kurulum rehberi bağlantısı ve kart açıklaması Ayarlar / Uzak Destek sekmesinden yönetilir. Doldurulmayan bağlantının butonu gösterilmez.
-- **Yeni Talep Durumu:** “İşlem Yapıldı” durumu MySQL enum alanına, admin tablolarına, kullanıcı sorgulamasına ve yazdırma görünümüne eklendi. Çözüm notu bu durumla kaydedildiğinde otomatik “Çözüldü” dönüşümü yapılmaz.
+- **Yeni Talep Durumu:** “İşlem Yapıldı” durumu MySQL enum alanına, admin tablolarına, kullanıcı sorgulamasına ve yazdırma görünümüne eklendi. “Çözüldü” gibi kapanış durumu kabul edilir; Bekleyenler listesinden çıkar, Çözülenler sekmesine ve çözüm istatistiklerine dahil edilir.
 - **Dağıtım Notu:** Docker image build gerekmez. Üç yeni migrasyon nedeniyle sunucuda `php artisan migrate --force` çalıştırılmalıdır.
 
 ## 🚀 Önceki Durum: v1.19 (30 Temmuz 2026)

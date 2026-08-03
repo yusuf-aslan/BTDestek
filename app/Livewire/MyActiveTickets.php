@@ -26,7 +26,7 @@ class MyActiveTickets extends TableWidget
         return $table
             ->query(
                 Ticket::query()
-                    ->whereNotIn('status', ['çözüldü', 'iptal'])
+                    ->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal'])
                     ->latest()
             )
             ->columns([

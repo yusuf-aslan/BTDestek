@@ -24,7 +24,7 @@ class MyActiveTickets extends BaseWidget
         return $table
             ->query(
                 Ticket::query()
-                    ->whereNotIn('status', ['çözüldü', 'iptal'])
+                    ->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal'])
                     ->where(function (Builder $query) {
                         $user = Auth::user();
                         if ($user) {

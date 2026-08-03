@@ -28,13 +28,13 @@ class ListTickets extends ListRecords
     {
         return [
             'pending' => Tab::make('Bekleyenler')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereNotIn('status', ['çözüldü', 'iptal']))
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal']))
                 ->badge($this->getStatusCount(['yeni', 'işlemde', 'beklemede']))
                 ->badgeColor('warning'),
             
             'solved' => Tab::make('Çözülenler')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'çözüldü'))
-                ->badge($this->getStatusCount(['çözüldü']))
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', ['işlem yapıldı', 'çözüldü']))
+                ->badge($this->getStatusCount(['işlem yapıldı', 'çözüldü']))
                 ->badgeColor('success'),
 
             'cancelled' => Tab::make('İptal Edilenler')
