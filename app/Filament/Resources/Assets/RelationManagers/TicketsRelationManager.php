@@ -31,6 +31,7 @@ class TicketsRelationManager extends RelationManager
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
+                    ->formatStateUsing(fn (string $state): string => \App\Models\TicketStatus::labelFor($state))
                     ->color(fn (string $state): string => match ($state) {
                         'yeni' => 'gray',
                         'işlemde' => 'warning',
@@ -38,6 +39,7 @@ class TicketsRelationManager extends RelationManager
                         'işlem yapıldı' => 'primary',
                         'çözüldü' => 'success',
                         'iptal' => 'danger',
+                        default => \App\Models\TicketStatus::colorFor($state),
                     }),
                 TextColumn::make('created_at')
                     ->label('Tarih')

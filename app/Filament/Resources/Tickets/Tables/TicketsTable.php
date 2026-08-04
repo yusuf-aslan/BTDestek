@@ -14,6 +14,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Ticket;
+use App\Models\TicketStatus;
 
 class TicketsTable
 {
@@ -64,14 +65,8 @@ class TicketsTable
                 TextColumn::make('status')
                     ->label('Durum')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'yeni' => 'gray',
-                        'işlemde' => 'warning',
-                        'beklemede' => 'info',
-                        'işlem yapıldı' => 'primary',
-                        'çözüldü' => 'success',
-                        'iptal' => 'danger',
-                    })
+                    ->formatStateUsing(fn (string $state): string => TicketStatus::labelFor($state))
+                    ->color(fn (string $state): string => TicketStatus::colorFor($state))
                     ->sortable(),
                 TextColumn::make('assignedTo.name')
                     ->label('Atanan')
@@ -80,14 +75,14 @@ class TicketsTable
                 TextColumn::make('created_at')
                     ->label('Bekleme Süresi')
                     ->formatStateUsing(function ($state, $record) {
-                        $endTime = in_array($record->status, ['işlem yapıldı', 'çözüldü', 'iptal'], true) ? ($record->resolved_at ?? $record->updated_at) : now();
+                        $endTime = TicketStatus::isClosed($record->status) ? ($record->resolved_at ?? $record->updated_at) : now();
                         $diff = \Carbon\Carbon::parse($state)->diff($endTime);
                         if ($diff->d > 0) return "{$diff->d} gün {$diff->h} sa";
                         if ($diff->h > 0) return "{$diff->h} saat {$diff->i} dk";
                         return "{$diff->i} dakika";
                     })
                     ->color(function ($record) {
-                        if (in_array($record->status, ['işlem yapıldı', 'çözüldü', 'iptal'], true)) return 'gray';
+                        if (TicketStatus::isClosed($record->status)) return 'gray';
                         $hours = \Carbon\Carbon::parse($record->created_at)->diffInHours(now());
                         if ($hours >= 24) return 'danger';
                         if ($hours >= 2) return 'warning';
@@ -155,7 +150,7 @@ class TicketsTable
                         ->icon('heroicon-o-hand-raised')
                         ->color('success')
                         ->action(fn (Ticket $record) => $record->update(['assigned_to' => auth()->id()]))
-                        ->visible(fn (Ticket $record) => $record->assigned_to !== auth()->id() && !in_array($record->status, ['işlem yapıldı', 'çözüldü', 'iptal'], true)),
+                        ->visible(fn (Ticket $record) => $record->assigned_to !== auth()->id() && !TicketStatus::isClosed($record->status)),
                     Action::make('assign')
                         ->label('Bileti Ata')
                         ->icon('heroicon-o-user-plus')
@@ -178,7 +173,7 @@ class TicketsTable
                                 ->preload(),
                         ])
                         ->action(fn (Ticket $record, array $data) => $record->update($data))
-                        ->visible(fn (Ticket $record) => !in_array($record->status, ['işlem yapıldı', 'çözüldü', 'iptal'], true)),
+                        ->visible(fn (Ticket $record) => !TicketStatus::isClosed($record->status)),
                     Action::make('print')
                         ->label('Yazdır')
                         ->icon('heroicon-o-printer')

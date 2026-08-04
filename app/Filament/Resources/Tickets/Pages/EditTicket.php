@@ -7,6 +7,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Str;
+use App\Models\TicketStatus;
 
 class EditTicket extends EditRecord
 {
@@ -57,7 +58,9 @@ class EditTicket extends EditRecord
     {
         $data = $this->form->getState();
         
-        if (!empty($data['resolution_note']) && !in_array($data['status'], ['işlem yapıldı', 'çözüldü', 'iptal'])) {
+        $resolutionNoteChanged = (string) ($data['resolution_note'] ?? '') !== (string) ($this->record->resolution_note ?? '');
+
+        if ($resolutionNoteChanged && !empty($data['resolution_note']) && !TicketStatus::isClosed($data['status'])) {
             $this->dispatch('open-resolve-confirmation-modal');
             return;
         }
@@ -69,7 +72,7 @@ class EditTicket extends EditRecord
     public function forceSaveAsResolved(): void
     {
         $state = $this->form->getState();
-        $state['status'] = 'çözüldü';
+        $state['status'] = TicketStatus::resolutionKey();
         
         // Update form state
         $this->form->fill($state);

@@ -37,10 +37,10 @@ class DashboardOverview extends Widget
 
         // Ana istatistikler
         $totalTickets   = (clone $scopedQuery())->count();
-        $pendingTickets = (clone $scopedQuery())->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal'])->count();
+        $pendingTickets = (clone $scopedQuery())->whereIn('status', \App\Models\TicketStatus::keysFor('pending'))->count();
         $todayTickets   = (clone $scopedQuery())->whereDate('created_at', today())->count();
-        $resolvedTickets = (clone $scopedQuery())->whereIn('status', ['işlem yapıldı', 'çözüldü'])->count();
-        $urgentTickets  = (clone $scopedQuery())->where('priority', 'acil')->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal'])->count();
+        $resolvedTickets = (clone $scopedQuery())->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))->count();
+        $urgentTickets  = (clone $scopedQuery())->where('priority', 'acil')->whereIn('status', \App\Models\TicketStatus::keysFor('pending'))->count();
 
         // Son 7 günün trendleri
         $trendData = [];
@@ -56,7 +56,7 @@ class DashboardOverview extends Widget
 
         // Bekleyen talepler (en son 8 adet)
         $pendingList = (clone $scopedQuery())
-            ->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal'])
+            ->whereIn('status', \App\Models\TicketStatus::keysFor('pending'))
             ->with(['category.department', 'assignedTo'])
             ->latest()
             ->limit(8)
@@ -68,9 +68,9 @@ class DashboardOverview extends Widget
             $techPerformance = User::query()
                 ->whereHas('categories')
                 ->withCount([
-                    'tickets as active_tickets' => fn (Builder $q) => $q->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal']),
-                    'resolvedTickets as resolved_today' => fn (Builder $q) => $q->whereIn('status', ['işlem yapıldı', 'çözüldü'])->whereDate('resolved_at', today()),
-                    'resolvedTickets as total_resolved' => fn (Builder $q) => $q->whereIn('status', ['işlem yapıldı', 'çözüldü']),
+                    'tickets as active_tickets' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('pending')),
+                    'resolvedTickets as resolved_today' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))->whereDate('resolved_at', today()),
+                    'resolvedTickets as total_resolved' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('solved')),
                 ])
                 ->orderByDesc('total_resolved')
                 ->limit(10)

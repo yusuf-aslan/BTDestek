@@ -165,14 +165,13 @@ class TicketForm
                             ->live(),
                         Select::make('status')
                             ->label('Durum')
-                            ->options([
-                                'yeni' => 'Yeni',
-                                'işlemde' => 'İşlemde',
-                                'beklemede' => 'Beklemede',
-                                'işlem yapıldı' => 'İşlem Yapıldı',
-                                'çözüldü' => 'Çözüldü',
-                                'iptal' => 'İptal',
-                            ])
+                            ->options(function ($record): array {
+                                $options = \App\Models\TicketStatus::options();
+                                if ($record && !array_key_exists($record->status, $options)) {
+                                    $options[$record->status] = \App\Models\TicketStatus::labelFor($record->status) . ' (Pasif)';
+                                }
+                                return $options;
+                            })
                             ->required(),
                         Select::make('priority')
                             ->label('Öncelik')

@@ -7,6 +7,7 @@ use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\TicketStatus;
 
 class ListTickets extends ListRecords
 {
@@ -28,18 +29,18 @@ class ListTickets extends ListRecords
     {
         return [
             'pending' => Tab::make('Bekleyenler')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal']))
-                ->badge($this->getStatusCount(['yeni', 'işlemde', 'beklemede']))
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', TicketStatus::keysFor('pending')))
+                ->badge($this->getStatusCount(TicketStatus::keysFor('pending')))
                 ->badgeColor('warning'),
             
             'solved' => Tab::make('Çözülenler')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', ['işlem yapıldı', 'çözüldü']))
-                ->badge($this->getStatusCount(['işlem yapıldı', 'çözüldü']))
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', TicketStatus::keysFor('solved')))
+                ->badge($this->getStatusCount(TicketStatus::keysFor('solved')))
                 ->badgeColor('success'),
 
             'cancelled' => Tab::make('İptal Edilenler')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'iptal'))
-                ->badge($this->getStatusCount(['iptal']))
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', TicketStatus::keysFor('cancelled')))
+                ->badge($this->getStatusCount(TicketStatus::keysFor('cancelled')))
                 ->badgeColor('danger'),
 
             'all' => Tab::make('Tümü')

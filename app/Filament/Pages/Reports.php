@@ -67,7 +67,7 @@ class Reports extends Page
 
         // Çözülen talepler (resolved_by)
         $resolvedQuery = Ticket::where('resolved_by', $this->selectedUserId)
-            ->whereIn('status', ['işlem yapıldı', 'çözüldü'])
+            ->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))
             ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
             ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo));
 
@@ -81,7 +81,7 @@ class Reports extends Page
 
         // Ortalama çözüm süresi (dakika cinsinden)
         $avgMins = Ticket::where('resolved_by', $this->selectedUserId)
-            ->whereIn('status', ['işlem yapıldı', 'çözüldü'])
+            ->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))
             ->whereNotNull('resolved_at')
             ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
             ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo))
@@ -121,7 +121,7 @@ class Reports extends Page
         if (!$this->selectedUserId) return collect();
 
         return Ticket::where('resolved_by', $this->selectedUserId)
-            ->whereIn('status', ['işlem yapıldı', 'çözüldü'])
+            ->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))
             ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
             ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo))
             ->with('category.department')
@@ -174,8 +174,8 @@ class Reports extends Page
     {
         return [
             'total_tickets'     => Ticket::count(),
-            'open_tickets'      => Ticket::whereIn('status', ['yeni', 'işlemde', 'beklemede'])->count(),
-            'resolved_tickets'  => Ticket::whereIn('status', ['işlem yapıldı', 'çözüldü'])->count(),
+            'open_tickets'      => Ticket::whereIn('status', \App\Models\TicketStatus::keysFor('pending'))->count(),
+            'resolved_tickets'  => Ticket::whereIn('status', \App\Models\TicketStatus::keysFor('solved'))->count(),
             'total_activities'  => Activity::count(),
         ];
     }

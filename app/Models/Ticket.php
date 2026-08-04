@@ -152,7 +152,7 @@ class Ticket extends Model
                     'description' => "Talep durumu '{$oldStatus}' durumundan '{$newStatus}' durumuna güncellendi.",
                 ]);
 
-                if (in_array($newStatus, ['işlem yapıldı', 'çözüldü'], true)) {
+                if (TicketStatus::isClosed($newStatus)) {
                     if (!$ticket->resolved_at) {
                         $ticket->resolved_at = now();
                     }
@@ -163,6 +163,9 @@ class Ticket extends Model
                     }
 
                     $ticket->resolved_by = $ticket->assigned_to;
+                } else {
+                    $ticket->resolved_at = null;
+                    $ticket->resolved_by = null;
                 }
             }
 

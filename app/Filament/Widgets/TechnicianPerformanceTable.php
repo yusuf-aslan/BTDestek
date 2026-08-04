@@ -29,9 +29,9 @@ class TechnicianPerformanceTable extends BaseWidget
                 User::query()
                     ->whereHas('categories') // Only technicians
                     ->withCount([
-                        'tickets as active_tickets' => fn (Builder $query) => $query->whereNotIn('status', ['işlem yapıldı', 'çözüldü', 'iptal']),
-                        'resolvedTickets as resolved_today' => fn (Builder $query) => $query->whereIn('status', ['işlem yapıldı', 'çözüldü'])->whereDate('resolved_at', today()),
-                        'resolvedTickets as total_resolved' => fn (Builder $query) => $query->whereIn('status', ['işlem yapıldı', 'çözüldü']),
+                        'tickets as active_tickets' => fn (Builder $query) => $query->whereIn('status', \App\Models\TicketStatus::keysFor('pending')),
+                        'resolvedTickets as resolved_today' => fn (Builder $query) => $query->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))->whereDate('resolved_at', today()),
+                        'resolvedTickets as total_resolved' => fn (Builder $query) => $query->whereIn('status', \App\Models\TicketStatus::keysFor('solved')),
                     ])
             )
             ->columns([

@@ -6,6 +6,7 @@ use App\Mail\TicketCreated;
 use App\Mail\TicketResolved;
 use App\Mail\TicketStatusUpdated;
 use App\Models\Ticket;
+use App\Models\TicketStatus;
 use Illuminate\Support\Facades\Mail;
 
 class TicketObserver
@@ -42,7 +43,7 @@ class TicketObserver
             $newStatus = $ticket->status;
             
             try {
-                if (in_array($newStatus, ['işlem yapıldı', 'çözüldü'], true)) {
+                if (TicketStatus::isSolved($newStatus)) {
                     Mail::to($ticket->email)->send(new TicketResolved($ticket));
                 } else {
                     Mail::to($ticket->email)->send(new TicketStatusUpdated($ticket));

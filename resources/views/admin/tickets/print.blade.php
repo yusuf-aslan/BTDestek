@@ -139,7 +139,7 @@
         </tr>
     </table>
 
-    @if(in_array($ticket->status, ['işlem yapıldı', 'çözüldü'], true))
+    @if(\App\Models\TicketStatus::isClosed($ticket->status))
     <div class="section-title">Çözüm Bilgileri</div>
     <table class="content-table">
         <tr>

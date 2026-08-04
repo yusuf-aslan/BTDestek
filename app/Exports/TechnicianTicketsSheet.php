@@ -30,7 +30,7 @@ class TechnicianTicketsSheet implements FromQuery, WithTitle, WithHeadings, With
     {
         return Ticket::query()
             ->where('resolved_by', $this->user->id)
-            ->whereIn('status', ['işlem yapıldı', 'çözüldü'])
+            ->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))
             ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
             ->when($this->dateTo, fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo))
             ->with('category.department');

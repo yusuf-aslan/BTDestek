@@ -488,14 +488,9 @@
                                             </div>
                                         </div>
                                         <span class="px-2.5 py-0.5 text-[9px] font-bold rounded-full uppercase tracking-wider shrink-0
-                                            {{ $recentTicket->status === 'yeni' ? 'bg-slate-100 text-slate-700 dark:bg-slate-900/60 dark:text-slate-300' : '' }}
-                                            {{ $recentTicket->status === 'işlemde' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : '' }}
-                                            {{ $recentTicket->status === 'beklemede' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' : '' }}
-                                            {{ $recentTicket->status === 'işlem yapıldı' ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300' : '' }}
-                                            {{ $recentTicket->status === 'çözüldü' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : '' }}
-                                            {{ $recentTicket->status === 'iptal' ? 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' : '' }}
+                                            {{ \App\Models\TicketStatus::badgeClassesFor($recentTicket->status) }}
                                         ">
-                                            {{ $recentTicket->status }}
+                                            {{ \App\Models\TicketStatus::labelFor($recentTicket->status) }}
                                         </span>
                                     </div>
                                 </a>
