@@ -15,6 +15,9 @@ class GeneralSetting extends Model
         'work_hours_end',
         'allow_tickets_outside_work_hours',
         'weekend_tickets_allowed',
+        'is_lunch_break_enabled',
+        'lunch_break_start',
+        'lunch_break_end',
         'is_dark_mode_enabled',
         'show_email_on_ticket_form',
         'show_broken_pc_ip_on_ticket_form',
@@ -37,10 +40,33 @@ class GeneralSetting extends Model
         'important_reminders' => 'array',
         'allow_tickets_outside_work_hours' => 'boolean',
         'weekend_tickets_allowed' => 'boolean',
+        'is_lunch_break_enabled' => 'boolean',
         'is_dark_mode_enabled' => 'boolean',
         'show_email_on_ticket_form' => 'boolean',
         'show_broken_pc_ip_on_ticket_form' => 'boolean',
     ];
+
+    public function isLunchBreakAt($dateTime = null): bool
+    {
+        if (! $this->is_lunch_break_enabled || ! $this->lunch_break_start || ! $this->lunch_break_end) {
+            return false;
+        }
+
+        $moment = $dateTime ? \Carbon\Carbon::parse($dateTime) : now();
+        $start = $moment->copy()->setTimeFromTimeString($this->lunch_break_start);
+        $end = $moment->copy()->setTimeFromTimeString($this->lunch_break_end);
+
+        return $end->greaterThan($start)
+            && $moment->greaterThanOrEqualTo($start)
+            && $moment->lessThan($end);
+    }
+
+    public function lunchBreakEndsAt($dateTime = null): \Carbon\Carbon
+    {
+        $moment = $dateTime ? \Carbon\Carbon::parse($dateTime) : now();
+
+        return $moment->copy()->setTimeFromTimeString($this->lunch_break_end ?: '13:00:00');
+    }
 
     protected static function booted()
     {

@@ -238,6 +238,28 @@ class Settings extends Page implements HasForms
                                             ->helperText('Kapalı ise Cumartesi ve Pazar günleri talep açılamaz.')
                                             ->default(true),
                                     ])->columns(2),
+
+                                Section::make('Öğle Arası')
+                                    ->description('Öğle arasında açılan taleplerin bekleme süresinin ne zaman başlayacağını belirleyin.')
+                                    ->schema([
+                                        Toggle::make('is_lunch_break_enabled')
+                                            ->label('Öğle Arası Süre Kuralı Aktif')
+                                            ->helperText('Açıksa bu saatler arasında girilen taleplerin süresi öğle arası bitince başlar.')
+                                            ->default(true)
+                                            ->columnSpanFull(),
+
+                                        TimePicker::make('lunch_break_start')
+                                            ->label('Öğle Arası Başlangıcı')
+                                            ->seconds(false)
+                                            ->default('12:00')
+                                            ->required(),
+
+                                        TimePicker::make('lunch_break_end')
+                                            ->label('Öğle Arası Bitişi')
+                                            ->seconds(false)
+                                            ->default('13:00')
+                                            ->required(),
+                                    ])->columns(2),
                             ]),
 
                         \Filament\Schemas\Components\Tabs\Tab::make('İçerik Yönetimi')

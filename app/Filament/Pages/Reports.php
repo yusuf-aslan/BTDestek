@@ -86,7 +86,7 @@ class Reports extends Page
             ->when($this->dateFrom, fn ($q) => $q->whereDate('resolved_at', '>=', $this->dateFrom))
             ->when($this->dateTo,   fn ($q) => $q->whereDate('resolved_at', '<=', $this->dateTo))
             ->get()
-            ->avg(fn ($t) => $t->created_at->diffInMinutes($t->resolved_at));
+            ->avg(fn ($t) => $t->elapsedMinutes($t->resolved_at));
 
         // Faaliyetler
         $activityQuery = Activity::where('user_id', $this->selectedUserId)

@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Tickets\Schemas;
 use App\Models\CannedResponse;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Components\Section;
@@ -212,8 +211,11 @@ class TicketForm
                             ->view('filament.forms.components.dictation-controls')
                             ->columnSpanFull(),
 
-                        DatePicker::make('resolved_at')
-                            ->label('Çözüm Tarihi'),
+                        DateTimePicker::make('resolved_at')
+                            ->label('Çözüm Tarihi ve Saati')
+                            ->displayFormat('d.m.Y H:i')
+                            ->seconds(false)
+                            ->native(false),
                     ])->columns(3),
 
                 Section::make('Ekler')

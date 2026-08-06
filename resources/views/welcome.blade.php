@@ -220,6 +220,20 @@
                     }
                 @endphp
 
+                @if(!$isClosed && $settings?->isLunchBreakAt(now()))
+                    <div class="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 p-5 rounded-2xl flex items-center gap-4">
+                        <div class="w-11 h-11 bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-blue-900 dark:text-blue-100 mb-1">Öğle Arası Bilgilendirmesi</h4>
+                            <p class="text-sm font-medium text-blue-700 dark:text-blue-300 leading-relaxed">
+                                Talebiniz kaydedilecektir; değerlendirme süresi saat {{ $settings->lunchBreakEndsAt(now())->format('H:i') }} itibarıyla başlayacaktır.
+                            </p>
+                        </div>
+                    </div>
+                @endif
+
                 @if($isClosed)
                     <div class="bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-100 dark:border-amber-800/50 p-6 rounded-2xl flex items-center gap-5 animate-in fade-in slide-in-from-top-4 duration-500">
                         <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 rounded-full flex items-center justify-center shrink-0">

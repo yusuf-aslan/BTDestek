@@ -110,8 +110,15 @@ class TicketController extends Controller
             }
         }
 
+        $successMessage = 'Talebiniz başarıyla alındı. Talep numaranızı ve aşağıdaki yazdırma seçeneğini kullanarak talebinizin bir kopyasını saklamanızı öneririz.';
+
+        if ($settings?->isLunchBreakAt($ticket->created_at)) {
+            $lunchBreakEnd = $settings->lunchBreakEndsAt($ticket->created_at)->format('H:i');
+            $successMessage .= " Öğle arası nedeniyle talebiniz {$lunchBreakEnd} itibarıyla değerlendirilmeye başlanacaktır.";
+        }
+
         return redirect()->back()->with('success_data', [
-            'message' => 'Talebiniz başarıyla alındı. Talep numaranızı ve aşağıdaki yazdırma seçeneğini kullanarak talebinizin bir kopyasını saklamanızı öneririz.',
+            'message' => $successMessage,
             'tracking_number' => $ticket->tracking_number,
             'ticket_id' => $ticket->id,
             'copy_data' => [

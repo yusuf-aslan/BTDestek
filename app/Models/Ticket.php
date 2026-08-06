@@ -76,6 +76,33 @@ class Ticket extends Model
         return $this->hasMany(TicketActivity::class)->latest();
     }
 
+    public function waitingStartedAt(?GeneralSetting $settings = null): \Carbon\Carbon
+    {
+        $startedAt = $this->created_at->copy();
+        $settings ??= \Illuminate\Support\Facades\Cache::rememberForever(
+            'general_settings',
+            fn () => GeneralSetting::first()
+        );
+
+        if ($settings?->isLunchBreakAt($startedAt)) {
+            return $settings->lunchBreakEndsAt($startedAt);
+        }
+
+        return $startedAt;
+    }
+
+    public function elapsedMinutes($endTime = null, ?GeneralSetting $settings = null): int
+    {
+        $startedAt = $this->waitingStartedAt($settings);
+        $endedAt = $endTime ? \Carbon\Carbon::parse($endTime) : now();
+
+        if ($endedAt->lessThanOrEqualTo($startedAt)) {
+            return 0;
+        }
+
+        return (int) $startedAt->diffInMinutes($endedAt);
+    }
+
     protected static function booted(): void
     {
         static::created(function (Ticket $ticket) {
@@ -105,6 +132,29 @@ class Ticket extends Model
                     }
 
                     $technician = User::find($newAssignedTo);
+
+                    // Kapalı bir talebin teknisyeni sonradan düzeltilirse,
+                    // performans istatistiklerini de yeni teknisyene aktar.
+                    if (
+                        TicketStatus::isClosed($ticket->getOriginal('status'))
+                        && (string) $ticket->getOriginal('resolved_by') !== (string) $newAssignedTo
+                    ) {
+                        $oldResolverId = $ticket->getOriginal('resolved_by');
+                        $oldResolver = $oldResolverId ? User::find($oldResolverId) : null;
+                        $ticket->resolved_by = $newAssignedTo;
+
+                        TicketActivity::create([
+                            'ticket_id' => $ticket->id,
+                            'user_id' => Auth::id(),
+                            'activity_type' => 'resolver_changed',
+                            'properties' => ['old' => $oldResolverId, 'new' => $newAssignedTo],
+                            'description' => sprintf(
+                                'Çözen teknisyen %s kullanıcısından %s kullanıcısına düzeltildi.',
+                                $oldResolver?->name ?? 'belirtilmemiş',
+                                $technician?->name ?? 'belirtilmemiş'
+                            ),
+                        ]);
+                    }
                     
                     TicketActivity::create([
                         'ticket_id' => $ticket->id,
@@ -169,10 +219,6 @@ class Ticket extends Model
                 }
             }
 
-            // If resolved_at is provided (from DatePicker), automatically append current time
-            if ($ticket->isDirty('resolved_at') && $ticket->resolved_at) {
-                $ticket->resolved_at = \Carbon\Carbon::parse($ticket->resolved_at)->setTime(now()->hour, now()->minute, now()->second);
-            }
         });
     }
 }

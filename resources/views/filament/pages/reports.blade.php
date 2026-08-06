@@ -355,7 +355,7 @@
                                         <td class="rp-td rp-td-muted" style="white-space:nowrap;">{{ $ticket->resolved_at?->format('d.m.Y H:i') ?? '-' }}</td>
                                         <td class="rp-td rp-td-muted">
                                             @if($ticket->resolved_at)
-                                                @php $mins = $ticket->created_at->diffInMinutes($ticket->resolved_at); $h = floor($mins/60); $m = $mins % 60; @endphp
+                                                @php $mins = $ticket->elapsedMinutes($ticket->resolved_at); $h = floor($mins/60); $m = $mins % 60; @endphp
                                                 {{ $h > 0 ? "{$h}s {$m}dk" : "{$m}dk" }}
                                             @else -
                                             @endif

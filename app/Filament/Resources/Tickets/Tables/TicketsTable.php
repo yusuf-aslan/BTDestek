@@ -76,14 +76,18 @@ class TicketsTable
                     ->label('Bekleme Süresi')
                     ->formatStateUsing(function ($state, $record) {
                         $endTime = TicketStatus::isClosed($record->status) ? ($record->resolved_at ?? $record->updated_at) : now();
-                        $diff = \Carbon\Carbon::parse($state)->diff($endTime);
-                        if ($diff->d > 0) return "{$diff->d} gün {$diff->h} sa";
-                        if ($diff->h > 0) return "{$diff->h} saat {$diff->i} dk";
-                        return "{$diff->i} dakika";
+                        $minutes = $record->elapsedMinutes($endTime);
+                        $days = intdiv($minutes, 1440);
+                        $hours = intdiv($minutes % 1440, 60);
+                        $remainingMinutes = $minutes % 60;
+
+                        if ($days > 0) return "{$days} gün {$hours} sa";
+                        if ($hours > 0) return "{$hours} saat {$remainingMinutes} dk";
+                        return "{$remainingMinutes} dakika";
                     })
                     ->color(function ($record) {
                         if (TicketStatus::isClosed($record->status)) return 'gray';
-                        $hours = \Carbon\Carbon::parse($record->created_at)->diffInHours(now());
+                        $hours = $record->elapsedMinutes() / 60;
                         if ($hours >= 24) return 'danger';
                         if ($hours >= 2) return 'warning';
                         return 'success';
