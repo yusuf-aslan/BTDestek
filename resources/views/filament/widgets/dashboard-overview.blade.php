@@ -376,7 +376,8 @@
                         <th class="db-tech-th" style="text-align:center;">Aktif İşler</th>
                         <th class="db-tech-th" style="text-align:center;">Bugün Çözülen</th>
                         <th class="db-tech-th" style="text-align:center;">Toplam Çözülen</th>
-                        <th class="db-tech-th" style="text-align:center;">Doluluk</th>
+                        <th class="db-tech-th" style="text-align:center;">Bu Ay Faaliyet</th>
+                        <th class="db-tech-th" style="text-align:center;">Çözüm Payı</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -398,6 +399,23 @@
                         </td>
                         <td class="db-tech-td" style="text-align:center;">
                             <span class="db-tech-stat db-tech-stat-resolved">{{ $tech->total_resolved }}</span>
+                        </td>
+                        <td class="db-tech-td" style="text-align:center;white-space:nowrap;">
+                            @php
+                                $activityMinutes = (int) ($tech->monthly_activity_minutes ?? 0);
+                                $activityHours = intdiv($activityMinutes, 60);
+                                $remainingMinutes = $activityMinutes % 60;
+                            @endphp
+                            <div style="font-weight:800;color:#10b981;">
+                                @if($activityHours > 0)
+                                    {{ $activityHours }} sa{{ $remainingMinutes > 0 ? ' ' . $remainingMinutes . ' dk' : '' }}
+                                @else
+                                    {{ $remainingMinutes }} dk
+                                @endif
+                            </div>
+                            <div style="font-size:10px;color:#9ca3af;margin-top:2px;">
+                                {{ $tech->monthly_activity_count }} faaliyet
+                            </div>
                         </td>
                         <td class="db-tech-td" style="min-width:120px;">
                             @php $pct = $techMax > 0 ? round(($tech->total_resolved / $techMax) * 100) : 0; @endphp

@@ -71,7 +71,13 @@ class DashboardOverview extends Widget
                     'tickets as active_tickets' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('pending')),
                     'resolvedTickets as resolved_today' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))->whereDate('resolved_at', today()),
                     'resolvedTickets as total_resolved' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('solved')),
+                    'activities as monthly_activity_count' => fn (Builder $q) => $q
+                        ->whereBetween('activity_date', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()]),
                 ])
+                ->withSum([
+                    'activities as monthly_activity_minutes' => fn (Builder $q) => $q
+                        ->whereBetween('activity_date', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()]),
+                ], 'duration')
                 ->orderByDesc('total_resolved')
                 ->limit(10)
                 ->get();
