@@ -160,14 +160,25 @@ class TicketsTable
                         ->icon('heroicon-o-user-plus')
                         ->color('info')
                         ->form([
+                            \Filament\Forms\Components\Select::make('category_id')
+                                ->label('Kategori Seç')
+                                ->options(\App\Models\Category::query()->orderBy('name')->pluck('name', 'id'))
+                                ->default(fn (Ticket $record) => $record->category_id)
+                                ->required()
+                                ->searchable()
+                                ->preload()
+                                ->live()
+                                ->afterStateUpdated(fn (\Filament\Schemas\Components\Utilities\Set $set) => $set('assigned_to', null)),
                             \Filament\Forms\Components\Select::make('assigned_to')
                                 ->label('Teknisyen Seç')
-                                ->options(function (Ticket $record) {
-                                    $users = \App\Models\User::whereHas('categories', fn ($query) => $query->where('categories.id', $record->category_id))
+                                ->options(function (\Filament\Schemas\Components\Utilities\Get $get) {
+                                    $categoryId = $get('category_id');
+                                    $users = \App\Models\User::query()
+                                        ->when($categoryId, fn ($query) => $query->whereHas('categories', fn ($categoryQuery) => $categoryQuery->where('categories.id', $categoryId)))
                                         ->pluck('name', 'id');
                                     
                                     if ($users->isEmpty()) {
-                                        return \App\Models\User::all()->pluck('name', 'id');
+                                        return \App\Models\User::query()->orderBy('name')->pluck('name', 'id');
                                     }
                                     
                                     return $users;

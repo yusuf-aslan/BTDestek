@@ -58,7 +58,8 @@ class EditTicket extends EditRecord
     {
         $data = $this->form->getState();
         
-        $resolutionNoteChanged = (string) ($data['resolution_note'] ?? '') !== (string) ($this->record->resolution_note ?? '');
+        $resolutionNoteChanged = $this->normalizeRichText($data['resolution_note'] ?? null)
+            !== $this->normalizeRichText($this->record->resolution_note);
 
         if ($resolutionNoteChanged && !empty($data['resolution_note']) && !TicketStatus::isClosed($data['status'])) {
             $this->dispatch('open-resolve-confirmation-modal');
@@ -78,5 +79,29 @@ class EditTicket extends EditRecord
         $this->form->fill($state);
         
         parent::save(true, true);
+    }
+
+    private function normalizeRichText(?string $content): string
+    {
+        if (blank($content)) {
+            return '';
+        }
+
+        $decoded = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        preg_match_all('/<img\b[^>]*\bsrc=["\']([^"\']+)["\']/i', $decoded, $images);
+
+        $text = preg_replace('/<br\s*\/?>/i', "\n", $decoded);
+        $text = preg_replace('/<\/(p|div|li|h[1-6]|blockquote)>/i', "\n", $text);
+        $text = strip_tags($text);
+        $text = str_replace("\u{00A0}", ' ', $text);
+        $text = preg_replace('/[\h\v]+/u', ' ', $text);
+        $text = trim($text);
+        $imageSources = $images[1] ?? [];
+
+        if ($text === '' && $imageSources === []) {
+            return '';
+        }
+
+        return $text . '|' . implode('|', $imageSources);
     }
 }
