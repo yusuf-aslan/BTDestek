@@ -19,20 +19,6 @@ class DashboardOverview extends Widget
 
     protected static bool $isLazy = false;
 
-    public string $performancePeriod = 'monthly';
-
-    public string $performanceSort = 'resolved';
-
-    public function setPerformancePeriod(string $period): void
-    {
-        $this->performancePeriod = in_array($period, ['monthly', 'all'], true) ? $period : 'monthly';
-    }
-
-    public function setPerformanceSort(string $sort): void
-    {
-        $this->performanceSort = in_array($sort, ['resolved', 'activity'], true) ? $sort : 'resolved';
-    }
-
     public function getViewData(): array
     {
         $user = Auth::user();
@@ -79,11 +65,13 @@ class DashboardOverview extends Widget
         // Teknisyen performans (sadece admin)
         $techPerformance = [];
         if ($isAdmin) {
-            $performancePeriod = in_array($this->performancePeriod, ['monthly', 'all'], true)
-                ? $this->performancePeriod
+            $requestedPeriod = request()->string('performance_period')->toString();
+            $performancePeriod = in_array($requestedPeriod, ['monthly', 'all'], true)
+                ? $requestedPeriod
                 : 'monthly';
-            $performanceSort = in_array($this->performanceSort, ['resolved', 'activity'], true)
-                ? $this->performanceSort
+            $requestedSort = request()->string('performance_sort')->toString();
+            $performanceSort = in_array($requestedSort, ['resolved', 'activity'], true)
+                ? $requestedSort
                 : 'resolved';
             $isMonthlyPerformance = $performancePeriod === 'monthly';
             $monthStart = now()->startOfMonth()->toDateString();
@@ -132,8 +120,8 @@ class DashboardOverview extends Widget
             'trendMax'        => $trendMax ?: 1,
             'pendingList'     => $pendingList,
             'techPerformance' => $techPerformance,
-            'performancePeriod' => in_array($this->performancePeriod, ['monthly', 'all'], true) ? $this->performancePeriod : 'monthly',
-            'performanceSort' => in_array($this->performanceSort, ['resolved', 'activity'], true) ? $this->performanceSort : 'resolved',
+            'performancePeriod' => $performancePeriod ?? 'monthly',
+            'performanceSort' => $performanceSort ?? 'resolved',
             'announcements'   => $announcements,
         ];
     }

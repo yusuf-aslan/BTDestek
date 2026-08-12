@@ -380,16 +380,16 @@
         <div class="db-panel-header">
             <span>👤</span>
             <span class="db-panel-title">Teknisyen Performans Tablosu</span>
-            <div class="db-performance-controls">
-                <select wire:change="setPerformancePeriod($event.target.value)" class="db-period-filter" aria-label="Performans dönemi">
+            <form method="GET" action="{{ request()->url() }}" class="db-performance-controls">
+                <select name="performance_period" onchange="this.form.submit()" class="db-period-filter" aria-label="Performans dönemi">
                     <option value="monthly" @selected($performancePeriod === 'monthly')>Aylık</option>
                     <option value="all" @selected($performancePeriod === 'all')>Tüm Zamanlar</option>
                 </select>
-                <select wire:change="setPerformanceSort($event.target.value)" class="db-period-filter" aria-label="Performans sıralaması">
+                <select name="performance_sort" onchange="this.form.submit()" class="db-period-filter" aria-label="Performans sıralaması">
                     <option value="resolved" @selected($performanceSort === 'resolved')>Çözüme Göre</option>
                     <option value="activity" @selected($performanceSort === 'activity')>Faaliyete Göre</option>
                 </select>
-            </div>
+            </form>
         </div>
         <div style="overflow-x:auto;">
             <table class="db-tech-table">
