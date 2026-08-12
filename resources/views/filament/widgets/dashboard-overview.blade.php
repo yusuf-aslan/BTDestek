@@ -62,10 +62,16 @@
 .db-panel-title { font-size: 14px; font-weight: 700; color: #374151; letter-spacing: .3px; }
 .dark .db-panel-title { color: #e5e7eb; }
 .db-period-filter {
-    margin-left: auto; min-width: 142px; padding: 7px 32px 7px 11px;
+    min-width: 142px; padding: 7px 32px 7px 11px;
     border-radius: 9px; border: 1px solid rgba(156,163,175,.28);
     background: #fff; color: #374151; font-size: 12px; font-weight: 700;
     outline: none; cursor: pointer;
+}
+.db-performance-controls { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+@media (max-width: 640px) {
+    .db-panel-header:has(.db-performance-controls) { flex-wrap: wrap; }
+    .db-performance-controls { width: 100%; margin-left: 0; }
+    .db-performance-controls .db-period-filter { flex: 1; min-width: 0; }
 }
 .db-period-filter:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
 .dark .db-period-filter { background: #171d2a; color: #e5e7eb; border-color: rgba(255,255,255,.12); }
@@ -374,10 +380,16 @@
         <div class="db-panel-header">
             <span>👤</span>
             <span class="db-panel-title">Teknisyen Performans Tablosu</span>
-            <select wire:model.live="performancePeriod" class="db-period-filter" aria-label="Performans dönemi">
-                <option value="monthly">Aylık</option>
-                <option value="all">Tüm Zamanlar</option>
-            </select>
+            <div class="db-performance-controls">
+                <select wire:change="setPerformancePeriod($event.target.value)" class="db-period-filter" aria-label="Performans dönemi">
+                    <option value="monthly" @selected($performancePeriod === 'monthly')>Aylık</option>
+                    <option value="all" @selected($performancePeriod === 'all')>Tüm Zamanlar</option>
+                </select>
+                <select wire:change="setPerformanceSort($event.target.value)" class="db-period-filter" aria-label="Performans sıralaması">
+                    <option value="resolved" @selected($performanceSort === 'resolved')>Çözüme Göre</option>
+                    <option value="activity" @selected($performanceSort === 'activity')>Faaliyete Göre</option>
+                </select>
+            </div>
         </div>
         <div style="overflow-x:auto;">
             <table class="db-tech-table">

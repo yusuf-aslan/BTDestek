@@ -21,6 +21,18 @@ class DashboardOverview extends Widget
 
     public string $performancePeriod = 'monthly';
 
+    public string $performanceSort = 'resolved';
+
+    public function setPerformancePeriod(string $period): void
+    {
+        $this->performancePeriod = in_array($period, ['monthly', 'all'], true) ? $period : 'monthly';
+    }
+
+    public function setPerformanceSort(string $sort): void
+    {
+        $this->performanceSort = in_array($sort, ['resolved', 'activity'], true) ? $sort : 'resolved';
+    }
+
     public function getViewData(): array
     {
         $user = Auth::user();
@@ -70,11 +82,14 @@ class DashboardOverview extends Widget
             $performancePeriod = in_array($this->performancePeriod, ['monthly', 'all'], true)
                 ? $this->performancePeriod
                 : 'monthly';
+            $performanceSort = in_array($this->performanceSort, ['resolved', 'activity'], true)
+                ? $this->performanceSort
+                : 'resolved';
             $isMonthlyPerformance = $performancePeriod === 'monthly';
             $monthStart = now()->startOfMonth()->toDateString();
             $monthEnd = now()->endOfMonth()->toDateString();
 
-            $techPerformance = User::query()
+            $techPerformanceQuery = User::query()
                 ->whereHas('categories')
                 ->withCount([
                     'tickets as active_tickets' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('pending')),
@@ -88,8 +103,17 @@ class DashboardOverview extends Widget
                 ->withSum([
                     'activities as period_activity_minutes' => fn (Builder $q) => $q
                         ->when($isMonthlyPerformance, fn (Builder $query) => $query->whereBetween('activity_date', [$monthStart, $monthEnd])),
-                ], 'duration')
-                ->orderByDesc('total_resolved')
+                ], 'duration');
+
+            if ($performanceSort === 'activity') {
+                $techPerformanceQuery
+                    ->orderByDesc('period_activity_minutes')
+                    ->orderByDesc('total_resolved');
+            } else {
+                $techPerformanceQuery->orderByDesc('total_resolved');
+            }
+
+            $techPerformance = $techPerformanceQuery
                 ->limit(10)
                 ->get();
         }
@@ -108,7 +132,8 @@ class DashboardOverview extends Widget
             'trendMax'        => $trendMax ?: 1,
             'pendingList'     => $pendingList,
             'techPerformance' => $techPerformance,
-            'performancePeriod' => $this->performancePeriod,
+            'performancePeriod' => in_array($this->performancePeriod, ['monthly', 'all'], true) ? $this->performancePeriod : 'monthly',
+            'performanceSort' => in_array($this->performanceSort, ['resolved', 'activity'], true) ? $this->performanceSort : 'resolved',
             'announcements'   => $announcements,
         ];
     }
