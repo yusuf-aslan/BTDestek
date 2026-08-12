@@ -144,6 +144,19 @@
     font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 99px;
     white-space: nowrap; flex-shrink: 0;
 }
+.db-ticket-status { border: 1px solid transparent; }
+.db-status-primary { background: rgba(99,102,241,.12); color: #4f46e5; border-color: rgba(99,102,241,.20); }
+.db-status-info    { background: rgba(59,130,246,.12); color: #2563eb; border-color: rgba(59,130,246,.20); }
+.db-status-warning { background: rgba(245,158,11,.12); color: #d97706; border-color: rgba(245,158,11,.20); }
+.db-status-success { background: rgba(16,185,129,.12); color: #059669; border-color: rgba(16,185,129,.20); }
+.db-status-danger  { background: rgba(239,68,68,.12); color: #dc2626; border-color: rgba(239,68,68,.20); }
+.db-status-gray    { background: rgba(107,114,128,.12); color: #6b7280; border-color: rgba(107,114,128,.20); }
+.dark .db-status-primary { background: rgba(99,102,241,.20); color: #a5b4fc; }
+.dark .db-status-info    { background: rgba(59,130,246,.20); color: #93c5fd; }
+.dark .db-status-warning { background: rgba(245,158,11,.20); color: #fbbf24; }
+.dark .db-status-success { background: rgba(16,185,129,.20); color: #34d399; }
+.dark .db-status-danger  { background: rgba(239,68,68,.20); color: #f87171; }
+.dark .db-status-gray    { background: rgba(107,114,128,.20); color: #d1d5db; }
 .db-badge-acil    { background: rgba(239,68,68,.12); color: #dc2626; }
 .dark .db-badge-acil    { background: rgba(239,68,68,.20); color: #f87171; }
 .db-badge-yüksek  { background: rgba(245,158,11,.12); color: #d97706; }
@@ -304,6 +317,9 @@
                     @if($ticket->department_room)
                     <div class="db-ticket-dept">{{ Str::limit($ticket->department_room, 20) }}</div>
                     @endif
+                    <span class="db-ticket-badge db-ticket-status db-status-{{ \App\Models\TicketStatus::colorFor($ticket->status) }}">
+                        {{ \App\Models\TicketStatus::labelFor($ticket->status) }}
+                    </span>
                     <span class="db-ticket-badge db-badge-{{ $ticket->priority }}">{{ ucfirst($ticket->priority) }}</span>
                 </div>
                 @endforeach
