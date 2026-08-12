@@ -61,6 +61,14 @@
 .dark .db-panel-header { background: rgba(99,102,241,.08); border-color: rgba(255,255,255,.06); }
 .db-panel-title { font-size: 14px; font-weight: 700; color: #374151; letter-spacing: .3px; }
 .dark .db-panel-title { color: #e5e7eb; }
+.db-period-filter {
+    margin-left: auto; min-width: 142px; padding: 7px 32px 7px 11px;
+    border-radius: 9px; border: 1px solid rgba(156,163,175,.28);
+    background: #fff; color: #374151; font-size: 12px; font-weight: 700;
+    outline: none; cursor: pointer;
+}
+.db-period-filter:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+.dark .db-period-filter { background: #171d2a; color: #e5e7eb; border-color: rgba(255,255,255,.12); }
 .db-panel-badge {
     margin-left: auto; background: #6366f1; color: #fff;
     font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px;
@@ -366,6 +374,10 @@
         <div class="db-panel-header">
             <span>👤</span>
             <span class="db-panel-title">Teknisyen Performans Tablosu</span>
+            <select wire:model.live="performancePeriod" class="db-period-filter" aria-label="Performans dönemi">
+                <option value="monthly">Aylık</option>
+                <option value="all">Tüm Zamanlar</option>
+            </select>
         </div>
         <div style="overflow-x:auto;">
             <table class="db-tech-table">
@@ -375,8 +387,8 @@
                         <th class="db-tech-th">Teknisyen</th>
                         <th class="db-tech-th" style="text-align:center;">Aktif İşler</th>
                         <th class="db-tech-th" style="text-align:center;">Bugün Çözülen</th>
-                        <th class="db-tech-th" style="text-align:center;">Toplam Çözülen</th>
-                        <th class="db-tech-th" style="text-align:center;">Bu Ay Faaliyet</th>
+                        <th class="db-tech-th" style="text-align:center;">{{ $performancePeriod === 'monthly' ? 'Bu Ay Çözülen' : 'Toplam Çözülen' }}</th>
+                        <th class="db-tech-th" style="text-align:center;">{{ $performancePeriod === 'monthly' ? 'Bu Ay Faaliyet' : 'Toplam Faaliyet' }}</th>
                         <th class="db-tech-th" style="text-align:center;">Çözüm Payı</th>
                     </tr>
                 </thead>
@@ -402,10 +414,10 @@
                         </td>
                         <td class="db-tech-td" style="text-align:center;white-space:nowrap;">
                             <div style="font-weight:800;color:#10b981;">
-                                {{ (int) ($tech->monthly_activity_minutes ?? 0) }} dk
+                                {{ (int) ($tech->period_activity_minutes ?? 0) }} dk
                             </div>
                             <div style="font-size:10px;color:#9ca3af;margin-top:2px;">
-                                {{ $tech->monthly_activity_count }} faaliyet
+                                {{ $tech->period_activity_count }} faaliyet
                             </div>
                         </td>
                         <td class="db-tech-td" style="min-width:120px;">

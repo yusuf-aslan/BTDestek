@@ -19,6 +19,8 @@ class DashboardOverview extends Widget
 
     protected static bool $isLazy = false;
 
+    public string $performancePeriod = 'monthly';
+
     public function getViewData(): array
     {
         $user = Auth::user();
@@ -65,18 +67,27 @@ class DashboardOverview extends Widget
         // Teknisyen performans (sadece admin)
         $techPerformance = [];
         if ($isAdmin) {
+            $performancePeriod = in_array($this->performancePeriod, ['monthly', 'all'], true)
+                ? $this->performancePeriod
+                : 'monthly';
+            $isMonthlyPerformance = $performancePeriod === 'monthly';
+            $monthStart = now()->startOfMonth()->toDateString();
+            $monthEnd = now()->endOfMonth()->toDateString();
+
             $techPerformance = User::query()
                 ->whereHas('categories')
                 ->withCount([
                     'tickets as active_tickets' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('pending')),
                     'resolvedTickets as resolved_today' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))->whereDate('resolved_at', today()),
-                    'resolvedTickets as total_resolved' => fn (Builder $q) => $q->whereIn('status', \App\Models\TicketStatus::keysFor('solved')),
-                    'activities as monthly_activity_count' => fn (Builder $q) => $q
-                        ->whereBetween('activity_date', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()]),
+                    'resolvedTickets as total_resolved' => fn (Builder $q) => $q
+                        ->whereIn('status', \App\Models\TicketStatus::keysFor('solved'))
+                        ->when($isMonthlyPerformance, fn (Builder $query) => $query->whereBetween('resolved_at', [$monthStart . ' 00:00:00', $monthEnd . ' 23:59:59'])),
+                    'activities as period_activity_count' => fn (Builder $q) => $q
+                        ->when($isMonthlyPerformance, fn (Builder $query) => $query->whereBetween('activity_date', [$monthStart, $monthEnd])),
                 ])
                 ->withSum([
-                    'activities as monthly_activity_minutes' => fn (Builder $q) => $q
-                        ->whereBetween('activity_date', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()]),
+                    'activities as period_activity_minutes' => fn (Builder $q) => $q
+                        ->when($isMonthlyPerformance, fn (Builder $query) => $query->whereBetween('activity_date', [$monthStart, $monthEnd])),
                 ], 'duration')
                 ->orderByDesc('total_resolved')
                 ->limit(10)
@@ -97,6 +108,7 @@ class DashboardOverview extends Widget
             'trendMax'        => $trendMax ?: 1,
             'pendingList'     => $pendingList,
             'techPerformance' => $techPerformance,
+            'performancePeriod' => $this->performancePeriod,
             'announcements'   => $announcements,
         ];
     }
