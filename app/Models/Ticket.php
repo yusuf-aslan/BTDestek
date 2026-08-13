@@ -8,6 +8,7 @@ use Filament\Actions\Action;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class Ticket extends Model
@@ -74,6 +75,21 @@ class Ticket extends Model
     public function activities(): HasMany
     {
         return $this->hasMany(TicketActivity::class)->latest();
+    }
+
+    public function scopeVisibleTo(Builder $query, ?User $user): Builder
+    {
+        if (! $user) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        $categoryIds = $user->categories()->pluck('categories.id');
+
+        if ($categoryIds->isNotEmpty()) {
+            return $query->whereIn('category_id', $categoryIds);
+        }
+
+        return $user->is_admin ? $query : $query->whereRaw('1 = 0');
     }
 
     public function waitingStartedAt(?GeneralSetting $settings = null): \Carbon\Carbon

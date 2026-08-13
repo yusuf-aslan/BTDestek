@@ -26,6 +26,7 @@ class MyActiveTickets extends TableWidget
         return $table
             ->query(
                 Ticket::query()
+                    ->visibleTo(auth()->user())
                     ->whereIn('status', \App\Models\TicketStatus::keysFor('pending'))
                     ->latest()
             )

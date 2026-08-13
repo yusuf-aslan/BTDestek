@@ -25,15 +25,7 @@ class DashboardOverview extends Widget
         $isAdmin = $user?->is_admin;
 
         // Kapsam sorgusu
-        $scopedQuery = function () use ($user, $isAdmin) {
-            $q = Ticket::query();
-            if (!$isAdmin) {
-                $q->whereHas('category', function (Builder $cq) use ($user) {
-                    $cq->whereHas('users', fn (Builder $uq) => $uq->where('users.id', $user->id));
-                });
-            }
-            return $q;
-        };
+        $scopedQuery = fn () => Ticket::query()->visibleTo($user);
 
         // Ana istatistikler
         $totalTickets   = (clone $scopedQuery())->count();

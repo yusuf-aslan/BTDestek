@@ -22,15 +22,9 @@ class TicketWatcher extends Component
         $user = Auth::user();
         if (!$user) return 0;
 
-        $query = Ticket::query()->whereIn('status', \App\Models\TicketStatus::keysFor('pending'));
-        
-        if (!$user->is_admin) {
-            $query->whereHas('category', function ($q) use ($user) {
-                $q->whereHas('users', function ($u) use ($user) {
-                    $u->where('users.id', $user->id);
-                });
-            });
-        }
+        $query = Ticket::query()
+            ->visibleTo($user)
+            ->whereIn('status', \App\Models\TicketStatus::keysFor('pending'));
         
         return $query->count();
     }

@@ -10,6 +10,11 @@ class TicketPrintController extends Controller
 {
     public function show(Ticket $ticket)
     {
+        abort_unless(
+            Ticket::query()->visibleTo(auth()->user())->whereKey($ticket->getKey())->exists(),
+            403
+        );
+
         // Load relationships if needed
         $ticket->load(['category', 'asset', 'resolver']);
 

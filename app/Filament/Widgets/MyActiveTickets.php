@@ -6,7 +6,6 @@ use App\Models\Ticket;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class MyActiveTickets extends BaseWidget
@@ -24,22 +23,8 @@ class MyActiveTickets extends BaseWidget
         return $table
             ->query(
                 Ticket::query()
+                    ->visibleTo(Auth::user())
                     ->whereIn('status', \App\Models\TicketStatus::keysFor('pending'))
-                    ->where(function (Builder $query) {
-                        $user = Auth::user();
-                        if ($user) {
-                            $hasAssignedCategories = $user->categories()->exists();
-                            if ($hasAssignedCategories) {
-                                $query->whereHas('category', function (Builder $q) use ($user) {
-                                    $q->whereHas('users', function (Builder $sq) use ($user) {
-                                        $sq->where('users.id', $user->id);
-                                    });
-                                });
-                            } elseif (!$user->is_admin) {
-                                $query->whereRaw('1 = 0');
-                            }
-                        }
-                    })
                     ->latest()
             )
             ->columns([

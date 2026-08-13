@@ -5,7 +5,6 @@ namespace App\Filament\Widgets;
 use App\Models\Ticket;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class TicketStatsOverview extends BaseWidget
@@ -17,15 +16,7 @@ class TicketStatsOverview extends BaseWidget
         $user = Auth::user();
         
         // Base query for scoping
-        $baseQuery = Ticket::query()->where(function (Builder $query) use ($user) {
-            if (!$user->is_admin) {
-                $query->whereHas('category', function (Builder $q) use ($user) {
-                    $q->whereHas('users', function (Builder $sq) use ($user) {
-                        $sq->where('users.id', $user->id);
-                    });
-                });
-            }
-        });
+        $baseQuery = Ticket::query()->visibleTo($user);
 
         return [
             Stat::make('Toplam Talep', (clone $baseQuery)->count())
