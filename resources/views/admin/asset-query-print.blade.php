@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Envanter Sorgulama Raporu - {{ $anabirim }}</title>
+    <title>{{ $siteTitle }} - Envanter Sorgulama Raporu</title>
     <style>
         * {
             margin: 0;
@@ -165,7 +165,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>🏥 Hastane BT Destek Sistemi</h1>
+        <h1>🏥 {{ $siteTitle }}</h1>
         <div class="meta">
             <strong>Envanter Sorgulama Raporu</strong>
         </div>
@@ -239,7 +239,7 @@
 
     <div class="footer">
         <p>Bu rapor <strong>{{ $printDate }}</strong> tarihinde sistemden otomatik olarak oluşturulmuştur.</p>
-        <p style="margin-top: 5px; font-size: 11px;">Hastane BT Destek Sistemi - Envanter Yönetimi</p>
+        <p style="margin-top: 5px; font-size: 11px;">{{ $siteTitle }} - Envanter Yönetimi</p>
     </div>
 
     <script>

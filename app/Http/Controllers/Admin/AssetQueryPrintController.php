@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
+use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class AssetQueryPrintController extends Controller
 {
@@ -28,12 +30,17 @@ class AssetQueryPrintController extends Controller
         }
 
         $assets = $query->orderBy('name', 'asc')->get();
+        $settings = Cache::rememberForever('general_settings', fn () => GeneralSetting::first());
+        $siteTitle = filled($settings?->site_title)
+            ? $settings->site_title
+            : 'Hastane BT Destek Sistemi';
 
         return view('admin.asset-query-print', [
             'assets' => $assets,
             'anabirim' => $anabirim,
             'model' => $model,
             'printDate' => now()->format('d.m.Y H:i'),
+            'siteTitle' => $siteTitle,
         ]);
     }
 }
