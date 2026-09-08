@@ -107,6 +107,25 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+### v1.21 - Eş Zamanlı Talep Düzenleme Kilidi
+
+Talebi ilk açan kullanıcı geçici düzenleme kilidini alır. Adminler dahil diğer kullanıcılar, talebi kimin açık tuttuğunu belirten bir uyarı görür. Aynı hesabın farklı sekmeleri de ayrı değerlendirilir.
+
+- **Talebi Bırak:** Onay sonrasında kaydedilmemiş değişiklikler bırakılır ve başka kullanıcı talebi açabilir.
+- **Otomatik süre:** Kilit açık ekranda 30 saniyede bir yenilenir. Sayfadan ayrılırken bırakılır; bağlantı kopması durumunda son yenilemeden yaklaşık 2 dakika sonra sona erer.
+- **Kayıt ve atama koruması:** Düzenleme, silme ve listedeki atama işlemleri kilidi kontrol eder. Kilidi sona ermiş eski sekmelerin kayıt yapması engellenir.
+- **Mevcut iş akışı:** Talebi görüntülemek veya bırakmak, atanan teknisyeni ve talep durumunu değiştirmez.
+
+**Mevcut Docker kurulumunu v1.21'e güncelleme:** Talep kilidi alanları için migration zorunludur. Proje klasöründe çalıştırın:
+
+```bash
+git pull origin master
+docker exec btdestek-app php artisan migrate --force
+docker exec btdestek-app php artisan optimize:clear
+```
+
+Migration başarıyla tamamlandıktan sonra açık panel sekmelerini yenileyin. Bu güncelleme için Docker build veya container yeniden başlatma gerekmez.
+
 *   **v1.20 - Uzak Destek ve Yeni Talep Durumu:**
     *   **Uzak Destek Kartı:** Kullanıcı portalında, sabit cihaz IP kartının üzerine TightVNC uzak destek kartı eklendi. Kart açık ve koyu temayla uyumlu, mobil ekranlarda taşmayacak ve daha az alan kaplayacak şekilde tasarlandı.
     *   **Yönetilebilir Bağlantılar:** TightVNC indirme bağlantısı, Bilgi Bankası kurulum rehberi bağlantısı ve kart açıklaması Ayarlar / Uzak Destek sekmesinden değiştirilebilir hale getirildi. Boş bırakılan bağlantının butonu kullanıcıya gösterilmez.
