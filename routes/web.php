@@ -3,6 +3,9 @@
 use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
+Route::post('/tickets/{ticket}/edit-lock/release', [\App\Http\Controllers\TicketEditLockController::class, 'release'])
+    ->middleware('auth')->name('tickets.edit-lock.release');
+
 Route::get('/', [TicketController::class, 'index'])->name('home');
 Route::post('/talep-olustur', [TicketController::class, 'store'])->name('tickets.store');
 Route::get('/talep-sorgula', [TicketController::class, 'show'])->name('tickets.show');

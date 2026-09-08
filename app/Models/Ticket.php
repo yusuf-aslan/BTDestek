@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Ticket extends Model
 {
+    protected $hidden = ['edit_lock_token'];
+
     protected $fillable = [
         'tracking_number',
         'name',

@@ -153,7 +153,8 @@ class TicketsTable
                         ->label('Üzerime Al')
                         ->icon('heroicon-o-hand-raised')
                         ->color('success')
-                        ->action(fn (Ticket $record) => $record->update(['assigned_to' => auth()->id()]))
+                        ->action(fn (Ticket $record) => app(\App\Services\TicketEditLock::class)->run(
+                            (int) $record->id, null, fn () => $record->update(['assigned_to' => auth()->id()])))
                         ->visible(fn (Ticket $record) => $record->assigned_to !== auth()->id() && !TicketStatus::isClosed($record->status)),
                     Action::make('assign')
                         ->label('Bileti Ata')
@@ -187,7 +188,8 @@ class TicketsTable
                                 ->searchable()
                                 ->preload(),
                         ])
-                        ->action(fn (Ticket $record, array $data) => $record->update($data))
+                        ->action(fn (Ticket $record, array $data) => app(\App\Services\TicketEditLock::class)->run(
+                            (int) $record->id, null, fn () => $record->update($data)))
                         ->visible(fn (Ticket $record) => !TicketStatus::isClosed($record->status)),
                     Action::make('print')
                         ->label('Yazdır')

@@ -13,6 +13,55 @@ class EditTicket extends EditRecord
 {
     protected static string $resource = TicketResource::class;
 
+    protected string $view = 'filament.pages.edit-ticket-locked';
+
+    #[\Livewire\Attributes\Locked]
+    public string $editToken = '';
+
+    #[\Livewire\Attributes\Locked]
+    public bool $hasEditLock = false;
+
+    public function mount(int | string $record): void
+    {
+        $this->record = $this->resolveRecord($record);
+        $this->authorizeAccess();
+        $this->editToken = (string) Str::uuid();
+        try {
+            app(\App\Services\TicketEditLock::class)->acquire((int) $this->record->id, $this->editToken);
+            $this->hasEditLock = true;
+            parent::mount($record);
+        } catch (\Illuminate\Validation\ValidationException $exception) {
+            $this->lockWarning($exception);
+            $this->redirect($this->getRedirectUrl());
+        }
+    }
+
+    private function lockWarning(\Illuminate\Validation\ValidationException $exception): void
+    {
+        \Filament\Notifications\Notification::make()->warning()->title('Talep kullanımda')
+            ->body(collect($exception->errors())->flatten()->first())->persistent()->send();
+    }
+
+    public function heartbeatEditLock(): void
+    {
+        if (! $this->hasEditLock) return;
+        try {
+            $service = app(\App\Services\TicketEditLock::class);
+            $service->run((int) $this->record->id, $this->editToken,
+                fn () => $service->acquire((int) $this->record->id, $this->editToken));
+        } catch (\Illuminate\Validation\ValidationException $exception) {
+            $this->hasEditLock = false;
+            $this->lockWarning($exception);
+        }
+    }
+
+    public function releaseTicket(): void
+    {
+        app(\App\Services\TicketEditLock::class)->release((int) $this->record->id, $this->editToken);
+        $this->hasEditLock = false;
+        $this->redirect($this->getRedirectUrl());
+    }
+
     public function getPollingInterval(): ?string
     {
         return '15s';
@@ -35,26 +84,43 @@ class EditTicket extends EditRecord
 
     protected function getHeaderActions(): array
     {
+        if (! $this->hasEditLock) return [];
         return [
             Action::make('save_top')
                 ->label('Değişiklikleri Kaydet')
                 ->color('primary')
                 ->action('save'),
             Action::make('cancel_top')
-                ->label('İptal')
+                ->label('Talebi Bırak')
                 ->color('gray')
-                ->url($this->getResource()::getUrl('index')),
+                ->requiresConfirmation()
+                ->modalHeading('Talep bırakılsın mı?')
+                ->modalDescription('Kaydedilmemiş değişiklikler silinecek ve diğer kullanıcılar talebi açabilecek.')
+                ->action('releaseTicket'),
             Action::make('print')
                 ->label('Yazdır')
                 ->icon('heroicon-o-printer')
                 ->color('gray')
                 ->url(fn ($record) => route('admin.tickets.print', $record))
                 ->openUrlInNewTab(),
-            DeleteAction::make(),
+            DeleteAction::make()->using(fn ($record) => app(\App\Services\TicketEditLock::class)
+                ->run((int) $record->id, $this->editToken, fn () => $record->delete())),
         ];
     }
 
     public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
+    {
+        try {
+            app(\App\Services\TicketEditLock::class)->run((int) $this->record->id, $this->editToken,
+                fn () => $this->saveWithLock($shouldRedirect, $shouldSendSavedNotification));
+        } catch (\Illuminate\Validation\ValidationException $exception) {
+            if (! isset($exception->errors()['edit_lock'])) throw $exception;
+            $this->hasEditLock = false;
+            $this->lockWarning($exception);
+        }
+    }
+
+    private function saveWithLock(bool $shouldRedirect, bool $shouldSendSavedNotification): void
     {
         $data = $this->form->getState();
         
@@ -67,18 +133,27 @@ class EditTicket extends EditRecord
         }
 
         parent::save($shouldRedirect, $shouldSendSavedNotification);
+        if ($shouldRedirect) {
+            app(\App\Services\TicketEditLock::class)->release((int) $this->record->id, $this->editToken);
+        }
     }
 
     #[\Livewire\Attributes\On('confirm-resolve-save')]
     public function forceSaveAsResolved(): void
     {
-        $state = $this->form->getState();
+        $state = $this->data;
         $state['status'] = TicketStatus::resolutionKey();
         
         // Update form state
         $this->form->fill($state);
         
-        parent::save(true, true);
+        $this->save(true, true);
+    }
+
+    public function saveFormComponentOnly(\Filament\Schemas\Components\Component $component): void
+    {
+        app(\App\Services\TicketEditLock::class)->run((int) $this->record->id, $this->editToken,
+            fn () => parent::saveFormComponentOnly($component));
     }
 
     private function normalizeRichText(?string $content): string
