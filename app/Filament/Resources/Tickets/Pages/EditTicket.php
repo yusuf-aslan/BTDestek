@@ -62,6 +62,22 @@ class EditTicket extends EditRecord
         $this->redirect($this->getRedirectUrl());
     }
 
+    public function releaseIdleTicket(): void
+    {
+        if (! $this->hasEditLock) return;
+
+        app(\App\Services\TicketEditLock::class)->release((int) $this->record->id, $this->editToken);
+        $this->hasEditLock = false;
+
+        \Filament\Notifications\Notification::make()
+            ->warning()
+            ->title('Talep kilidi bırakıldı')
+            ->body('2 dakika işlem yapılmadığı için talep diğer kullanıcıların düzenlemesine açıldı.')
+            ->send();
+
+        $this->redirect($this->getRedirectUrl());
+    }
+
     public function getPollingInterval(): ?string
     {
         return '15s';
