@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Tickets\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -148,6 +149,8 @@ class TicketsTable
             ])
             ->recordActions([
                 ActionGroup::make([
+                    ViewAction::make()
+                        ->label('Görüntüle'),
                     EditAction::make(),
                     Action::make('claim')
                         ->label('Üzerime Al')

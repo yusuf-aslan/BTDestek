@@ -209,6 +209,7 @@ class TicketForm
 
                         \Filament\Forms\Components\ViewField::make('dictation_controls')
                             ->view('filament.forms.components.dictation-controls')
+                            ->visible(fn (string $operation): bool => $operation !== 'view')
                             ->columnSpanFull(),
 
                         DateTimePicker::make('resolved_at')

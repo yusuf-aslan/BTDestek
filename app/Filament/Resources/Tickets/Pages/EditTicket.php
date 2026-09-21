@@ -32,7 +32,7 @@ class EditTicket extends EditRecord
             parent::mount($record);
         } catch (\Illuminate\Validation\ValidationException $exception) {
             $this->lockWarning($exception);
-            $this->redirect($this->getRedirectUrl());
+            $this->redirect($this->getResource()::getUrl('view', ['record' => $this->record]));
         }
     }
 
