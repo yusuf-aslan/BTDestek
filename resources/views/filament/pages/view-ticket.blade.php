@@ -6,6 +6,7 @@
             align-items: center;
             gap: 14px;
             overflow: hidden;
+            margin-bottom: 24px;
             padding: 15px 18px;
             border: 1px solid;
             border-radius: 14px;
