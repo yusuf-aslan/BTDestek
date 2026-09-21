@@ -24,6 +24,10 @@ class ViewTicket extends ViewRecord
     {
         parent::mount($record);
         $this->refreshLockStatus();
+
+        if (! $this->isEditLocked) {
+            $this->redirect($this->getResource()::getUrl('edit', ['record' => $this->record]));
+        }
     }
 
     public function refreshLockStatus(): void
