@@ -107,6 +107,14 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.22 - Eğitim Videoları ve Sistem Bilgileri:**
+    *   **Eğitim Videoları:** Ekran kullanımını anlatan videolar "Talep Yönetimi / Eğitim Videoları" menüsünden eklenir. Video dosya olarak yüklenebilir (MP4/WebM, isteğe bağlı .vtt altyazı ve kapak görseli) veya YouTube/Vimeo/doğrudan video bağlantısı olarak verilebilir. Videolar konu, sıra ve yayın durumuyla yönetilir.
+    *   **Görünürlük:** Her video "Herkes" veya "Yalnızca personel" olarak işaretlenir. Personel videoları yalnızca giriş yapmış kullanıcılara görünür. Yüklenen dosyalar dışarıya kapalı diskte saklanır ve yetki kontrolüyle, ileri/geri sarılabilir şekilde sunulur.
+    *   **Destek Sayfası Menüsü:** Ayarlar / Eğitim Videoları sekmesinden sayfa açılıp kapatılır; menü başlığı, menüdeki sırası, sayfa açıklaması ve en büyük video boyutu buradan yönetilir. Kapalıyken yetkili kullanıcılar sayfayı önizleyebilir.
+    *   **Yetki:** Admin olmayan kullanıcılara "Eğitim Videoları" modül yetkisi verilebilir.
+    *   **Sistem Bilgileri:** Ayarlar / Sistem Bilgileri sayfası uygulama, sunucu, PHP, veritabanı ve depolama durumunu gösterir; GitHub bağlantısı (şifreli erişim anahtarı) ile sunucudaki sürümü GitHub'daki dalla karşılaştırır.
+    *   **Dağıtım Notu:** Yeni migrasyonlar var. Video yükleme sınırları için `docker/php/uploads.ini` (512 MB) eklendi ve `docker-compose.yml` ile `docker/nginx/default.conf` güncellendi; kod çekildikten sonra `docker-compose up -d` ile konteynerler yeniden oluşturulmalı (image build gerekmez), ardından `php artisan migrate --force` ve `php artisan optimize` çalıştırılmalıdır.
+
 *   **v1.21 - Eş Zamanlı Talep Düzenleme Kilidi:**
     *   **Eş Zamanlı Düzenleme Koruması:** Talebi ilk açan kullanıcı geçici düzenleme kilidini alır. Adminler dahil diğer kullanıcılar, talebi kimin açık tuttuğunu belirten bir uyarı görür. Aynı hesabın farklı sekmeleri de ayrı değerlendirilir.
     *   **Talebi Bırak:** Onay sonrasında kaydedilmemiş değişiklikler bırakılır ve başka kullanıcı talebi açabilir.

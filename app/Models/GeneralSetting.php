@@ -37,6 +37,11 @@ class GeneralSetting extends Model
         'github_repo',
         'github_branch',
         'github_token',
+        'training_videos_enabled',
+        'training_videos_menu_title',
+        'training_videos_menu_sort',
+        'training_videos_description',
+        'training_videos_max_upload_mb',
     ];
 
     // Ayarlar sayfası formu toArray() ile doldurduğu için token tarayıcıya gönderilmesin
@@ -53,6 +58,9 @@ class GeneralSetting extends Model
         'is_dark_mode_enabled' => 'boolean',
         'show_email_on_ticket_form' => 'boolean',
         'show_broken_pc_ip_on_ticket_form' => 'boolean',
+        'training_videos_enabled' => 'boolean',
+        'training_videos_menu_sort' => 'integer',
+        'training_videos_max_upload_mb' => 'integer',
     ];
 
     public function isLunchBreakAt($dateTime = null): bool

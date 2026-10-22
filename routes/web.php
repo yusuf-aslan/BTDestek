@@ -15,6 +15,11 @@ Route::get('/talep/{ticket}/yazdir', [\App\Http\Controllers\PublicTicketPrintCon
 Route::get('/bilgi-bankasi', [\App\Http\Controllers\ArticleController::class, 'index'])->name('kb.index');
 Route::get('/bilgi-bankasi/{slug}', [\App\Http\Controllers\ArticleController::class, 'show'])->name('kb.show');
 
+Route::get('/egitim-videolari', [\App\Http\Controllers\TrainingVideoController::class, 'index'])->name('training.index');
+Route::get('/egitim-videolari/{video}', [\App\Http\Controllers\TrainingVideoController::class, 'show'])->name('training.show');
+Route::get('/egitim-videolari/{video}/video', [\App\Http\Controllers\TrainingVideoController::class, 'video'])->name('training.video');
+Route::get('/egitim-videolari/{video}/altyazi', [\App\Http\Controllers\TrainingVideoController::class, 'subtitle'])->name('training.subtitle');
+
 Route::get('/tickets/attachments/{attachment}', [\App\Http\Controllers\TicketAttachmentController::class, 'download'])
     ->name('tickets.attachments.download')
     ->middleware('auth');

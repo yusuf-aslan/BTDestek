@@ -281,6 +281,58 @@ class Settings extends Page implements HasForms
                                     ]),
                             ]),
 
+                        \Filament\Schemas\Components\Tabs\Tab::make('Eğitim Videoları')
+                            ->icon('heroicon-o-play-circle')
+                            ->schema([
+                                Section::make('Destek Sayfası')
+                                    ->description('Eğitim videoları sayfası ve üst menüdeki bağlantısı. Videolar "Talep Yönetimi / Eğitim Videoları" menüsünden eklenir.')
+                                    ->schema([
+                                        Toggle::make('training_videos_enabled')
+                                            ->label('Eğitim videolarını destek sayfasında yayınla')
+                                            ->helperText('Kapalıyken menü gizlenir ve sayfa ziyaretçilere kapanır. Yetkili kullanıcılar giriş yapmışken yine önizleyebilir.')
+                                            ->default(false)
+                                            ->columnSpanFull(),
+
+                                        TextInput::make('training_videos_menu_title')
+                                            ->label('Menü Başlığı')
+                                            ->placeholder('EĞİTİM VİDEOLARI')
+                                            ->helperText('Üst menüde ve sayfa başlığında görünür.')
+                                            ->default('EĞİTİM VİDEOLARI')
+                                            ->required()
+                                            ->maxLength(40),
+
+                                        TextInput::make('training_videos_menu_sort')
+                                            ->label('Menü Sırası')
+                                            ->helperText('Menüler sayfasındaki sıra numaralarıyla birlikte sıralanır (ör. Bilgi Bankası 3 ise 4 yazarak hemen sağına alın).')
+                                            ->numeric()
+                                            ->minValue(0)
+                                            ->default(4)
+                                            ->required(),
+
+                                        \Filament\Forms\Components\Textarea::make('training_videos_description')
+                                            ->label('Sayfa Açıklaması')
+                                            ->placeholder('Sistemin ekranlarını adım adım anlatan kısa eğitim videoları.')
+                                            ->rows(2)
+                                            ->maxLength(500)
+                                            ->columnSpanFull(),
+                                    ])->columns(2),
+
+                                Section::make('Yükleme')
+                                    ->schema([
+                                        TextInput::make('training_videos_max_upload_mb')
+                                            ->label('En Büyük Video Boyutu')
+                                            ->suffix('MB')
+                                            ->numeric()
+                                            ->minValue(1)
+                                            ->maxValue(2048)
+                                            ->default(200)
+                                            ->required()
+                                            ->helperText(fn (): string => 'Sunucunun kabul ettiği üst sınır: '
+                                                .\App\Support\UploadLimits::serverLimitLabel()
+                                                .'. Bu değerden büyük yazılırsa sunucu sınırı geçerli olur.'),
+                                    ]),
+                            ]),
+
                         \Filament\Schemas\Components\Tabs\Tab::make('Uzak Destek')
                             ->icon('heroicon-o-lifebuoy')
                             ->schema([

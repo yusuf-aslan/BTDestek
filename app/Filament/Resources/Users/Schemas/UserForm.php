@@ -60,6 +60,7 @@ class UserForm
                                 'menus' => 'Menüler',
                                 'settings' => 'Site Ayarları',
                                 'tickets' => 'Talepler',
+                                'training_videos' => 'Eğitim Videoları',
                                 'users' => 'Personel Yönetimi',
                             ])
                             ->columns(2)

@@ -69,6 +69,20 @@ class AppServiceProvider extends ServiceProvider
                     ->get();
             });
 
+            // Eğitim videoları menüsü Menüler kaydı yerine Ayarlar / Eğitim Videoları sekmesinden yönetilir
+            if ($settings?->training_videos_enabled) {
+                $trainingMenu = new \App\Models\Menu([
+                    'title' => $settings->training_videos_menu_title ?: 'EĞİTİM VİDEOLARI',
+                    'url' => route('training.index', absolute: false),
+                    'target' => '_self',
+                    'sort_order' => $settings->training_videos_menu_sort ?? 4,
+                    'is_active' => true,
+                ]);
+                $trainingMenu->setRelation('children', collect());
+
+                $public_menus = $public_menus->concat([$trainingMenu])->sortBy('sort_order')->values();
+            }
+
             $view->with('settings', $settings);
             $view->with('public_menus', $public_menus);
         });
