@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\GeneralSetting;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -14,10 +15,37 @@ class VersionCheckService
 
     private const CACHE_SECONDS = 600;
 
+    public const DEFAULT_REPO = 'yusuf-aslan/BTDestek';
+
+    public const DEFAULT_BRANCH = 'master';
+
+    private ?array $settings = null;
+
+    public function settings(): array
+    {
+        if ($this->settings === null) {
+            $setting = GeneralSetting::query()->first();
+
+            $this->settings = [
+                'repo' => $setting?->github_repo ?: self::DEFAULT_REPO,
+                'branch' => $setting?->github_branch ?: self::DEFAULT_BRANCH,
+                'token' => $setting?->github_token,
+            ];
+        }
+
+        return $this->settings;
+    }
+
+    public function forget(): void
+    {
+        Cache::forget(self::CACHE_KEY);
+        $this->settings = null;
+    }
+
     public function check(bool $fresh = false): array
     {
         if ($fresh) {
-            Cache::forget(self::CACHE_KEY);
+            $this->forget();
         }
 
         return Cache::remember(self::CACHE_KEY, self::CACHE_SECONDS, fn () => $this->run());
@@ -59,8 +87,8 @@ class VersionCheckService
     private function run(): array
     {
         $local = $this->local();
-        $repo = config('services.github.repo');
-        $branch = config('services.github.branch');
+        $repo = $this->settings()['repo'];
+        $branch = $this->settings()['branch'];
 
         $result = [
             'checked_at' => now(),
@@ -76,7 +104,7 @@ class VersionCheckService
         ];
 
         if (! $repo) {
-            $result['error'] = 'GitHub reposu tanımlı değil (GITHUB_REPO).';
+            $result['error'] = 'GitHub deposu tanımlı değil.';
 
             return $result;
         }
@@ -158,7 +186,7 @@ class VersionCheckService
             ->connectTimeout(5)
             ->timeout(10);
 
-        if ($token = config('services.github.token')) {
+        if ($token = $this->settings()['token']) {
             $request = $request->withToken($token);
         }
 
@@ -168,11 +196,11 @@ class VersionCheckService
     private function githubError(int $status): string
     {
         return match ($status) {
-            401 => 'GitHub token geçersiz veya süresi dolmuş (GITHUB_TOKEN).',
-            403 => 'GitHub erişimi reddedildi veya istek limiti aşıldı. GITHUB_TOKEN tanımlanması önerilir.',
-            404 => config('services.github.token')
-                ? 'Repo veya dal bulunamadı. GITHUB_REPO / GITHUB_BRANCH ve token yetkisini kontrol edin.'
-                : 'Repo bulunamadı. Repo private ise .env dosyasına GITHUB_TOKEN eklenmelidir.',
+            401 => 'Erişim anahtarı geçersiz veya süresi dolmuş.',
+            403 => 'GitHub erişimi reddedildi veya istek limiti aşıldı. Erişim anahtarı tanımlanması önerilir.',
+            404 => $this->settings()['token']
+                ? 'Depo veya dal bulunamadı. Depo adını, dalı ve anahtarın bu depoya erişim yetkisini kontrol edin.'
+                : 'Depo bulunamadı. Depo özel ise aşağıdaki GitHub bağlantısına erişim anahtarı eklenmelidir.',
             default => "GitHub beklenmeyen bir yanıt döndü (HTTP {$status}).",
         };
     }

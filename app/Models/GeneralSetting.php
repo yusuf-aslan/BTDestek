@@ -34,9 +34,18 @@ class GeneralSetting extends Model
         'mail_encryption',
         'mail_from_address',
         'mail_from_name',
+        'github_repo',
+        'github_branch',
+        'github_token',
+    ];
+
+    // Ayarlar sayfası formu toArray() ile doldurduğu için token tarayıcıya gönderilmesin
+    protected $hidden = [
+        'github_token',
     ];
 
     protected $casts = [
+        'github_token' => 'encrypted',
         'important_reminders' => 'array',
         'allow_tickets_outside_work_hours' => 'boolean',
         'weekend_tickets_allowed' => 'boolean',

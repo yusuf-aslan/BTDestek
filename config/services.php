@@ -35,10 +35,4 @@ return [
         ],
     ],
 
-    'github' => [
-        'repo' => env('GITHUB_REPO', 'yusuf-aslan/BTDestek'),
-        'branch' => env('GITHUB_BRANCH', 'master'),
-        'token' => env('GITHUB_TOKEN'),
-    ],
-
 ];
