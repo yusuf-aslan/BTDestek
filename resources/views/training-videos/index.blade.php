@@ -10,7 +10,7 @@
 @section('title', ($activeCategory ? $activeCategory->name.' - ' : '').'Eğitim Videoları - ' . $settings->site_title)
 
 @section('content')
-    <main class="max-w-7xl mx-auto px-4 py-12">
+    <main class="w-full max-w-6xl mx-auto px-4 py-12">
         @include('training-videos.partials.preview-notice')
 
         <div class="text-center mb-10">

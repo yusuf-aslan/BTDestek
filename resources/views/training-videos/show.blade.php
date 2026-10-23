@@ -3,7 +3,7 @@
 @section('title', $video->title . ' - Eğitim Videoları')
 
 @section('content')
-    <main class="max-w-6xl mx-auto px-4 py-12">
+    <main class="w-full max-w-6xl mx-auto px-4 py-12">
         @include('training-videos.partials.preview-notice')
 
         <nav class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-8">
@@ -14,8 +14,8 @@
             @endif
         </nav>
 
-        <div class="grid lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-8">
+        <div class="w-full">
+            <div class="w-full">
                 <article class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
                     <div class="aspect-video bg-slate-900">
                         @if($embedUrl = $video->embedUrl())
@@ -81,21 +81,21 @@
                 </article>
             </div>
 
-            <aside class="lg:col-span-4">
-                @if($related->count() > 0)
+            @if($related->count() > 0)
+                <section class="mt-10">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">{{ $video->category ? $video->category->name.' Modülündeki Diğer Videolar' : 'Diğer Videolar' }}</h3>
-                    <div class="space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         @foreach($related as $item)
-                            <a href="{{ route('training.show', $item) }}" class="flex gap-3 p-2 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 transition group">
-                                <div class="relative w-28 shrink-0 aspect-video rounded-xl overflow-hidden bg-gradient-to-br from-blue-700 to-slate-800">
+                            <a href="{{ route('training.show', $item) }}" class="flex flex-col gap-3 p-2 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 transition group">
+                                <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-gradient-to-br from-blue-700 to-slate-800">
                                     @if($item->posterUrl())
                                         <img src="{{ $item->posterUrl() }}" alt="" loading="lazy" class="w-full h-full object-cover">
                                     @endif
                                     <span class="absolute inset-0 flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                        <svg class="w-8 h-8 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                     </span>
                                 </div>
-                                <div class="min-w-0 py-1">
+                                <div class="min-w-0 px-1 pb-1">
                                     <p class="font-semibold text-sm text-slate-800 dark:text-slate-100 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition line-clamp-2">{{ $item->title }}</p>
                                     @if($item->category && ! $item->category->is($video->category))
                                         <p class="text-xs text-slate-400 mt-1 truncate">{{ $item->category->name }}</p>
@@ -104,8 +104,8 @@
                             </a>
                         @endforeach
                     </div>
-                @endif
-            </aside>
+                </section>
+            @endif
         </div>
     </main>
 @endsection
