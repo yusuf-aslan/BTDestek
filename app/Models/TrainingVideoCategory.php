@@ -48,6 +48,22 @@ class TrainingVideoCategory extends Model
         return preg_match('/^#[0-9a-fA-F]{6}$/', (string) $this->color) ? $this->color : self::DEFAULT_COLOR;
     }
 
+    /**
+     * Paletteki henüz kullanılmayan ilk renk; hepsi kullanıldıysa sırayla döner.
+     */
+    public static function nextColor(): string
+    {
+        $used = static::query()->pluck('color')->map(fn ($c) => strtolower((string) $c))->all();
+
+        foreach (self::PALETTE as $color) {
+            if (! in_array($color, $used, true)) {
+                return $color;
+            }
+        }
+
+        return self::PALETTE[count($used) % count(self::PALETTE)];
+    }
+
     public static function uniqueSlug(string $name, ?int $ignoreId = null): string
     {
         $base = Str::slug($name) ?: 'modul';
@@ -69,7 +85,7 @@ class TrainingVideoCategory extends Model
             }
 
             if (blank($category->color)) {
-                $category->color = self::PALETTE[static::query()->count() % count(self::PALETTE)];
+                $category->color = static::nextColor();
             }
 
             if ($category->sort_order === null) {

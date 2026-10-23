@@ -47,7 +47,7 @@ class TrainingVideoCategoryForm
             ColorPicker::make('color')
                 ->label('Renk')
                 ->helperText('Modül listesindeki renkli nokta.')
-                ->default(fn (): string => TrainingVideoCategory::PALETTE[TrainingVideoCategory::query()->count() % count(TrainingVideoCategory::PALETTE)])
+                ->default(fn (): string => TrainingVideoCategory::nextColor())
                 ->regex('/^#[0-9a-fA-F]{6}$/')
                 ->required(),
         ];
