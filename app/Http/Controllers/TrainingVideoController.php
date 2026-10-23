@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GeneralSetting;
 use App\Models\TrainingVideo;
+use App\Models\TrainingVideoCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -15,34 +16,43 @@ class TrainingVideoController extends Controller
         $this->ensureEnabled($request);
 
         $user = $request->user();
+        $canManage = TrainingVideo::canManage($user);
         $search = trim((string) $request->get('search'));
-        $topic = $request->get('topic');
+
+        // Modül listesi: yalnızca kullanıcının görebileceği video içeren aktif modüller (yöneticiler boşları da görür)
+        $categories = TrainingVideoCategory::query()
+            ->when(! $canManage, fn ($query) => $query->where('is_active', true))
+            ->withCount(['videos' => fn ($query) => $query->visibleTo($user)])
+            ->ordered()
+            ->get()
+            ->filter(fn (TrainingVideoCategory $category) => $canManage || $category->videos_count > 0)
+            ->values();
+
+        $activeCategory = filled($slug = $request->get('modul'))
+            ? $categories->firstWhere('slug', $slug)
+            : null;
 
         $videos = TrainingVideo::visibleTo($user)
+            ->with('category')
+            ->when($activeCategory, fn ($query) => $query->where('training_video_category_id', $activeCategory->id))
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
                         ->orWhere('description', 'like', "%{$search}%")
-                        ->orWhere('topic', 'like', "%{$search}%");
+                        ->orWhereHas('category', fn ($c) => $c->where('name', 'like', "%{$search}%"));
                 });
             })
-            ->when(filled($topic), fn ($query) => $query->where('topic', $topic))
             ->ordered()
             ->paginate(12)
             ->withQueryString();
 
-        $topics = TrainingVideo::visibleTo($user)
-            ->whereNotNull('topic')
-            ->distinct()
-            ->orderBy('topic')
-            ->pluck('topic');
-
         return view('training-videos.index', [
             'videos' => $videos,
-            'topics' => $topics,
+            'categories' => $categories,
+            'activeCategory' => $activeCategory,
+            'totalCount' => TrainingVideo::visibleTo($user)->count(),
             'search' => $search,
-            'activeTopic' => $topic,
-            'canManage' => TrainingVideo::canManage($user),
+            'canManage' => $canManage,
         ]);
     }
 
@@ -56,11 +66,16 @@ class TrainingVideoController extends Controller
             $video->increment('views');
         }
 
+        // Aynı modülün videoları sırasıyla; modülsüz videoda diğer videolar
         $related = TrainingVideo::visibleTo($request->user())
+            ->with('category')
             ->whereKeyNot($video->getKey())
-            ->when(filled($video->topic), fn ($query) => $query->orderByRaw('topic = ? desc', [$video->topic]))
+            ->when(
+                $video->training_video_category_id,
+                fn ($query) => $query->where('training_video_category_id', $video->training_video_category_id),
+            )
             ->ordered()
-            ->limit(6)
+            ->limit(8)
             ->get();
 
         return view('training-videos.show', [

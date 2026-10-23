@@ -108,7 +108,8 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ## 🔄 Geliştirme Süreci (Changelog)
 
 *   **v1.22 - Eğitim Videoları ve Sistem Bilgileri:**
-    *   **Eğitim Videoları:** Ekran kullanımını anlatan videolar "Talep Yönetimi / Eğitim Videoları" menüsünden eklenir. Video dosya olarak yüklenebilir (MP4/WebM, isteğe bağlı .vtt altyazı ve kapak görseli) veya YouTube/Vimeo/doğrudan video bağlantısı olarak verilebilir. Videolar konu, sıra ve yayın durumuyla yönetilir.
+    *   **Eğitim Videoları:** Ekran kullanımını anlatan videolar "Talep Yönetimi / Eğitim Videoları" menüsünden eklenir. Video dosya olarak yüklenebilir (MP4/WebM, isteğe bağlı .vtt altyazı ve kapak görseli) veya YouTube/Vimeo/doğrudan video bağlantısı olarak verilebilir. Videolar modül, sıra ve yayın durumuyla yönetilir.
+    *   **Video Modülleri:** "Eğitim Videoları / Video Modülleri" ekranından modüller (ör. Stok, Personel, Kan Bankası) renk, açıklama ve sırayla tanımlanır; liste sürüklenerek sıralanır. Her video bir modüle bağlanır, video formundan da yeni modül eklenebilir. Destek sayfasında solda renkli modül listesi ve video sayıları yer alır; modül seçilince yalnızca o modülün videoları listelenir (`/egitim-videolari?modul=slug`). Pasif modüller ve videoları kullanıcılara gösterilmez; modül silinirse videoları silinmez.
     *   **Görünürlük:** Her video "Herkes" veya "Yalnızca personel" olarak işaretlenir. Personel videoları yalnızca giriş yapmış kullanıcılara görünür. Yüklenen dosyalar dışarıya kapalı diskte saklanır ve yetki kontrolüyle, ileri/geri sarılabilir şekilde sunulur.
     *   **Destek Sayfası Menüsü:** Ayarlar / Eğitim Videoları sekmesinden sayfa açılıp kapatılır; menü başlığı, menüdeki sırası, sayfa açıklaması ve en büyük video boyutu buradan yönetilir. Kapalıyken yetkili kullanıcılar sayfayı önizleyebilir.
     *   **Yetki:** Admin olmayan kullanıcılara "Eğitim Videoları" modül yetkisi verilebilir.

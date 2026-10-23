@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
 class TrainingVideo extends Model
@@ -28,7 +29,7 @@ class TrainingVideo extends Model
     protected $fillable = [
         'title',
         'slug',
-        'topic',
+        'training_video_category_id',
         'description',
         'audience',
         'source_type',
@@ -47,6 +48,11 @@ class TrainingVideo extends Model
         'views' => 'integer',
     ];
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(TrainingVideoCategory::class, 'training_video_category_id');
+    }
+
     public static function canManage(?User $user): bool
     {
         return (bool) $user?->hasModuleAccess('training_videos');
@@ -54,7 +60,7 @@ class TrainingVideo extends Model
 
     /**
      * Yöneticiler taslaklar dahil tüm videoları, giriş yapmış kullanıcılar personel videolarını,
-     * ziyaretçiler yalnızca herkese açık yayındaki videoları görür.
+     * ziyaretçiler yalnızca herkese açık yayındaki videoları görür. Pasif modüllerin videoları gizlenir.
      */
     public function scopeVisibleTo(Builder $query, ?User $user): Builder
     {
@@ -64,6 +70,9 @@ class TrainingVideo extends Model
 
         return $query
             ->where('is_published', true)
+            ->where(fn (Builder $q) => $q
+                ->whereNull('training_video_category_id')
+                ->orWhereHas('category', fn (Builder $c) => $c->where('is_active', true)))
             ->when(! $user, fn (Builder $q) => $q->where('audience', 'public'));
     }
 
@@ -78,7 +87,9 @@ class TrainingVideo extends Model
             return true;
         }
 
-        return $this->is_published && ($user || $this->audience === 'public');
+        return $this->is_published
+            && ($user || $this->audience === 'public')
+            && ($this->category === null || $this->category->is_active);
     }
 
     public function isUpload(): bool

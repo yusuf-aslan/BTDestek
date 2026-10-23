@@ -24,6 +24,7 @@ class BackupService
         'announcements',
         'canned_responses',
         'articles',
+        'training_video_categories',
         'training_videos',
         'menus',
         'general_settings',

@@ -18,6 +18,7 @@ class TrainingVideosTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->with('category'))
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
@@ -30,7 +31,7 @@ class TrainingVideosTable
                     ->label('Başlık')
                     ->searchable()
                     ->sortable()
-                    ->description(fn (TrainingVideo $record): ?string => $record->topic),
+                    ->description(fn (TrainingVideo $record): ?string => $record->category?->name),
 
                 TextColumn::make('audience')
                     ->label('Kimler Görebilir')
@@ -61,14 +62,11 @@ class TrainingVideosTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('topic')
-                    ->label('Konu')
-                    ->options(fn (): array => TrainingVideo::query()
-                        ->whereNotNull('topic')
-                        ->distinct()
-                        ->orderBy('topic')
-                        ->pluck('topic', 'topic')
-                        ->all()),
+                SelectFilter::make('training_video_category_id')
+                    ->label('Modül')
+                    ->relationship('category', 'name', fn ($query) => $query->orderBy('sort_order')->orderBy('name'))
+                    ->searchable()
+                    ->preload(),
 
                 SelectFilter::make('audience')
                     ->label('Kimler Görebilir')

@@ -8,9 +8,9 @@
 
         <nav class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-8">
             <a href="{{ route('training.index') }}" class="hover:text-blue-600 transition">{{ $settings->training_videos_menu_title ?: 'EĞİTİM VİDEOLARI' }}</a>
-            @if($video->topic)
+            @if($video->category)
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <a href="{{ route('training.index', ['topic' => $video->topic]) }}" class="hover:text-blue-600 transition">{{ $video->topic }}</a>
+                <a href="{{ route('training.index', ['modul' => $video->category->slug]) }}" class="hover:text-blue-600 transition">{{ $video->category->name }}</a>
             @endif
         </nav>
 
@@ -47,8 +47,11 @@
                             @if($video->audience === 'staff')
                                 <span class="px-2 py-0.5 bg-slate-800 text-white text-[10px] font-black uppercase tracking-wider rounded-md">Personel</span>
                             @endif
-                            @if($video->topic)
-                                <span class="px-2.5 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wider rounded-md">{{ $video->topic }}</span>
+                            @if($video->category)
+                                <a href="{{ route('training.index', ['modul' => $video->category->slug]) }}" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wider rounded-md hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+                                    <span class="w-2 h-2 rounded-full" style="background-color: {{ $video->category->dotColor() }}"></span>
+                                    {{ $video->category->name }}
+                                </a>
                             @endif
                         </div>
 
@@ -80,7 +83,7 @@
 
             <aside class="lg:col-span-4">
                 @if($related->count() > 0)
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Diğer Videolar</h3>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">{{ $video->category ? $video->category->name.' Modülündeki Diğer Videolar' : 'Diğer Videolar' }}</h3>
                     <div class="space-y-3">
                         @foreach($related as $item)
                             <a href="{{ route('training.show', $item) }}" class="flex gap-3 p-2 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 transition group">
@@ -94,8 +97,8 @@
                                 </div>
                                 <div class="min-w-0 py-1">
                                     <p class="font-semibold text-sm text-slate-800 dark:text-slate-100 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition line-clamp-2">{{ $item->title }}</p>
-                                    @if($item->topic)
-                                        <p class="text-xs text-slate-400 mt-1 truncate">{{ $item->topic }}</p>
+                                    @if($item->category && ! $item->category->is($video->category))
+                                        <p class="text-xs text-slate-400 mt-1 truncate">{{ $item->category->name }}</p>
                                     @endif
                                 </div>
                             </a>

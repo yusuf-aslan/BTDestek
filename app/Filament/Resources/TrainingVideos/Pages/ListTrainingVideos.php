@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TrainingVideos\Pages;
 
+use App\Filament\Resources\TrainingVideoCategories\TrainingVideoCategoryResource;
 use App\Filament\Resources\TrainingVideos\TrainingVideoResource;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
@@ -14,6 +15,11 @@ class ListTrainingVideos extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('categories')
+                ->label('Modüller')
+                ->icon('heroicon-o-squares-2x2')
+                ->color('gray')
+                ->url(fn (): string => TrainingVideoCategoryResource::getUrl('index')),
             Action::make('open_portal')
                 ->label('Destek Sayfasını Aç')
                 ->icon('heroicon-o-arrow-top-right-on-square')

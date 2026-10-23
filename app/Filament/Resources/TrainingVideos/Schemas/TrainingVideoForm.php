@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TrainingVideos\Schemas;
 
+use App\Filament\Resources\TrainingVideoCategories\Schemas\TrainingVideoCategoryForm;
 use App\Models\GeneralSetting;
 use App\Models\TrainingVideo;
 use App\Support\UploadLimits;
@@ -24,7 +25,7 @@ class TrainingVideoForm
         return $schema
             ->components([
                 Section::make('Video Bilgileri')
-                    ->description('Başlık, konu ve kimlerin görebileceği.')
+                    ->description('Başlık, modül ve kimlerin görebileceği.')
                     ->schema([
                         TextInput::make('title')
                             ->label('Başlık')
@@ -46,17 +47,15 @@ class TrainingVideoForm
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
 
-                        TextInput::make('topic')
-                            ->label('Konu')
-                            ->placeholder('ör. Talep Oluşturma, Yönetim Paneli')
-                            ->helperText('Destek sayfasında videolar bu konulara göre filtrelenir.')
-                            ->datalist(fn (): array => TrainingVideo::query()
-                                ->whereNotNull('topic')
-                                ->distinct()
-                                ->orderBy('topic')
-                                ->pluck('topic')
-                                ->all())
-                            ->maxLength(100),
+                        Select::make('training_video_category_id')
+                            ->label('Modül')
+                            ->helperText('Destek sayfasında video bu modülün altında listelenir. Listede yoksa + ile ekleyin.')
+                            ->relationship('category', 'name', fn ($query) => $query->orderBy('sort_order')->orderBy('name'))
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->createOptionForm(TrainingVideoCategoryForm::fields(compact: true))
+                            ->createOptionModalHeading('Yeni Modül'),
 
                         Select::make('audience')
                             ->label('Kimler Görebilir')
