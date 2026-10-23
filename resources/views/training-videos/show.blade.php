@@ -105,14 +105,6 @@
                         @endforeach
                     </div>
                 @endif
-
-                <div class="mt-6 bg-blue-700 rounded-3xl p-6 text-white shadow-xl shadow-blue-200 dark:shadow-blue-900/20">
-                    <h3 class="text-lg font-bold mb-1">Hala yardıma mı ihtiyacınız var?</h3>
-                    <p class="text-blue-100 text-sm mb-4">Videoda aradığınızı bulamadıysanız destek talebi oluşturun.</p>
-                    <a href="{{ route('home') }}#submit" class="inline-block px-5 py-2.5 bg-white text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-50 transition">
-                        Destek Talebi Oluştur
-                    </a>
-                </div>
             </aside>
         </div>
     </main>
