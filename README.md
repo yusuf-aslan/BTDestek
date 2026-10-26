@@ -107,6 +107,9 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.23 - Uzak Destek ve IP Kartları Simgeye Küçülür:**
+    *   **Daha Az Yer Kaplama:** Sağ alttaki Uzak Destek ve Cihaz IP kartları ana sayfa dışındaki sayfalarda (Eğitim Videoları, Bilgi Bankası, Durum Sorgula) yuvarlak bir simgeye küçülür; simgeye tıklayınca açılır, dışarı tıklayınca veya Esc ile kapanır. Ana sayfada kartlar eskisi gibi açık görünür.
+
 *   **v1.22 - Eğitim Videoları ve Sistem Bilgileri:**
     *   **Eğitim Videoları:** Ekran kullanımını anlatan videolar "Talep Yönetimi / Eğitim Videoları" menüsünden eklenir. Video dosya olarak yüklenebilir (MP4/WebM, isteğe bağlı .vtt altyazı ve kapak görseli) veya YouTube/Vimeo/doğrudan video bağlantısı olarak verilebilir. Videolar modül, sıra ve yayın durumuyla yönetilir.
     *   **Video Modülleri:** "Eğitim Videoları / Video Modülleri" ekranından modüller (ör. Stok, Personel, Kan Bankası) renk, açıklama ve sırayla tanımlanır; liste sürüklenerek sıralanır. Her video bir modüle bağlanır, video formundan da yeni modül eklenebilir. Destek sayfasında solda renkli modül listesi ve video sayıları yer alır; modül seçilince yalnızca o modülün videoları listelenir (`/egitim-videolari?modul=slug`). Pasif modüller ve videoları kullanıcılara gösterilmez; modül silinirse videoları silinmez.

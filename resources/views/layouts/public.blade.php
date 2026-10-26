@@ -126,7 +126,7 @@
     <!-- Footer -->
     <footer class="mt-auto py-10 border-t border-slate-200 @if($settings->is_dark_mode_enabled) dark:border-slate-700 bg-white dark:bg-slate-800 @else bg-white @endif shrink-0 transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi <span class="ml-2 opacity-50">v1.22</span></p>
+            <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi <span class="ml-2 opacity-50">v1.23</span></p>
             
             @if($settings->ip_display_position === 'footer')
             <div class="px-4 py-2 bg-slate-100 @if($settings->is_dark_mode_enabled) dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 @else rounded-full border border-slate-200 @endif flex items-center gap-2 shrink-0">
@@ -224,7 +224,14 @@
     </script>
 
     @if($settings->ip_display_position === 'fixed')
-    <div class="fixed bottom-4 right-4 z-[100] flex w-[min(19rem,calc(100vw-2rem))] flex-col gap-2.5 sm:bottom-10 sm:right-10">
+    @php
+        // Ana sayfa dışında kartlar içeriği kapatmasın diye simgeye küçülür, tıklayınca açılır
+        $floatingCollapsible = ! request()->routeIs('home');
+    @endphp
+    <div class="fixed bottom-4 right-4 z-[100] flex flex-col items-end gap-2.5 sm:bottom-10 sm:right-10"
+        @if($floatingCollapsible) x-data="{ open: false }" @keydown.escape.window="open = false" @click.outside="open = false" @endif>
+        <div id="floating-support-cards" class="flex w-[min(19rem,calc(100vw-2rem))] flex-col gap-2.5"
+            @if($floatingCollapsible) x-show="open" x-transition.origin.bottom.right style="display: none" @endif>
         @if(filled($settings->remote_support_download_url) || filled($settings->remote_support_guide_url))
             <div class="px-4 py-3.5 bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-[0_20px_45px_-15px_rgba(0,0,0,0.3)] border-l-[10px] border-l-emerald-500">
                 <div class="flex items-center gap-2.5 mb-2.5">
@@ -263,6 +270,17 @@
                 <span class="text-xl font-black text-blue-700 dark:text-blue-400 leading-none tracking-tight">{{ request()->ip() }}</span>
             </div>
         </div>
+        </div>
+
+        @if($floatingCollapsible)
+            <button type="button" @click="open = ! open" :aria-expanded="open.toString()" aria-controls="floating-support-cards"
+                :title="open ? 'Kapat' : 'Uzak destek ve IP adresi'"
+                class="w-12 h-12 rounded-full bg-blue-600 text-white shadow-[0_15px_35px_-10px_rgba(37,99,235,0.7)] flex items-center justify-center transition hover:bg-blue-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                <span class="sr-only">Uzak destek ve IP adresi</span>
+                <svg x-show="! open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <svg x-show="open" style="display: none" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        @endif
     </div>
     @endif
 </body>
