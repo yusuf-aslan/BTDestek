@@ -7,8 +7,8 @@ use App\Models\GeneralSetting;
 use App\Models\TrainingVideo;
 use App\Support\UploadLimits;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
@@ -64,11 +64,15 @@ class TrainingVideoForm
                             ->required()
                             ->native(false),
 
-                        Textarea::make('description')
+                        RichEditor::make('description')
                             ->label('Açıklama')
-                            ->placeholder('Videoda anlatılan adımları kısaca yazın.')
-                            ->rows(4)
-                            ->maxLength(5000)
+                            ->placeholder('Videoda anlatılan adımları yazın; bağlantı, liste ve başlık ekleyebilirsiniz.')
+                            ->toolbarButtons([
+                                ['bold', 'italic', 'underline', 'strike', 'link'],
+                                ['h2', 'h3'],
+                                ['bulletList', 'orderedList', 'blockquote'],
+                                ['undo', 'redo'],
+                            ])
                             ->columnSpanFull(),
 
                         TextInput::make('sort_order')

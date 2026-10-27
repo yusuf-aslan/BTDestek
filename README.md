@@ -109,6 +109,7 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 
 *   **v1.23 - Uzak Destek ve IP Kartları Simgeye Küçülür:**
     *   **Daha Az Yer Kaplama:** Sağ alttaki Uzak Destek ve Cihaz IP kartları ana sayfa dışındaki sayfalarda (Eğitim Videoları, Bilgi Bankası, Durum Sorgula) yuvarlak bir simgeye küçülür; simgeye tıklayınca açılır, dışarı tıklayınca veya Esc ile kapanır. Ana sayfada kartlar eskisi gibi açık görünür.
+    *   **Video Açıklama Editörü:** Eğitim videosu açıklaması zengin metin editörüyle yazılır (kalın, italik, bağlantı, başlık, liste, alıntı). İçerik gösterilmeden önce güvenlik için temizlenir; eski düz metin açıklamalar aynen görünmeye devam eder.
 
 *   **v1.22 - Eğitim Videoları ve Sistem Bilgileri:**
     *   **Eğitim Videoları:** Ekran kullanımını anlatan videolar "Talep Yönetimi / Eğitim Videoları" menüsünden eklenir. Video dosya olarak yüklenebilir (MP4/WebM, isteğe bağlı .vtt altyazı ve kapak görseli) veya YouTube/Vimeo/doğrudan video bağlantısı olarak verilebilir. Videolar modül, sıra ve yayın durumuyla yönetilir.

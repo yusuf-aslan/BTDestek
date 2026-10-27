@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TrainingVideo extends Model
 {
@@ -139,6 +140,33 @@ class TrainingVideo extends Model
     public function subtitleUrl(): ?string
     {
         return filled($this->subtitle_path) ? route('training.subtitle', $this) : null;
+    }
+
+    /**
+     * Editörden gelen HTML temizlenerek, eski düz metin açıklamalar satır sonları korunarak gösterilir.
+     */
+    public function descriptionHtml(): string
+    {
+        return $this->hasHtmlDescription()
+            ? Str::sanitizeHtml((string) $this->description)
+            : nl2br(e((string) $this->description));
+    }
+
+    public function descriptionText(): string
+    {
+        $text = (string) $this->description;
+
+        if ($this->hasHtmlDescription()) {
+            $html = preg_replace('/<\/(p|li|h[1-6]|blockquote)>|<br\s*\/?>/i', ' ', Str::sanitizeHtml($text));
+            $text = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
+        return trim(preg_replace('/\s+/u', ' ', $text));
+    }
+
+    private function hasHtmlDescription(): bool
+    {
+        return (bool) preg_match('/<\/?[a-z][a-z0-9]*(\s[^<>]*)?\/?>/i', (string) $this->description);
     }
 
     public function getRouteKeyName(): string

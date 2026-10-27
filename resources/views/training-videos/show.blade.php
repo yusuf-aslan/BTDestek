@@ -75,7 +75,7 @@
                         </div>
 
                         @if($video->description)
-                            <div class="text-slate-600 dark:text-slate-300 leading-relaxed">{!! nl2br(e($video->description)) !!}</div>
+                            <div class="prose max-w-none text-slate-600 dark:text-slate-300 leading-relaxed [&_a]:text-blue-700 [&_a]:font-semibold [&_a]:underline [&_a:hover]:text-blue-800 dark:[&_a]:text-blue-400 [&_blockquote]:border-l-4 [&_blockquote]:border-slate-200 dark:[&_blockquote]:border-slate-600 [&_blockquote]:pl-4 [&_blockquote]:italic [&_p:last-child]:mb-0">{!! $video->descriptionHtml() !!}</div>
                         @endif
                     </div>
                 </article>

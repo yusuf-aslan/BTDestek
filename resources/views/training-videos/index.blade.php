@@ -120,7 +120,7 @@
                                     </div>
                                     <h3 class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition mb-1">{{ $video->title }}</h3>
                                     @if($video->description)
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{{ Str::limit($video->description, 120) }}</p>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{{ Str::limit($video->descriptionText(), 120) }}</p>
                                     @endif
                                 </div>
                             </a>
