@@ -18,6 +18,8 @@ class TrainingVideoController extends Controller
         $user = $request->user();
         $canManage = TrainingVideo::canManage($user);
         $search = trim((string) $request->get('search'));
+        $sort = $request->query('sirala');
+        $sort = is_string($sort) && array_key_exists($sort, TrainingVideo::SORTS) ? $sort : array_key_first(TrainingVideo::SORTS);
 
         // Modül listesi: yalnızca kullanıcının görebileceği video içeren aktif modüller (yöneticiler boşları da görür)
         $categories = TrainingVideoCategory::query()
@@ -42,7 +44,7 @@ class TrainingVideoController extends Controller
                         ->orWhereHas('category', fn ($c) => $c->where('name', 'like', "%{$search}%"));
                 });
             })
-            ->ordered()
+            ->sortedBy($sort)
             ->paginate(12)
             ->withQueryString();
 
@@ -52,6 +54,7 @@ class TrainingVideoController extends Controller
             'activeCategory' => $activeCategory,
             'totalCount' => TrainingVideo::visibleTo($user)->count(),
             'search' => $search,
+            'sort' => $sort,
             'canManage' => $canManage,
         ]);
     }

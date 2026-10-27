@@ -19,7 +19,7 @@ class TrainingVideosTable
     {
         return $table
             ->modifyQueryUsing(fn ($query) => $query->with('category'))
-            ->defaultSort('sort_order')
+            ->defaultSort('created_at', 'desc')
             ->reorderable('sort_order')
             ->columns([
                 ImageColumn::make('poster_path')
@@ -54,6 +54,12 @@ class TrainingVideosTable
                     ->label('İzlenme')
                     ->numeric()
                     ->sortable(),
+
+                TextColumn::make('created_at')
+                    ->label('Eklendi')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->toggleable(),
 
                 TextColumn::make('updated_at')
                     ->label('Güncellendi')

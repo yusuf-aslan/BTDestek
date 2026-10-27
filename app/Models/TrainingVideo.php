@@ -82,6 +82,24 @@ class TrainingVideo extends Model
         return $query->orderBy('sort_order')->orderByDesc('created_at');
     }
 
+    /** Destek sayfasındaki sıralama seçenekleri; ilk anahtar varsayılandır. */
+    public const SORTS = [
+        'onerilen' => 'Önerilen',
+        'yeni' => 'En Yeni',
+        'izlenen' => 'En Çok İzlenen',
+        'ad' => 'A-Z',
+    ];
+
+    public function scopeSortedBy(Builder $query, string $sort): Builder
+    {
+        return match ($sort) {
+            'yeni' => $query->orderByDesc('created_at')->orderByDesc('id'),
+            'izlenen' => $query->orderByDesc('views')->orderByDesc('created_at'),
+            'ad' => $query->orderBy('title'),
+            default => $query->ordered(),
+        };
+    }
+
     public function isVisibleTo(?User $user): bool
     {
         if (static::canManage($user)) {

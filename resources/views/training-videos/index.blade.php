@@ -5,6 +5,8 @@
     $moduleLink = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition shrink-0 whitespace-nowrap lg:whitespace-normal';
     $moduleIdle = 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60';
     $moduleActive = 'bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 font-semibold';
+    // Varsayılan sıralama adrese yazılmaz
+    $sortParam = $sort !== array_key_first(\App\Models\TrainingVideo::SORTS) ? $sort : null;
 @endphp
 
 @section('title', ($activeCategory ? $activeCategory->name.' - ' : '').'Eğitim Videoları - ' . $settings->site_title)
@@ -24,6 +26,9 @@
                 @if($activeCategory)
                     <input type="hidden" name="modul" value="{{ $activeCategory->slug }}">
                 @endif
+                @if($sortParam)
+                    <input type="hidden" name="sirala" value="{{ $sortParam }}">
+                @endif
                 <input type="text" name="search" value="{{ $search }}" placeholder="{{ $activeCategory ? $activeCategory->name.' videolarında arayın...' : 'Video arayın... (Örn: Talep oluşturma, Stok girişi)' }}"
                     class="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/30 focus:border-blue-500 outline-none transition text-lg dark:text-slate-100">
                 <svg class="w-6 h-6 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -36,14 +41,14 @@
                 <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-3">
                     <h3 class="px-3 pt-1 pb-2 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Modüller</h3>
                     <nav class="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible lg:max-h-[70vh] lg:overflow-y-auto pb-1">
-                        <a href="{{ route('training.index', array_filter(['search' => $search])) }}"
+                        <a href="{{ route('training.index', array_filter(['search' => $search, 'sirala' => $sortParam])) }}"
                             class="{{ $moduleLink }} {{ ! $activeCategory ? $moduleActive : $moduleIdle }}">
                             <span class="w-2.5 h-2.5 rounded-full shrink-0 bg-slate-400"></span>
                             <span class="flex-1 truncate">Tüm Videolar</span>
                             <span class="text-xs text-slate-400 tabular-nums">{{ $totalCount }}</span>
                         </a>
                         @foreach($categories as $category)
-                            <a href="{{ route('training.index', array_filter(['modul' => $category->slug, 'search' => $search])) }}"
+                            <a href="{{ route('training.index', array_filter(['modul' => $category->slug, 'search' => $search, 'sirala' => $sortParam])) }}"
                                 class="{{ $moduleLink }} {{ $activeCategory?->is($category) ? $moduleActive : $moduleIdle }}">
                                 <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: {{ $category->dotColor() }}"></span>
                                 <span class="flex-1 truncate">{{ $category->name }}</span>
@@ -78,7 +83,25 @@
                             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ $activeCategory->description }}</p>
                         @endif
                     </div>
-                    <span class="text-sm text-slate-400 shrink-0">{{ $videos->total() }} video</span>
+                    <div class="flex items-center gap-3 shrink-0">
+                        <span class="text-sm text-slate-400 hidden sm:inline">{{ $videos->total() }} video</span>
+                        <form action="{{ route('training.index') }}" method="GET">
+                            @if($activeCategory)
+                                <input type="hidden" name="modul" value="{{ $activeCategory->slug }}">
+                            @endif
+                            @if($search !== '')
+                                <input type="hidden" name="search" value="{{ $search }}">
+                            @endif
+                            <label for="video-sort" class="sr-only">Sırala</label>
+                            <select id="video-sort" name="sirala" onchange="this.form.submit()"
+                                class="pl-3 pr-8 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 focus:ring-4 focus:ring-blue-50 dark:focus:ring-blue-900/30 focus:border-blue-500 outline-none cursor-pointer">
+                                @foreach(\App\Models\TrainingVideo::SORTS as $value => $label)
+                                    <option value="{{ $value }}" @selected($sort === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            <noscript><button type="submit" class="ml-1 text-sm font-semibold text-blue-700">Uygula</button></noscript>
+                        </form>
+                    </div>
                 </div>
 
                 @if($videos->count() > 0)
@@ -118,10 +141,7 @@
                                             {{ $video->views }}
                                         </span>
                                     </div>
-                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition mb-1">{{ $video->title }}</h3>
-                                    @if($video->description)
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{{ Str::limit($video->descriptionText(), 120) }}</p>
-                                    @endif
+                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition">{{ $video->title }}</h3>
                                 </div>
                             </a>
                         @endforeach
