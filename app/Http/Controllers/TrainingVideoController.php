@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\GeneralSetting;
 use App\Models\TrainingVideo;
 use App\Models\TrainingVideoCategory;
+use App\Models\TrainingVideoSuggestion;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -56,7 +60,64 @@ class TrainingVideoController extends Controller
             'search' => $search,
             'sort' => $sort,
             'canManage' => $canManage,
+            'suggestionsEnabled' => $this->suggestionsEnabled(),
+            'suggestionCategories' => TrainingVideoCategory::query()->where('is_active', true)->ordered()->get(['id', 'name']),
         ]);
+    }
+
+    public function suggest(Request $request): RedirectResponse
+    {
+        $this->ensureEnabled($request);
+        abort_unless($this->suggestionsEnabled(), 404);
+
+        // Bot doldurursa sessizce başarılı say; gerçek kullanıcı bu alanı görmez
+        if (filled($request->input('website'))) {
+            return $this->suggestionSent($request);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'training_video_category_id' => ['nullable', 'integer'],
+            'topic' => ['required', 'string', 'min:5', 'max:150'],
+            'details' => ['nullable', 'string', 'max:1000'],
+            'name' => ['nullable', 'string', 'max:100'],
+            'department' => ['nullable', 'string', 'max:100'],
+        ], [], [
+            'topic' => 'Konu',
+            'details' => 'Açıklama',
+            'name' => 'Ad soyad',
+            'department' => 'Birim',
+        ]);
+
+        // Hata olursa sayfa forma kaysın diye yönlendirmeyi kendimiz yapıyoruz
+        if ($validator->fails()) {
+            return back()->withInput()->withErrors($validator, 'suggestion')->withFragment('video-oneri');
+        }
+        $validated = $validator->validated();
+
+        // Pasif modüle öneri bırakılmasın; geçersiz modül "modül seçilmedi" sayılır
+        $categoryId = TrainingVideoCategory::query()
+            ->where('is_active', true)
+            ->whereKey($validated['training_video_category_id'] ?? 0)
+            ->value('id');
+
+        $limiterKey = 'training-suggestion:'.$request->ip();
+        if (RateLimiter::tooManyAttempts($limiterKey, 5)) {
+            return back()->withInput()->withErrors([
+                'topic' => 'Kısa sürede çok fazla öneri gönderdiniz. Lütfen bir saat sonra tekrar deneyin.',
+            ], 'suggestion')->withFragment('video-oneri');
+        }
+        RateLimiter::hit($limiterKey, 3600);
+
+        TrainingVideoSuggestion::submit([
+            'training_video_category_id' => $categoryId,
+            'topic' => trim($validated['topic']),
+            'details' => $validated['details'] ?? null,
+            'name' => $validated['name'] ?? null,
+            'department' => $validated['department'] ?? null,
+            'ip_address' => $request->ip(),
+        ]);
+
+        return $this->suggestionSent($request);
     }
 
     public function show(Request $request, TrainingVideo $video)
@@ -112,6 +173,18 @@ class TrainingVideoController extends Controller
             'Cache-Control' => 'private, max-age=3600',
             'X-Content-Type-Options' => 'nosniff',
         ]);
+    }
+
+    private function suggestionSent(Request $request): RedirectResponse
+    {
+        return back()
+            ->with('suggestion_sent', 'Öneriniz alındı, teşekkürler. Video hazırlarken önerileri dikkate alıyoruz.')
+            ->withFragment('video-oneri');
+    }
+
+    private function suggestionsEnabled(): bool
+    {
+        return (bool) GeneralSetting::query()->value('training_video_suggestions_enabled');
     }
 
     private function ensureEnabled(Request $request): void

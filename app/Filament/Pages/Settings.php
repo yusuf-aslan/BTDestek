@@ -317,6 +317,14 @@ class Settings extends Page implements HasForms
                                             ->columnSpanFull(),
                                     ])->columns(2),
 
+                                Section::make('Video Önerileri')
+                                    ->schema([
+                                        Toggle::make('training_video_suggestions_enabled')
+                                            ->label('Kullanıcılar video konusu önerebilsin')
+                                            ->helperText('Videolar sayfasının altında "Aradığınız videoyu bulamadınız mı?" formu gösterilir. Öneriler "Eğitim Videoları / Video Önerileri" menüsüne düşer.')
+                                            ->default(true),
+                                    ]),
+
                                 Section::make('Yükleme')
                                     ->schema([
                                         TextInput::make('training_videos_max_upload_mb')

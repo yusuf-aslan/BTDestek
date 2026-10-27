@@ -169,6 +169,10 @@
                         @endif
                     </div>
                 @endif
+
+                @if($suggestionsEnabled)
+                    @include('training-videos.partials.suggestion-form')
+                @endif
             </section>
         </div>
     </main>

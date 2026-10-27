@@ -107,6 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.24 - Video Konusu Önerileri:**
+    *   **Öneri Formu:** Eğitim videoları sayfasının altındaki "Aradığınız videoyu bulamadınız mı?" kutusundan kullanıcılar video konusu önerir (konu, modül, isteğe bağlı açıklama, birim, ad soyad). Arama sonuçsuz kalırsa form açık gelir ve aranan kelime konuya yazılır. Aynı IP'den saatte en fazla 5 öneri alınır; görünmez bir alan bot gönderimlerini eler.
+    *   **Tekrarlanan Öneriler:** Aynı modülde açık durumdaki bir öneriyle aynı konu (büyük/küçük harf ve noktalama farkı gözetilmeden) gelirse yeni kayıt açılmaz, "İsteyen" sayısı artar.
+    *   **Video Önerileri Ekranı:** "Eğitim Videoları / Video Önerileri" menüsünde öneriler en çok istenene göre listelenir; Bekliyor, Hazırlanıyor, Yayınlandı ve Reddedildi durumları ve hazırlanan videoya bağlantı verilebilir. Benzer öneriler toplu "Birleştir" işlemiyle tek kayıtta toplanır. Bekleyen öneri sayısı menüde rozetle görünür. Özellik "Ayarlar / Eğitim Videoları" sekmesinden kapatılabilir.
+
 *   **v1.23 - Uzak Destek ve IP Kartları Simgeye Küçülür:**
     *   **Daha Az Yer Kaplama:** Sağ alttaki Uzak Destek ve Cihaz IP kartları ana sayfa dışındaki sayfalarda (Eğitim Videoları, Bilgi Bankası, Durum Sorgula) yuvarlak bir simgeye küçülür; simgeye tıklayınca açılır, dışarı tıklayınca veya Esc ile kapanır. Ana sayfada kartlar eskisi gibi açık görünür.
     *   **Video Açıklama Editörü:** Eğitim videosu açıklaması zengin metin editörüyle yazılır (kalın, italik, bağlantı, başlık, liste, alıntı). İçerik gösterilmeden önce güvenlik için temizlenir; eski düz metin açıklamalar aynen görünmeye devam eder.

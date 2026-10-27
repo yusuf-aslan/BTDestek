@@ -42,6 +42,7 @@ class GeneralSetting extends Model
         'training_videos_menu_sort',
         'training_videos_description',
         'training_videos_max_upload_mb',
+        'training_video_suggestions_enabled',
     ];
 
     // Ayarlar sayfası formu toArray() ile doldurduğu için token tarayıcıya gönderilmesin
@@ -61,6 +62,7 @@ class GeneralSetting extends Model
         'training_videos_enabled' => 'boolean',
         'training_videos_menu_sort' => 'integer',
         'training_videos_max_upload_mb' => 'integer',
+        'training_video_suggestions_enabled' => 'boolean',
     ];
 
     public function isLunchBreakAt($dateTime = null): bool

@@ -16,6 +16,7 @@ Route::get('/bilgi-bankasi', [\App\Http\Controllers\ArticleController::class, 'i
 Route::get('/bilgi-bankasi/{slug}', [\App\Http\Controllers\ArticleController::class, 'show'])->name('kb.show');
 
 Route::get('/egitim-videolari', [\App\Http\Controllers\TrainingVideoController::class, 'index'])->name('training.index');
+Route::post('/egitim-videolari/oneri', [\App\Http\Controllers\TrainingVideoController::class, 'suggest'])->name('training.suggest');
 Route::get('/egitim-videolari/{video}', [\App\Http\Controllers\TrainingVideoController::class, 'show'])->name('training.show');
 Route::get('/egitim-videolari/{video}/video', [\App\Http\Controllers\TrainingVideoController::class, 'video'])->name('training.video');
 Route::get('/egitim-videolari/{video}/altyazi', [\App\Http\Controllers\TrainingVideoController::class, 'subtitle'])->name('training.subtitle');
