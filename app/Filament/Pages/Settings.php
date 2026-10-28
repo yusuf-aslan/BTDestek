@@ -285,7 +285,7 @@ class Settings extends Page implements HasForms
                             ->icon('heroicon-o-play-circle')
                             ->schema([
                                 Section::make('Destek Sayfası')
-                                    ->description('Eğitim videoları sayfası ve üst menüdeki bağlantısı. Videolar "Talep Yönetimi / Eğitim Videoları" menüsünden eklenir.')
+                                    ->description('Eğitim videoları sayfası ve üst menüdeki bağlantısı. Videolar "Bilgi ve Eğitim / Eğitim Videoları" menüsünden eklenir.')
                                     ->schema([
                                         Toggle::make('training_videos_enabled')
                                             ->label('Eğitim videolarını destek sayfasında yayınla')
@@ -321,7 +321,7 @@ class Settings extends Page implements HasForms
                                     ->schema([
                                         Toggle::make('training_video_suggestions_enabled')
                                             ->label('Kullanıcılar video konusu önerebilsin')
-                                            ->helperText('Videolar sayfasının altında "Aradığınız videoyu bulamadınız mı?" formu gösterilir. Öneriler "Eğitim Videoları / Video Önerileri" menüsüne düşer.')
+                                            ->helperText('Videolar sayfasının altında "Aradığınız videoyu bulamadınız mı?" formu gösterilir. Öneriler "Bilgi ve Eğitim / Video Önerileri" menüsüne düşer.')
                                             ->default(true),
                                     ]),
 

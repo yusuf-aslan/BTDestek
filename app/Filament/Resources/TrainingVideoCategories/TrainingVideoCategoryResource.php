@@ -20,11 +20,9 @@ class TrainingVideoCategoryResource extends Resource
 
     protected static ?string $navigationLabel = 'Video Modülleri';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Talep Yönetimi';
+    protected static string|\UnitEnum|null $navigationGroup = 'Bilgi ve Eğitim';
 
-    protected static ?string $navigationParentItem = 'Eğitim Videoları';
-
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $modelLabel = 'Video Modülü';
 

@@ -146,6 +146,7 @@ HTML
             ])
             ->navigationGroups([
                 'Talep Yönetimi',
+                'Bilgi ve Eğitim',
                 'Duyuru Yönetimi',
                 'Envanter Yönetimi',
                 'Ayarlar',

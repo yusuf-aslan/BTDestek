@@ -20,8 +20,8 @@ class TrainingVideoResource extends Resource
 
     protected static ?string $navigationLabel = 'Eğitim Videoları';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Talep Yönetimi';
-    protected static ?int $navigationSort = 6;
+    protected static string|\UnitEnum|null $navigationGroup = 'Bilgi ve Eğitim';
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $modelLabel = 'Eğitim Videosu';
 
