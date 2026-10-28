@@ -49,7 +49,7 @@ class TicketController extends Controller
 
         $intake = \App\Support\TicketIntake::at($settings);
         if ($intake->isClosed()) {
-            return redirect()->back()->withErrors(['error' => $intake->closedReason])->withInput();
+            return redirect()->back()->withErrors(['error' => $intake->message()])->withInput();
         }
 
         $validated = $request->validate([

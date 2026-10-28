@@ -212,7 +212,7 @@
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
                         <div>
-                            <h4 class="font-bold text-blue-900 dark:text-blue-100 mb-1">Yarım Gün Bilgilendirmesi</h4>
+                            <h4 class="font-bold text-blue-900 dark:text-blue-100 mb-1">Mesai Saati Bilgilendirmesi</h4>
                             <p class="text-sm font-medium text-blue-700 dark:text-blue-300 leading-relaxed">{{ $intake->notice }}</p>
                         </div>
                     </div>
@@ -238,10 +238,16 @@
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <div>
-                            <h4 class="text-lg font-bold text-amber-800 dark:text-amber-200 mb-1">Şu Anda Talep Alınmamaktadır</h4>
+                            <h4 class="text-lg font-bold text-amber-800 dark:text-amber-200 mb-1">Mesai Saatleri Dışındayız</h4>
                             <p class="font-medium text-sm text-amber-700 dark:text-amber-300/90 leading-relaxed">
                                 {{ $closedReason }}
                             </p>
+                            @if($intake->workHours)
+                                <p class="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-100 text-sm font-bold">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Mesai Saatleri: {{ $intake->workHours }}
+                                </p>
+                            @endif
                         </div>
                     </div>
                 @endif
@@ -410,7 +416,7 @@
                                 <button type="submit" @if($isClosed) disabled @endif 
                                         class="w-full {{ $isClosed ? 'bg-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200 dark:shadow-none animate-pulse-subtle' }} text-white font-extrabold py-5 rounded-2xl transition-all duration-300 shadow-2xl flex items-center justify-center gap-4 text-base uppercase tracking-[0.2em]">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                                    {{ $isClosed ? 'Şu An Talep Alınmıyor' : 'Talebi Gönder (Buraya Tıklayın)' }}
+                                    {{ $isClosed ? 'Mesai Saatleri Dışında' : 'Talebi Gönder (Buraya Tıklayın)' }}
                                 </button>
                             </div>
 

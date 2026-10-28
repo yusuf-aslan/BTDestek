@@ -12,12 +12,13 @@ use Carbon\CarbonInterface;
  */
 class TicketIntake
 {
-    private const EMERGENCY = 'Acil durumlar için lütfen nöbetçi müdür ile görüşünüz.';
+    private const CLOSED = 'Talepler yalnızca mesai saatleri içinde alınmaktadır.';
 
     /** @param  array{name: string, is_half_day: bool, closes_at: ?string, message: ?string}|null  $holiday */
     private function __construct(
         public readonly ?string $closedReason,
         public readonly ?string $notice,
+        public readonly ?string $workHours,
         public readonly ?array $holiday,
     ) {}
 
@@ -26,56 +27,69 @@ class TicketIntake
         $now ??= now();
 
         if (! $settings) {
-            return new self(null, null, null);
+            return new self(null, null, null, null);
         }
 
+        $workHours = self::workHoursLabel($settings);
         $holiday = Holiday::forDate($now, (bool) ($settings->official_holidays_enabled ?? true));
+        $closed = fn (?string $reason = null) => new self($reason ?: self::CLOSED, null, $workHours, $holiday);
 
         if ($holiday && ! $settings->holiday_tickets_allowed) {
             if (! $holiday['is_half_day']) {
-                return new self(
-                    $holiday['message'] ?: "{$holiday['name']} nedeniyle bugün sistem üzerinden talep kabul edilmemektedir. ".self::EMERGENCY,
-                    null,
-                    $holiday,
-                );
+                return $closed($holiday['message']);
             }
 
             $closesAt = $holiday['closes_at'] ?? '13:00';
 
             if ($now->format('H:i') >= $closesAt) {
-                return new self(
-                    $holiday['message'] ?: "Bugün {$holiday['name']} nedeniyle yarım gündür; talep kabulü saat {$closesAt} itibarıyla sona ermiştir. ".self::EMERGENCY,
-                    null,
-                    $holiday,
-                );
+                return $closed($holiday['message']);
             }
 
-            $notice = "Bugün {$holiday['name']} nedeniyle yarım gündür; talep kabulü saat {$closesAt} itibarıyla sona erecektir.";
+            $notice = "Bugün mesai bitiş saati: {$closesAt}";
         }
 
         if ($now->isWeekend() && ! $settings->weekend_tickets_allowed) {
-            return new self('Hafta sonları sistem üzerinden talep kabul edilmemektedir. '.self::EMERGENCY, null, $holiday);
+            return $closed();
         }
 
         if (! $settings->allow_tickets_outside_work_hours) {
-            $start = substr((string) $settings->work_hours_start, 0, 5);
-            $end = substr((string) $settings->work_hours_end, 0, 5);
             $time = $now->format('H:i');
 
-            if ($time < $start || $time >= $end) {
-                return new self(
-                    "Sistemimiz günlük talep kabul saatleri dışındadır. Taleplerinizi hafta içi {$start} - {$end} saatleri arasında iletebilirsiniz.",
-                    null,
-                    $holiday,
-                );
+            if ($time < self::time($settings->work_hours_start) || $time >= self::time($settings->work_hours_end)) {
+                return $closed();
             }
         }
 
-        return new self(null, $notice ?? null, $holiday);
+        return new self(null, $notice ?? null, $workHours, $holiday);
     }
 
     public function isClosed(): bool
     {
         return $this->closedReason !== null;
+    }
+
+    /** Talep kaydı reddedilince gösterilen tek satırlık mesaj. */
+    public function message(): ?string
+    {
+        return $this->closedReason
+            ? trim($this->closedReason.($this->workHours ? " Mesai saatleri: {$this->workHours}." : ''))
+            : null;
+    }
+
+    /** Ör. "Hafta içi 08:00 - 16:30"; mesai dışı talep alınıyorsa saat yazılmaz. */
+    private static function workHoursLabel(GeneralSetting $settings): ?string
+    {
+        if ($settings->allow_tickets_outside_work_hours) {
+            return null;
+        }
+
+        $range = self::time($settings->work_hours_start).' - '.self::time($settings->work_hours_end);
+
+        return ($settings->weekend_tickets_allowed ? 'Her gün ' : 'Hafta içi ').$range;
+    }
+
+    private static function time(mixed $value): string
+    {
+        return substr((string) $value, 0, 5);
     }
 }

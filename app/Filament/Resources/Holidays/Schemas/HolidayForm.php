@@ -60,7 +60,7 @@ class HolidayForm
 
                         Textarea::make('message')
                             ->label('Kullanıcıya Gösterilecek Mesaj')
-                            ->helperText('Boş bırakılırsa: "<Ad> nedeniyle bugün sistem üzerinden talep kabul edilmemektedir. Acil durumlar için lütfen nöbetçi müdür ile görüşünüz."')
+                            ->helperText('Boş bırakılırsa: "Talepler yalnızca mesai saatleri içinde alınmaktadır." Mesai saatleri altında ayrıca gösterilir.')
                             ->rows(2)
                             ->maxLength(500)
                             ->columnSpanFull(),
