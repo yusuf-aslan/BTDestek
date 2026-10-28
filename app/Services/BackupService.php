@@ -27,6 +27,7 @@ class BackupService
         'training_video_categories',
         'training_videos',
         'training_video_suggestions',
+        'holidays',
         'menus',
         'general_settings',
         'tickets',

@@ -239,6 +239,20 @@ class Settings extends Page implements HasForms
                                             ->default(true),
                                     ])->columns(2),
 
+                                Section::make('Tatil Günleri')
+                                    ->description('Resmi tatillerde ve "Ayarlar / Tatil Günleri" ekranından girilen günlerde (dini bayramlar, arifeler, idari izinler) talep alınmaz; yarım günlerde kapanış saatinden sonra form kapanır.')
+                                    ->schema([
+                                        Toggle::make('official_holidays_enabled')
+                                            ->label('Resmi Tatilleri Uygula')
+                                            ->helperText('1 Ocak, 23 Nisan, 1 Mayıs, 19 Mayıs, 15 Temmuz, 30 Ağustos, 29 Ekim ve 28 Ekim yarım gün (13:00) her yıl otomatik uygulanır.')
+                                            ->default(true),
+
+                                        Toggle::make('holiday_tickets_allowed')
+                                            ->label('Tatil Günlerinde Talep Kabul Et')
+                                            ->helperText('Açıksa tatil ve yarım gün kuralları uygulanmaz; yalnızca mesai ve hafta sonu kuralları geçerli olur.')
+                                            ->default(false),
+                                    ])->columns(2),
+
                                 Section::make('Öğle Arası')
                                     ->description('Öğle arasında açılan taleplerin bekleme süresinin ne zaman başlayacağını belirleyin.')
                                     ->schema([

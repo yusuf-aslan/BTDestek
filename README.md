@@ -107,6 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.25 - Resmi Tatil ve Bayram Günleri:**
+    *   **Resmi Tatiller:** 1 Ocak, 23 Nisan, 1 Mayıs, 19 Mayıs, 15 Temmuz, 30 Ağustos ve 29 Ekim her yıl otomatik tatil sayılır; 28 Ekim yarım gündür (13:00). "Ayarlar / Mesai & Kurallar" sekmesindeki "Resmi Tatilleri Uygula" seçeneğiyle kapatılabilir.
+    *   **Tatil Günleri Ekranı:** "Ayarlar / Tatil Günleri" ekranından dini bayramlar, arifeler ve idari izinler başlangıç-bitiş tarihiyle girilir. Yarım gün seçilirse kapanış saatine kadar talep alınır. İsteğe bağlı özel mesaj yazılabilir. Aynı güne girilen kayıt resmi tatilin önüne geçer.
+    *   **Destek Sayfası:** Tatil günü talep formu kapanır ve tatilin adıyla uyarı gösterilir; yarım günlerde kapanış saatine kadar bilgilendirme kutusu çıkar. "Tatil Günlerinde Talep Kabul Et" açılırsa tatil kuralları uygulanmaz. Mesai, hafta sonu ve tatil kontrolü tek yerde (`App\Support\TicketIntake`) toplandı; uyarı ile talep kaydı aynı kuralı kullanır. Uyarı metinlerinde "nöbetçi amirlik" yerine "nöbetçi müdür ile görüşünüz" kullanılır.
+
 *   **v1.24 - Video Konusu Önerileri:**
     *   **Öneri Formu:** Eğitim videoları sayfasının altındaki "Aradığınız videoyu bulamadınız mı?" kutusundan kullanıcılar video konusu önerir (konu, modül, isteğe bağlı açıklama, birim, ad soyad). Arama sonuçsuz kalırsa form açık gelir ve aranan kelime konuya yazılır. Aynı IP'den saatte en fazla 5 öneri alınır; görünmez bir alan bot gönderimlerini eler.
     *   **Tekrarlanan Öneriler:** Aynı modülde açık durumdaki bir öneriyle aynı konu (büyük/küçük harf ve noktalama farkı gözetilmeden) gelirse yeni kayıt açılmaz, "İsteyen" sayısı artar.

@@ -201,24 +201,22 @@
             <!-- Submit Form -->
             <div class="lg:col-span-8 space-y-8" id="submit">
                 @php
-                    $isClosed = false;
-                    $closedReason = '';
-                    if ($settings) {
-                        $now = now();
-                        if ($now->isWeekend() && !$settings->weekend_tickets_allowed) {
-                            $isClosed = true;
-                            $closedReason = 'Hafta sonları sistem üzerinden talep kabul edilmemektedir. Acil durumlar için lütfen nöbetçi amirliği arayınız.';
-                        } elseif (!$settings->allow_tickets_outside_work_hours) {
-                            $currentTime = $now->format('H:i');
-                            $start = \Carbon\Carbon::parse($settings->work_hours_start)->format('H:i');
-                            $end = \Carbon\Carbon::parse($settings->work_hours_end)->format('H:i');
-                            if ($currentTime < $start || $currentTime > $end) {
-                                $isClosed = true;
-                                $closedReason = "Sistemimiz günlük talep kabul saatleri dışındadır. Taleplerinizi hafta içi {$start} - {$end} saatleri arasında iletebilirsiniz.";
-                            }
-                        }
-                    }
+                    $intake = \App\Support\TicketIntake::at($settings);
+                    $isClosed = $intake->isClosed();
+                    $closedReason = $intake->closedReason;
                 @endphp
+
+                @if(!$isClosed && $intake->notice)
+                    <div class="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 p-5 rounded-2xl flex items-center gap-4">
+                        <div class="w-11 h-11 bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-blue-900 dark:text-blue-100 mb-1">Yarım Gün Bilgilendirmesi</h4>
+                            <p class="text-sm font-medium text-blue-700 dark:text-blue-300 leading-relaxed">{{ $intake->notice }}</p>
+                        </div>
+                    </div>
+                @endif
 
                 @if(!$isClosed && $settings?->isLunchBreakAt(now()))
                     <div class="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 p-5 rounded-2xl flex items-center gap-4">

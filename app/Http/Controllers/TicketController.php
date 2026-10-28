@@ -42,30 +42,14 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        // Working Hours Check
+        // Mesai, hafta sonu ve tatil kuralları ana sayfadaki uyarıyla aynı yerden gelir
         $settings = \Illuminate\Support\Facades\Cache::rememberForever('general_settings', function () {
             return \App\Models\GeneralSetting::first();
         });
-        
-        if ($settings) {
-            $now = now();
-            $isWeekend = $now->isWeekend();
-            $currentTime = $now->format('H:i:s');
-            
-            // Check Weekend
-            if ($isWeekend && !$settings->weekend_tickets_allowed) {
-                return redirect()->back()->withErrors(['error' => 'Hafta sonları sistem üzerinden talep kabul edilmemektedir. Acil durumlar için lütfen nöbetçi amirliği arayınız.'])->withInput();
-            }
 
-            // Check Work Hours
-            if (!$settings->allow_tickets_outside_work_hours) {
-                $start = \Carbon\Carbon::parse($settings->work_hours_start)->format('H:i');
-                $end = \Carbon\Carbon::parse($settings->work_hours_end)->format('H:i');
-
-                if ($currentTime < $start || $currentTime > $end) {
-                    return redirect()->back()->withErrors(['error' => "Sistemimiz günlük talep kabul saatleri dışındadır. Taleplerinizi hafta içi {$start} - {$end} saatleri arasında iletebilirsiniz."])->withInput();
-                }
-            }
+        $intake = \App\Support\TicketIntake::at($settings);
+        if ($intake->isClosed()) {
+            return redirect()->back()->withErrors(['error' => $intake->closedReason])->withInput();
         }
 
         $validated = $request->validate([
