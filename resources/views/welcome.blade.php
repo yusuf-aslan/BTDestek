@@ -83,7 +83,22 @@
     <!-- Queried Ticket Success Modal (from Tracking) -->
     @if(session('queried_ticket'))
         @php $ticket = session('queried_ticket'); @endphp
-        <div x-data="{ showStatus: true }" x-show="showStatus" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;">
+        <div x-data="{
+                showStatus: true,
+                status: @js(\App\Models\TicketStatus::labelFor($ticket->status)),
+                updatedAt: @js($ticket->updated_at->format('d.m.Y H:i')),
+                hasNote: @js(filled($ticket->resolution_note)),
+                refresh(update) {
+                    if (update.tracking_number !== @js($ticket->tracking_number)) return;
+                    this.status = update.status_label;
+                    this.updatedAt = update.updated_at;
+                    this.hasNote = Boolean(update.note_html);
+                    if (this.$refs.note.innerHTML.trim() !== (update.note_html ?? '').trim()) this.$refs.note.innerHTML = update.note_html ?? '';
+                },
+            }"
+            @ticket-updated.window="refresh($event.detail)"
+            data-open-ticket="{{ $ticket->tracking_number }}"
+            x-show="showStatus" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;">
             <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-md" @click="showStatus = false"></div>
             <div class="relative bg-white dark:bg-slate-800 w-full max-w-5xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
                 
@@ -100,8 +115,8 @@
                     </div>
                     <div class="flex items-end justify-between gap-6">
                         <div>
-                            <h2 class="text-3xl font-black tracking-tight leading-none mb-2">Talebiniz <span class="text-blue-500">{{ Str::upper($ticket->status) }}</span></h2>
-                            <p class="text-slate-400 text-sm font-medium">Son Güncelleme: {{ $ticket->updated_at->format('d.m.Y H:i') }}</p>
+                            <h2 class="text-3xl font-black tracking-tight leading-none mb-2">Talebiniz <span class="text-blue-500" x-text="status.toLocaleUpperCase('tr')"></span></h2>
+                            <p class="text-slate-400 text-sm font-medium">Son Güncelleme: <span x-text="updatedAt"></span></p>
                         </div>
                         <div class="shrink-0">
                             <div class="w-20 h-20 rounded-3xl bg-blue-600 flex items-center justify-center shadow-xl shadow-blue-900/40 rotate-3">
@@ -139,17 +154,13 @@
                         </div>
                     </div>
 
-                    @if($ticket->resolution_note)
-                        <div class="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-700">
-                            <label class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                Teknisyen Çözüm Notu
-                            </label>
-                            <div class="lightbox-images prose max-w-none p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 rounded-2xl text-blue-900 dark:text-blue-300 text-sm font-medium leading-relaxed shadow-sm shadow-blue-100">
-                                {!! $ticket->resolution_note !!}
-                            </div>
-                        </div>
-                    @endif
+                    <div x-show="hasNote" class="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <label class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Teknisyen Çözüm Notu
+                        </label>
+                        <div x-ref="note" class="lightbox-images prose max-w-none p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/50 rounded-2xl text-blue-900 dark:text-blue-300 text-sm font-medium leading-relaxed shadow-sm shadow-blue-100">{!! $ticket->resolution_note !!}</div>
+                    </div>
 
                 </div>
 
@@ -505,7 +516,7 @@
                                                 <span class="text-[10px] text-slate-400 dark:text-slate-500">{{ $recentTicket->created_at->diffForHumans() }}</span>
                                             </div>
                                         </div>
-                                        <span class="px-2.5 py-0.5 text-[9px] font-bold rounded-full uppercase tracking-wider shrink-0
+                                        <span data-ticket-badge="{{ $recentTicket->tracking_number }}" data-base="px-2.5 py-0.5 text-[9px] font-bold rounded-full uppercase tracking-wider shrink-0" class="px-2.5 py-0.5 text-[9px] font-bold rounded-full uppercase tracking-wider shrink-0
                                             {{ \App\Models\TicketStatus::badgeClassesFor($recentTicket->status) }}
                                         ">
                                             {{ \App\Models\TicketStatus::labelFor($recentTicket->status) }}

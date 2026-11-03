@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Announcement;
 use App\Models\Category;
 use App\Models\Ticket;
+use App\Models\TicketStatus;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class TicketController extends Controller
 {
+    private const MAX_WATCHED_TICKETS = 30;
+
     public function index()
     {
         $announcements = Announcement::where('is_active', true)->latest()->get();
@@ -128,5 +133,59 @@ class TicketController extends Controller
         }
 
         return redirect()->route('home')->with('queried_ticket', $ticket);
+    }
+
+    /**
+     * Bu bilgisayardan açılan ve tarayıcının takip ettiği taleplerin güncel durumu.
+     * Takip numarası zaten talebi sorgulamaya yettiği için bu uç yeni bir erişim açmaz.
+     */
+    public function updates(Request $request): JsonResponse
+    {
+        $numbers = collect(Arr::wrap($request->query('numbers')))
+            ->filter(fn ($number) => is_string($number))
+            ->take(self::MAX_WATCHED_TICKETS)
+            ->values();
+
+        $tickets = Ticket::query()
+            ->where(fn ($query) => $query
+                ->whereIn('tracking_number', $numbers)
+                ->orWhere(fn ($query) => $query
+                    ->where('ip_address', $request->ip())
+                    ->where('updated_at', '>=', now()->subDays(7))))
+            ->latest()
+            ->limit(self::MAX_WATCHED_TICKETS * 2)
+            ->get(['tracking_number', 'subject', 'status', 'resolution_note', 'updated_at'])
+            ->map(function (Ticket $ticket) {
+                $answered = TicketStatus::isClosed($ticket->status) || filled($ticket->resolution_note);
+
+                return [
+                    'tracking_number' => $ticket->tracking_number,
+                    'subject' => $ticket->subject,
+                    'signature' => md5($ticket->status.'|'.$ticket->resolution_note),
+                    'heading' => $answered ? 'Talebiniz cevaplandı' : 'Talebinizin durumu değişti',
+                    'status_label' => TicketStatus::labelFor($ticket->status),
+                    'badge_classes' => TicketStatus::badgeClassesFor($ticket->status),
+                    'note' => $this->noteExcerpt($ticket->resolution_note),
+                    'note_html' => $ticket->resolution_note,
+                    'updated_at' => $ticket->updated_at?->format('d.m.Y H:i'),
+                    'url' => route('tickets.show', ['tracking_number' => $ticket->tracking_number]),
+                ];
+            });
+
+        return response()
+            ->json(['tickets' => $tickets])
+            ->header('Cache-Control', 'no-store');
+    }
+
+    private function noteExcerpt(?string $note): ?string
+    {
+        if (blank($note)) {
+            return null;
+        }
+
+        // Etiketler silinirken paragraflar birbirine yapışmasın
+        $text = html_entity_decode(strip_tags(str_replace('<', ' <', $note)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return Str::limit(trim(preg_replace('/[\s\x{00A0}]+/u', ' ', $text)), 140);
     }
 }

@@ -10,6 +10,17 @@ Route::get('/', [TicketController::class, 'index'])->name('home');
 Route::post('/talep-olustur', [TicketController::class, 'store'])->name('tickets.store');
 Route::get('/talep-sorgula', [TicketController::class, 'show'])->name('tickets.show');
 
+// Açık sayfalar sürekli sorduğu için oturum kullanmaz: oturum yazmaz ve tek seferlik mesajları (flash) tüketmez
+Route::get('/talep-guncellemeleri', [TicketController::class, 'updates'])
+    ->name('tickets.updates')
+    ->withoutMiddleware([
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+    ]);
+
 Route::get('/talep/{ticket}/yazdir', [\App\Http\Controllers\PublicTicketPrintController::class, 'show'])->name('public.tickets.print');
 
 Route::get('/bilgi-bankasi', [\App\Http\Controllers\ArticleController::class, 'index'])->name('kb.index');

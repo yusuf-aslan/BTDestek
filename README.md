@@ -107,6 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.27 - Talep Güncelleme Bildirimleri:**
+    *   **Anlık Bildirim:** Destek sayfaları açıkken 30 saniyede bir talepler kontrol edilir. Durum değişince ya da çözüm notu yazılınca sol altta numara, konu, yeni durum, notun başı ve "Görüntüle" butonuyla bildirim çıkar; sekme başlığında da görünür. Bildirim kapatılana kadar sayfalar arasında kalır.
+    *   **Takip Edilen Talepler:** Bu bilgisayardan açılan talepler ile bu tarayıcıda oluşturulan veya numarasıyla sorgulanan talepler takip edilir (en fazla 30). Son görülen durum tarayıcıda saklandığı için sayfa kapalıyken olan değişiklik de bir sonraki açılışta bildirilir.
+    *   **Canlı Güncelleme:** "Son 24 Saatteki Talepleriniz" kutusundaki durum ve açık talep sorgulama penceresindeki durum ile çözüm notu sayfa yenilenmeden güncellenir.
+
 *   **v1.26 - Panelde Kategori Dökümü:**
     *   **İstatistik Kartları:** Toplam, Bekleyen, Bugün Gelen, Çözülen ve Acil kartlarında kategoriler sayılarıyla listelenir. En kalabalık 4 kategori gösterilir, kalanı "Diğer" altında toplanır. Kart ve kategori satırlarına tıklanınca talep listesi ilgili sekme ve filtreyle açılır.
     *   **Bekleyen Talepler:** Her satırda kategori, bölüm, geçen süre ve atanan kişi görünür. Acil ve yüksek öncelikli talepler listenin başına gelir. Başlıktaki sayı toplam bekleyen sayısını gösterir; liste 8 talepten uzunsa "Tüm bekleyen talepleri gör" bağlantısı çıkar.
