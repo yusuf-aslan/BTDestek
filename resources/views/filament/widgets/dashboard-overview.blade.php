@@ -21,10 +21,17 @@
 .db-card::before { content:''; position:absolute; top:-20px; right:-20px; width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,.12); }
 .db-card::after  { content:''; position:absolute; top:16px; right:24px; font-size:28px; opacity:.85; }
 
-.db-card-icon { font-size: 28px; line-height: 1; }
+.db-card-head { position: relative; display: flex; flex-direction: column; gap: 8px; color: inherit; text-decoration: none; }
+.db-card-icon { position: absolute; top: 0; right: 0; font-size: 24px; line-height: 1; }
 .db-card-value { font-size: 34px; font-weight: 800; color: #fff; line-height: 1; }
-.db-card-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.80); text-transform: uppercase; letter-spacing: .8px; }
-.db-card-sub   { font-size: 11px; color: rgba(255,255,255,.60); margin-top: 2px; }
+.db-card-label { font-size: 12px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: .8px; padding-right: 32px; }
+.db-card-sub   { font-size: 12px; color: rgba(255,255,255,.90); }
+
+.db-card-cats { position: relative; display: flex; flex-direction: column; gap: 2px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.25); }
+.db-card-cat { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 2px 6px; margin: 0 -6px; border-radius: 6px; color: #fff; font-size: 12px; font-weight: 500; text-decoration: none; }
+a.db-card-cat:hover { background: rgba(0,0,0,.14); }
+.db-card-cat-name { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-card-cat-count { flex-shrink: 0; min-width: 22px; padding: 0 6px; border-radius: 99px; background: rgba(0,0,0,.20); font-weight: 700; text-align: center; }
 
 .db-card-total    { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
 .db-card-pending  { background: linear-gradient(135deg, #f59e0b, #f97316); }
@@ -135,10 +142,18 @@
 .dark .db-ticket-no { color: #818cf8; background: rgba(99,102,241,.15); }
 .db-ticket-no:hover { background: rgba(99,102,241,.18); text-decoration: none; }
 
-.db-ticket-subject { font-size: 13px; color: #374151; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-ticket-main { flex: 1; min-width: 0; }
+.db-ticket-subject { font-size: 13px; font-weight: 600; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dark .db-ticket-subject { color: #d1d5db; }
 
-.db-ticket-dept { font-size: 11px; color: #9ca3af; white-space: nowrap; flex-shrink: 0; }
+.db-ticket-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; margin-top: 3px; font-size: 11px; color: #6b7280; }
+.dark .db-ticket-meta { color: #9ca3af; }
+.db-ticket-cat { font-weight: 700; color: #4f46e5; background: rgba(99,102,241,.10); padding: 1px 7px; border-radius: 6px; }
+.dark .db-ticket-cat { color: #a5b4fc; background: rgba(99,102,241,.20); }
+
+.db-ticket-more { display: block; padding: 10px 20px; font-size: 12px; font-weight: 700; color: #4f46e5; text-align: center; text-decoration: none; border-top: 1px solid rgba(156,163,175,.12); }
+.db-ticket-more:hover { background: rgba(99,102,241,.05); }
+.dark .db-ticket-more { color: #a5b4fc; border-color: rgba(255,255,255,.06); }
 
 .db-ticket-badge {
     font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 99px;
@@ -225,42 +240,31 @@
 
     {{-- ── STAT CARDS ────────────────────────────────────────── --}}
     <div class="db-stats">
-
-        <div class="db-card db-card-total">
-            <div class="db-card-icon">📋</div>
-            <div class="db-card-value">{{ $totalTickets }}</div>
-            <div class="db-card-label">Toplam Talep</div>
-            <div class="db-card-sub">Yetkiniz dahilindeki tümü</div>
+        @foreach($cards as $card)
+        <div class="db-card db-card-{{ $card['key'] }}">
+            <a href="{{ $card['url'] }}" class="db-card-head">
+                <div class="db-card-label">{{ $card['label'] }}</div>
+                <div class="db-card-value">{{ $card['total'] }}</div>
+                <div class="db-card-icon" aria-hidden="true">{{ $card['icon'] }}</div>
+            </a>
+            <div class="db-card-cats">
+                @forelse($card['rows'] as $row)
+                    <a href="{{ $row['url'] }}" class="db-card-cat" title="{{ $row['name'] }}: {{ $row['count'] }}">
+                        <span class="db-card-cat-name">{{ $row['name'] }}</span>
+                        <span class="db-card-cat-count">{{ $row['count'] }}</span>
+                    </a>
+                @empty
+                    <div class="db-card-sub">{{ $card['empty'] }}</div>
+                @endforelse
+                @if($card['others'])
+                <div class="db-card-cat" title="{{ $card['others']['names'] }}">
+                    <span class="db-card-cat-name">Diğer</span>
+                    <span class="db-card-cat-count">{{ $card['others']['count'] }}</span>
+                </div>
+                @endif
+            </div>
         </div>
-
-        <div class="db-card db-card-pending">
-            <div class="db-card-icon">⏳</div>
-            <div class="db-card-value">{{ $pendingTickets }}</div>
-            <div class="db-card-label">Bekleyen</div>
-            <div class="db-card-sub">İşlem gerektiriyor</div>
-        </div>
-
-        <div class="db-card db-card-today">
-            <div class="db-card-icon">📬</div>
-            <div class="db-card-value">{{ $todayTickets }}</div>
-            <div class="db-card-label">Bugün Gelen</div>
-            <div class="db-card-sub">Son 24 saat</div>
-        </div>
-
-        <div class="db-card db-card-resolved">
-            <div class="db-card-icon">✅</div>
-            <div class="db-card-value">{{ $resolvedTickets }}</div>
-            <div class="db-card-label">Çözülen</div>
-            <div class="db-card-sub">Toplam kapatılan</div>
-        </div>
-
-        <div class="db-card db-card-urgent">
-            <div class="db-card-icon">🔴</div>
-            <div class="db-card-value">{{ $urgentTickets }}</div>
-            <div class="db-card-label">Acil & Bekleyen</div>
-            <div class="db-card-sub">Öncelikli talepler</div>
-        </div>
-
+        @endforeach
     </div>
 
     {{-- ── ACİL UYARILAR ───────────────────────────────────────── --}}
@@ -268,7 +272,7 @@
     <div style="background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(239,68,68,.04));border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
         <span style="font-size:20px;">🚨</span>
         <span style="font-size:13px;font-weight:600;color:#dc2626;">{{ $urgentTickets }} adet <strong>acil</strong> talep işlem bekliyor!</span>
-        <a href="{{ route('filament.admin.resources.tickets.index', ['tableFilters[status][values][0]' => 'bekliyor','tableFilters[priority][value]' => 'acil']) }}" style="margin-left:auto;font-size:12px;font-weight:600;color:#dc2626;text-decoration:none;padding:4px 12px;border:1px solid rgba(239,68,68,.35);border-radius:8px;transition:background .15s;" onmouseover="this.style.background='rgba(239,68,68,.08)'" onmouseout="this.style.background='transparent'">Görüntüle →</a>
+        <a href="{{ $urgentUrl }}" style="margin-left:auto;font-size:12px;font-weight:600;color:#dc2626;text-decoration:none;padding:4px 12px;border:1px solid rgba(239,68,68,.35);border-radius:8px;transition:background .15s;" onmouseover="this.style.background='rgba(239,68,68,.08)'" onmouseout="this.style.background='transparent'">Görüntüle →</a>
     </div>
     @endif
 
@@ -298,8 +302,8 @@
             <div class="db-panel-header">
                 <span>⏳</span>
                 <span class="db-panel-title">Bekleyen Talepler</span>
-                @if($pendingList->count() > 0)
-                <span class="db-panel-badge">{{ $pendingList->count() }}</span>
+                @if($pendingTickets > 0)
+                <span class="db-panel-badge">{{ $pendingTickets }}</span>
                 @endif
             </div>
             @if($pendingList->isEmpty())
@@ -313,16 +317,28 @@
                     <div class="db-ticket-priority db-priority-{{ $ticket->priority }}"></div>
                     <a href="{{ route('filament.admin.resources.tickets.edit', $ticket) }}"
                        class="db-ticket-no">{{ $ticket->tracking_number }}</a>
-                    <div class="db-ticket-subject" title="{{ $ticket->subject }}">{{ $ticket->subject }}</div>
-                    @if($ticket->department_room)
-                    <div class="db-ticket-dept">{{ Str::limit($ticket->department_room, 20) }}</div>
-                    @endif
+                    <div class="db-ticket-main">
+                        <div class="db-ticket-subject" title="{{ $ticket->subject }}">{{ $ticket->subject }}</div>
+                        <div class="db-ticket-meta">
+                            <span class="db-ticket-cat">{{ $ticket->category->name }}</span>
+                            @if($ticket->department_room)
+                            <span title="{{ $ticket->department_room }}">{{ Str::limit($ticket->department_room, 24) }}</span>
+                            @endif
+                            <span title="{{ $ticket->created_at->format('d.m.Y H:i') }}">{{ $ticket->created_at->diffForHumans() }}</span>
+                            @if($ticket->assignedTo)
+                            <span>Atanan: {{ $ticket->assignedTo->name }}</span>
+                            @endif
+                        </div>
+                    </div>
                     <span class="db-ticket-badge db-ticket-status db-status-{{ \App\Models\TicketStatus::colorFor($ticket->status) }}">
                         {{ \App\Models\TicketStatus::labelFor($ticket->status) }}
                     </span>
                     <span class="db-ticket-badge db-badge-{{ $ticket->priority }}">{{ ucfirst($ticket->priority) }}</span>
                 </div>
                 @endforeach
+                @if($pendingTickets > $pendingList->count())
+                <a href="{{ $pendingUrl }}" class="db-ticket-more">Tüm bekleyen talepleri gör ({{ $pendingTickets }}) →</a>
+                @endif
             @endif
         </div>
 

@@ -107,6 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.26 - Panelde Kategori Dökümü:**
+    *   **İstatistik Kartları:** Toplam, Bekleyen, Bugün Gelen, Çözülen ve Acil kartlarında kategoriler sayılarıyla listelenir. En kalabalık 4 kategori gösterilir, kalanı "Diğer" altında toplanır. Kart ve kategori satırlarına tıklanınca talep listesi ilgili sekme ve filtreyle açılır.
+    *   **Bekleyen Talepler:** Her satırda kategori, bölüm, geçen süre ve atanan kişi görünür. Acil ve yüksek öncelikli talepler listenin başına gelir. Başlıktaki sayı toplam bekleyen sayısını gösterir; liste 8 talepten uzunsa "Tüm bekleyen talepleri gör" bağlantısı çıkar.
+    *   **Düzeltme:** Acil uyarısındaki "Görüntüle" bağlantısı artık yalnızca bekleyen acil talepleri açar.
+
 *   **v1.25 - Resmi Tatil ve Bayram Günleri:**
     *   **Resmi Tatiller:** 1 Ocak, 23 Nisan, 1 Mayıs, 19 Mayıs, 15 Temmuz, 30 Ağustos ve 29 Ekim her yıl otomatik tatil sayılır; 28 Ekim yarım gündür (13:00). "Ayarlar / Mesai & Kurallar" sekmesindeki "Resmi Tatilleri Uygula" seçeneğiyle kapatılabilir.
     *   **Tatil Günleri Ekranı:** "Ayarlar / Tatil Günleri" ekranından dini bayramlar, arifeler ve idari izinler başlangıç-bitiş tarihiyle girilir. Yarım gün seçilirse kapanış saatine kadar talep alınır. İsteğe bağlı özel mesaj yazılabilir. Aynı güne girilen kayıt resmi tatilin önüne geçer.
