@@ -388,17 +388,12 @@ a.db-card-cat:hover { background: rgba(0,0,0,.14); }
             {{-- Özet mini kutu --}}
             <div class="db-panel" style="padding: 16px 20px;">
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    @php
-                        $weekTotal   = array_sum(array_column($trendData,'count'));
-                        $weekResolved = array_sum(array_column($trendData,'resolved'));
-                        $rate = $weekTotal > 0 ? round(($weekResolved / $weekTotal) * 100) : 0;
-                    @endphp
                     <div style="text-align:center;padding:12px;background:rgba(99,102,241,.06);border-radius:10px;">
                         <div style="font-size:22px;font-weight:800;color:#6366f1;">{{ $weekTotal }}</div>
                         <div style="font-size:11px;color:#9ca3af;margin-top:2px;">Bu Hafta Gelen</div>
                     </div>
                     <div style="text-align:center;padding:12px;background:rgba(16,185,129,.06);border-radius:10px;">
-                        <div style="font-size:22px;font-weight:800;color:#10b981;">{{ $rate }}%</div>
+                        <div style="font-size:22px;font-weight:800;color:#10b981;">{{ $weekRate }}%</div>
                         <div style="font-size:11px;color:#9ca3af;margin-top:2px;">Çözüm Oranı</div>
                     </div>
                 </div>

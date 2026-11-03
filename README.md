@@ -107,6 +107,10 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.29 - Çözüm Oranı Düzeltmesi:**
+    *   **Çözüm Oranı:** Son 7 günde gelen taleplerden kaçının çözüldüğünü gösterir. Daha önce açılıp bu dönemde kapanan talepler oranı %100'ün üzerine çıkarıyordu.
+    *   **Trend Grafiği:** Çözülen sayısı gelen sayısını geçtiğinde çubuklar artık grafik alanından taşmaz.
+
 *   **v1.28 - Panelde Otomatik Yenileme:**
     *   **Canlı Panel:** Anasayfadaki kartlar, Bekleyen Talepler listesi, acil uyarısı ve trend 30 saniyede bir sayfa yenilenmeden güncellenir. Teknisyen performans tablosunda seçili dönem ve sıralama korunur.
 

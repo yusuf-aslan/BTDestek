@@ -90,7 +90,15 @@ class DashboardOverview extends Widget
                 'resolved' => (clone $scopedQuery())->whereDate('resolved_at', $date->format('Y-m-d'))->count(),
             ];
         }
-        $trendMax = max(array_column($trendData, 'count') ?: [1]);
+        $trendMax = max([...array_column($trendData, 'count'), ...array_column($trendData, 'resolved')]);
+
+        // Oran yalnızca bu dönemde gelen talepleri kapsar; eski taleplerin kapanması %100'ü aştırmasın
+        $weekTotal = array_sum(array_column($trendData, 'count'));
+        $weekSolved = (clone $scopedQuery())
+            ->where('created_at', '>=', now()->subDays(6)->startOfDay())
+            ->whereIn('status', $solvedKeys)
+            ->count();
+        $weekRate = $weekTotal > 0 ? round(($weekSolved / $weekTotal) * 100) : 0;
 
         // Bekleyen talepler: liste sınırlı olduğu için acil olanlar yeni gelenlerin altında kaybolmasın
         $pendingList = (clone $scopedQuery())
@@ -149,6 +157,8 @@ class DashboardOverview extends Widget
             'urgentUrl'       => $urgentUrl,
             'trendData'       => $trendData,
             'trendMax'        => $trendMax ?: 1,
+            'weekTotal'       => $weekTotal,
+            'weekRate'        => $weekRate,
             'pendingList'     => $pendingList,
             'techPerformance' => $techPerformance,
             'announcements'   => $announcements,
