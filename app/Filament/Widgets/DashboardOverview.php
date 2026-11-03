@@ -10,6 +10,7 @@ use Filament\Widgets\Widget;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Attributes\Locked;
 
 class DashboardOverview extends Widget
 {
@@ -22,6 +23,22 @@ class DashboardOverview extends Widget
     protected static ?int $sort = 0;
 
     protected static bool $isLazy = false;
+
+    // Otomatik yenileme Livewire isteğiyle gelir, adres çubuğundaki filtreler o istekte yoktur.
+    #[Locked]
+    public string $performancePeriod = 'monthly';
+
+    #[Locked]
+    public string $performanceSort = 'resolved';
+
+    public function mount(): void
+    {
+        $period = request()->string('performance_period')->toString();
+        $sort = request()->string('performance_sort')->toString();
+
+        $this->performancePeriod = in_array($period, ['monthly', 'all'], true) ? $period : 'monthly';
+        $this->performanceSort = in_array($sort, ['resolved', 'activity'], true) ? $sort : 'resolved';
+    }
 
     public function getViewData(): array
     {
@@ -87,15 +104,7 @@ class DashboardOverview extends Widget
         // Teknisyen performans (sadece admin)
         $techPerformance = [];
         if ($isAdmin) {
-            $requestedPeriod = request()->string('performance_period')->toString();
-            $performancePeriod = in_array($requestedPeriod, ['monthly', 'all'], true)
-                ? $requestedPeriod
-                : 'monthly';
-            $requestedSort = request()->string('performance_sort')->toString();
-            $performanceSort = in_array($requestedSort, ['resolved', 'activity'], true)
-                ? $requestedSort
-                : 'resolved';
-            $isMonthlyPerformance = $performancePeriod === 'monthly';
+            $isMonthlyPerformance = $this->performancePeriod === 'monthly';
             $monthStart = now()->startOfMonth()->toDateString();
             $monthEnd = now()->endOfMonth()->toDateString();
 
@@ -115,7 +124,7 @@ class DashboardOverview extends Widget
                         ->when($isMonthlyPerformance, fn (Builder $query) => $query->whereBetween('activity_date', [$monthStart, $monthEnd])),
                 ], 'duration');
 
-            if ($performanceSort === 'activity') {
+            if ($this->performanceSort === 'activity') {
                 $techPerformanceQuery
                     ->orderByDesc('period_activity_minutes')
                     ->orderByDesc('total_resolved');
@@ -142,8 +151,6 @@ class DashboardOverview extends Widget
             'trendMax'        => $trendMax ?: 1,
             'pendingList'     => $pendingList,
             'techPerformance' => $techPerformance,
-            'performancePeriod' => $performancePeriod ?? 'monthly',
-            'performanceSort' => $performanceSort ?? 'resolved',
             'announcements'   => $announcements,
         ];
     }

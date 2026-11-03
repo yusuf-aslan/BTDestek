@@ -1,5 +1,8 @@
 {{-- Variables ($isAdmin, $totalTickets, etc.) are injected by Filament from getViewData() --}}
 
+{{-- Livewire tek kök öğe ister: stil de bu öğenin içinde kalmalı, yoksa yenileme bileşeni bulamaz. --}}
+<div class="db-wrap" wire:poll.30s>
+
 <style>
 /* ─── DASHBOARD OVERRIDE ─────────────────────────────────── */
 .db-wrap { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; width: 100%; }
@@ -236,8 +239,6 @@ a.db-card-cat:hover { background: rgba(0,0,0,.14); }
 .db-section-line { flex: 1; height: 1px; background: rgba(156,163,175,.15); }
 </style>
 
-<div class="db-wrap">
-
     {{-- ── STAT CARDS ────────────────────────────────────────── --}}
     <div class="db-stats">
         @foreach($cards as $card)
@@ -412,7 +413,7 @@ a.db-card-cat:hover { background: rgba(0,0,0,.14); }
         <div class="db-panel-header">
             <span>👤</span>
             <span class="db-panel-title">Teknisyen Performans Tablosu</span>
-            <form method="GET" action="{{ request()->url() }}" class="db-performance-controls">
+            <form method="GET" action="{{ \App\Filament\Pages\Dashboard::getUrl() }}" class="db-performance-controls">
                 <select name="performance_period" onchange="this.form.submit()" class="db-period-filter" aria-label="Performans dönemi">
                     <option value="monthly" @selected($performancePeriod === 'monthly')>Aylık</option>
                     <option value="all" @selected($performancePeriod === 'all')>Tüm Zamanlar</option>

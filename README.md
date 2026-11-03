@@ -107,6 +107,9 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.28 - Panelde Otomatik Yenileme:**
+    *   **Canlı Panel:** Anasayfadaki kartlar, Bekleyen Talepler listesi, acil uyarısı ve trend 30 saniyede bir sayfa yenilenmeden güncellenir. Teknisyen performans tablosunda seçili dönem ve sıralama korunur.
+
 *   **v1.27 - Talep Güncelleme Bildirimleri:**
     *   **Anlık Bildirim:** Destek sayfaları açıkken 30 saniyede bir talepler kontrol edilir. Durum değişince ya da çözüm notu yazılınca sol altta numara, konu, yeni durum, notun başı ve "Görüntüle" butonuyla bildirim çıkar; sekme başlığında da görünür. Bildirim kapatılana kadar sayfalar arasında kalır.
     *   **Takip Edilen Talepler:** Bu bilgisayardan açılan talepler ile bu tarayıcıda oluşturulan veya numarasıyla sorgulanan talepler takip edilir (en fazla 30). Son görülen durum tarayıcıda saklandığı için sayfa kapalıyken olan değişiklik de bir sonraki açılışta bildirilir.
