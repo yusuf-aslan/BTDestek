@@ -136,6 +136,10 @@ HTML
                 PanelsRenderHook::HEAD_END,
                 fn (): string => '
                     <style>
+                        /* Üst çubuktaki arama kutusu: yer kaplamasın, yazarken genişlesin */
+                        .fi-topbar .fi-global-search-field { width: 11rem; transition: width .2s ease; }
+                        .fi-topbar .fi-global-search-field:focus-within { width: 16rem; }
+
                         /* Dark modda primary (Amber/Orange) butonlarin yazi rengini okunurluk icin beyaz yap */
                         .dark .fi-btn.fi-color-primary,
                         .dark .fi-btn.fi-color-primary *,
