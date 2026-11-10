@@ -61,13 +61,11 @@ class AdminPanelProvider extends PanelProvider
             $panel->topNavigation();
         }
 
-        // Kurum logosu varsa sol üstte o görünür; koyu temada yazısı beyaza çevrilmiş kopyası kullanılır
+        // Kurum logosu varsa sol üstte o görünür; yazısı açık temada koyu, koyu temada beyaz gösterilir
         if ($settings?->site_logo) {
-            $darkLogo = BrandLogo::darkVariant($settings->site_logo);
-
             $panel
-                ->brandLogo(asset('storage/' . $settings->site_logo))
-                ->darkModeBrandLogo(asset('storage/' . ($darkLogo ?? $settings->site_logo)));
+                ->brandLogo(asset('storage/' . BrandLogo::forLight($settings->site_logo)))
+                ->darkModeBrandLogo(asset('storage/' . BrandLogo::forDark($settings->site_logo)));
         } else {
             $panel->brandLogo($adminBrand);
         }

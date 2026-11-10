@@ -54,7 +54,11 @@
         <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <a href="{{ route('home') }}" class="flex items-center gap-3">
                 @if($settings->site_logo)
-                    <img src="{{ asset('storage/' . $settings->site_logo) }}" alt="{{ $settings->site_title }}" class="h-10 w-auto">
+                    {{-- Yazısı açık zeminde koyu, koyu zeminde beyaz olan kopyalar --}}
+                    <img src="{{ asset('storage/' . \App\Support\BrandLogo::forLight($settings->site_logo)) }}" alt="{{ $settings->site_title }}" class="h-10 w-auto @if($settings->is_dark_mode_enabled) dark:hidden @endif">
+                    @if($settings->is_dark_mode_enabled)
+                    <img src="{{ asset('storage/' . \App\Support\BrandLogo::forDark($settings->site_logo)) }}" alt="{{ $settings->site_title }}" class="hidden h-10 w-auto dark:block">
+                    @endif
                 @else
                     <div class="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-200 @if($settings->is_dark_mode_enabled) dark:shadow-blue-900/20 @endif">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -140,7 +144,7 @@
     <!-- Footer -->
     <footer class="mt-auto py-10 border-t border-slate-200 @if($settings->is_dark_mode_enabled) dark:border-slate-700 bg-white dark:bg-slate-800 @else bg-white @endif shrink-0 transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi <span class="ml-2 opacity-50">v1.30</span></p>
+            <p class="text-slate-400 @if($settings->is_dark_mode_enabled) dark:text-slate-500 @endif text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} Hastane Bilgi İşlem Birimi <span class="ml-2 opacity-50">v1.31</span></p>
             
             @if($settings->ip_display_position === 'footer')
             <div class="px-4 py-2 bg-slate-100 @if($settings->is_dark_mode_enabled) dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 @else rounded-full border border-slate-200 @endif flex items-center gap-2 shrink-0">

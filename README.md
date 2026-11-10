@@ -107,6 +107,9 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.31 - Logo Açık/Koyu Tema Uyumu:**
+    *   **Otomatik Logo Renkleri:** Logo koyu yazılı da beyaz yazılı da yüklense yazı kısmı ayırt edilir; açık temada koyu, koyu temada beyaz gösterilir. İkon ve renkli kısımlar değişmez. Hem yönetim panelinde hem personel sayfalarının başlığında geçerlidir.
+
 *   **v1.30 - Üst Çubuk Düzenlemesi:**
     *   **Kurum Logosu:** Ayarlardaki site logosu panelin sol üstünde görünür. Koyu temada logodaki koyu yazı otomatik olarak beyaza çevrilmiş kopyasıyla gösterilir (ikon renkleri korunur).
     *   **Ana Sayfa Bağlantısı:** Ayarlar menüsünden kaldırılıp arama kutusunun yanına taşındı.
