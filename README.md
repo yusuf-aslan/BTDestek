@@ -107,6 +107,9 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.32 - Talep Alma Saatleri İfadesi:**
+    *   **Metin Düzeltmesi:** Talep alımı mesai bitişinden önce kapatılabildiği için destek sayfasındaki "Mesai Saatleri Dışındayız" uyarısı "Talep Alma Saatleri Dışındayız", saat etiketi de "Talep Alma Saatleri" oldu. Ayarlardaki alanlar da "Talep Alma Başlangıcı / Bitişi" olarak adlandırıldı.
+
 *   **v1.31 - Logo Açık/Koyu Tema Uyumu:**
     *   **Otomatik Logo Renkleri:** Logo koyu yazılı da beyaz yazılı da yüklense yazı kısmı ayırt edilir; açık temada koyu, koyu temada beyaz gösterilir. İkon ve renkli kısımlar değişmez. Hem yönetim panelinde hem personel sayfalarının başlığında geçerlidir.
 

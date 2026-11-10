@@ -60,7 +60,7 @@ class HolidayForm
 
                         Textarea::make('message')
                             ->label('Kullanıcıya Gösterilecek Mesaj')
-                            ->helperText('Boş bırakılırsa: "Talepler yalnızca mesai saatleri içinde alınmaktadır." Mesai saatleri altında ayrıca gösterilir.')
+                            ->helperText('Boş bırakılırsa: "Destek talepleri yalnızca belirlenen saatler içinde alınmaktadır." Talep alma saatleri altında ayrıca gösterilir.')
                             ->rows(2)
                             ->maxLength(500)
                             ->columnSpanFull(),

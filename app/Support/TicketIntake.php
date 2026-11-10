@@ -12,7 +12,7 @@ use Carbon\CarbonInterface;
  */
 class TicketIntake
 {
-    private const CLOSED = 'Talepler yalnızca mesai saatleri içinde alınmaktadır.';
+    private const CLOSED = 'Destek talepleri yalnızca belirlenen saatler içinde alınmaktadır.';
 
     /** @param  array{name: string, is_half_day: bool, closes_at: ?string, message: ?string}|null  $holiday */
     private function __construct(
@@ -45,7 +45,7 @@ class TicketIntake
                 return $closed($holiday['message']);
             }
 
-            $notice = "Bugün mesai bitiş saati: {$closesAt}";
+            $notice = "Bugün talep alma bitiş saati: {$closesAt}";
         }
 
         if ($now->isWeekend() && ! $settings->weekend_tickets_allowed) {
@@ -72,11 +72,11 @@ class TicketIntake
     public function message(): ?string
     {
         return $this->closedReason
-            ? trim($this->closedReason.($this->workHours ? " Mesai saatleri: {$this->workHours}." : ''))
+            ? trim($this->closedReason.($this->workHours ? " Talep alma saatleri: {$this->workHours}." : ''))
             : null;
     }
 
-    /** Ör. "Hafta içi 08:00 - 16:30"; mesai dışı talep alınıyorsa saat yazılmaz. */
+    /** Ör. "Hafta içi 08:00 - 16:30"; saat dışı talep alınıyorsa saat yazılmaz. */
     private static function workHoursLabel(GeneralSetting $settings): ?string
     {
         if ($settings->allow_tickets_outside_work_hours) {

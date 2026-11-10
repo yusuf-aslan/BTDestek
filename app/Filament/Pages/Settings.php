@@ -210,26 +210,26 @@ class Settings extends Page implements HasForms
                                     ])->columns(2),
                             ]),
 
-                        \Filament\Schemas\Components\Tabs\Tab::make('Mesai & Kurallar')
+                        \Filament\Schemas\Components\Tabs\Tab::make('Talep Saatleri & Kurallar')
                             ->icon('heroicon-o-clock')
                             ->schema([
-                                Section::make('Çalışma Saatleri')
-                                    ->description('Mesai saatleri ve talep kabul kuralları.')
+                                Section::make('Talep Alma Saatleri')
+                                    ->description('Destek sayfasından talep alınan saatler. Mesai bitişinden önce kapatılabilir; kullanıcılar "Talep Alma Saatleri Dışındayız" uyarısını görür.')
                                     ->schema([
                                         TimePicker::make('work_hours_start')
-                                            ->label('Mesai Başlangıcı')
+                                            ->label('Talep Alma Başlangıcı')
                                             ->seconds(false)
                                             ->default('08:00')
                                             ->required(),
 
                                         TimePicker::make('work_hours_end')
-                                            ->label('Mesai Bitişi')
+                                            ->label('Talep Alma Bitişi')
                                             ->seconds(false)
                                             ->default('17:00')
                                             ->required(),
 
                                         Toggle::make('allow_tickets_outside_work_hours')
-                                            ->label('Mesai Dışı Talep Kabul Et')
+                                            ->label('Bu Saatler Dışında da Talep Kabul Et')
                                             ->helperText('Kapalı ise belirtilen saatler dışında talep açılamaz.')
                                             ->default(true),
 
@@ -249,7 +249,7 @@ class Settings extends Page implements HasForms
 
                                         Toggle::make('holiday_tickets_allowed')
                                             ->label('Tatil Günlerinde Talep Kabul Et')
-                                            ->helperText('Açıksa tatil ve yarım gün kuralları uygulanmaz; yalnızca mesai ve hafta sonu kuralları geçerli olur.')
+                                            ->helperText('Açıksa tatil ve yarım gün kuralları uygulanmaz; yalnızca talep alma saatleri ve hafta sonu kuralları geçerli olur.')
                                             ->default(false),
                                     ])->columns(2),
 

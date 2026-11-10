@@ -20,7 +20,7 @@ class ListHolidays extends ListRecords
 
         return $official
             ? 'Sabit tarihli resmi tatiller her yıl otomatik uygulanır. Buraya dini bayramları, arifeleri ve idari izinleri girin.'
-            : 'Resmi tatiller Ayarlar / Mesai & Kurallar sekmesinden kapatılmış; yalnızca buraya girilen günler uygulanır.';
+            : 'Resmi tatiller Ayarlar / Talep Saatleri & Kurallar sekmesinden kapatılmış; yalnızca buraya girilen günler uygulanır.';
     }
 
     protected function getHeaderActions(): array
