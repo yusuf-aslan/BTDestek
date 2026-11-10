@@ -16,6 +16,8 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class TicketResource extends Resource
 {
@@ -50,6 +52,32 @@ class TicketResource extends Resource
         $user = \Filament\Facades\Filament::auth()->user();
 
         return parent::getEloquentQuery()->visibleTo($user);
+    }
+
+    // Üst çubuktaki arama: takip numarası, talep eden, telefon ve bölümle de bulunur
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['tracking_number', 'subject', 'name', 'phone_number', 'department_room'];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with('category');
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->tracking_number . ' · ' . Str::limit($record->subject, 60);
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return array_filter([
+            'Durum' => TicketStatus::labelFor($record->status),
+            'Kategori' => $record->category?->name,
+            'Talep Eden' => $record->name,
+            'Bölüm' => $record->department_room,
+        ]);
     }
 
     public static function form(Schema $schema): Schema

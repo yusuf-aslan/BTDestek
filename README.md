@@ -107,6 +107,11 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.30 - Üst Çubuk Düzenlemesi:**
+    *   **Kurum Logosu:** Ayarlardaki site logosu panelin sol üstünde görünür. Koyu temada logodaki koyu yazı otomatik olarak beyaza çevrilmiş kopyasıyla gösterilir (ikon renkleri korunur).
+    *   **Ana Sayfa Bağlantısı:** Ayarlar menüsünden kaldırılıp arama kutusunun yanına taşındı.
+    *   **Gelişmiş Arama:** Arama kutusu Ctrl+K ile açılır. Talepler takip numarası, konu, talep eden, telefon ve bölümle; envanter ad, demirbaş no, seri no ve modelle aranır. Sonuçlarda durum, kategori, talep eden ve bölüm görünür.
+
 *   **v1.29 - Çözüm Oranı Düzeltmesi:**
     *   **Çözüm Oranı:** Son 7 günde gelen taleplerden kaçının çözüldüğünü gösterir. Daha önce açılıp bu dönemde kapanan talepler oranı %100'ün üzerine çıkarıyordu.
     *   **Trend Grafiği:** Çözülen sayısı gelen sayısını geçtiğinde çubuklar artık grafik alanından taşmaz.

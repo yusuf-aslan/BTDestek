@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Livewire\TicketWatcher;
+use App\Support\BrandLogo;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -52,15 +53,27 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->databaseNotifications()
+            ->globalSearchKeyBindings(['ctrl+k', 'command+k'])
+            ->globalSearchFieldKeyBindingSuffix()
             ->maxContentWidth('screen-2xl');
         
         if ($settings && $settings->menu_layout === 'horizontal') {
             $panel->topNavigation();
         }
 
+        // Kurum logosu varsa sol üstte o görünür; koyu temada yazısı beyaza çevrilmiş kopyası kullanılır
+        if ($settings?->site_logo) {
+            $darkLogo = BrandLogo::darkVariant($settings->site_logo);
+
+            $panel
+                ->brandLogo(asset('storage/' . $settings->site_logo))
+                ->darkModeBrandLogo(asset('storage/' . ($darkLogo ?? $settings->site_logo)));
+        } else {
+            $panel->brandLogo($adminBrand);
+        }
+
         return $panel
             ->brandName($siteTitle)
-            ->brandLogo($adminBrand)
             ->brandLogoHeight('2.25rem')
             ->renderHook(
                 PanelsRenderHook::BODY_END,
@@ -110,7 +123,14 @@ HTML
             )
             ->renderHook(
                 PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
-                fn (): string => Blade::render('@livewire(\App\Livewire\QuickActivityModal::class)'),
+                fn (): string => Blade::render(<<<'HTML'
+                    @livewire(\App\Livewire\QuickActivityModal::class)
+
+                    <x-filament::link href="/" target="_blank" icon="heroicon-o-globe-alt" color="gray" class="hidden md:inline-flex">
+                        Ana sayfa
+                    </x-filament::link>
+HTML
+                ),
             )
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
@@ -150,14 +170,6 @@ HTML
                 'Duyuru Yönetimi',
                 'Envanter Yönetimi',
                 'Ayarlar',
-            ])
-            ->navigationItems([
-                NavigationItem::make('Anasayfa')
-                    ->url('/')
-                    ->icon('heroicon-o-globe-alt')
-                    ->group('Ayarlar')
-                    ->sort(999)
-                    ->openUrlInNewTab(),
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -14,6 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AssetResource extends Resource
@@ -29,6 +30,28 @@ class AssetResource extends Resource
     protected static ?string $modelLabel = 'Envanter';
     protected static ?string $pluralModelLabel = 'Envanterler';
     protected static ?string $navigationLabel = 'Envanter Yönetimi';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    // Üst çubuktaki arama: demirbaş ve seri numarasıyla da bulunur
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'asset_tag', 'serial_number', 'model'];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with('location');
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return array_filter([
+            'Demirbaş No' => $record->asset_tag,
+            'Seri No' => $record->serial_number,
+            'Konum' => $record->location?->name,
+        ]);
+    }
 
     public static function form(Schema $schema): Schema
     {
