@@ -61,6 +61,11 @@ class ViewTicket extends ViewRecord
                 ->icon('heroicon-o-pencil-square')
                 ->color(fn (): string => $this->isEditLocked ? 'gray' : 'primary')
                 ->url(fn (): string => $this->getResource()::getUrl('edit', ['record' => $this->record])),
+            Action::make('add_task')
+                ->label('İş Listeme Ekle')
+                ->icon('heroicon-o-clipboard-document-list')
+                ->color('gray')
+                ->url(fn ($record): string => \App\Filament\Resources\Tasks\TaskResource::getUrl('create', ['ticket' => $record->id])),
             Action::make('print')
                 ->label('Yazdır')
                 ->icon('heroicon-o-printer')

@@ -184,7 +184,8 @@ class Ticket extends Model
 
                     // Send In-App Notification to the assigned technician
                     if ($technician && $newAssignedTo !== Auth::id()) {
-                        Notification::make()
+                        // Sunucuda kuyruk işçisi yok; sendToDatabase kuyruğa yazdığı için bildirim hiç ulaşmıyordu
+                        $technician->notifyNow(Notification::make()
                             ->title('Yeni Talep Atandı')
                             ->body("{$ticket->tracking_number} nolu talep üzerinize atandı: {$ticket->subject}")
                             ->icon('heroicon-o-ticket')
@@ -194,7 +195,7 @@ class Ticket extends Model
                                     ->label('Görüntüle')
                                     ->url(fn () => route('filament.admin.resources.tickets.edit', $ticket)),
                             ])
-                            ->sendToDatabase($technician);
+                            ->toDatabase());
                     }
                 } else {
                     $ticket->assigned_at = null;

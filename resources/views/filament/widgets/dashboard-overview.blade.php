@@ -402,6 +402,9 @@ a.db-card-cat:hover { background: rgba(0,0,0,.14); }
         </div>
     </div>
 
+    {{-- ── İŞ LİSTEM (kişiye özel) ────────────────────────────── --}}
+    @livewire(\App\Livewire\MyTasksPanel::class, key('my-tasks-panel'))
+
     {{-- ── TEKNİSYEN PERFORMANS ─────────────────────────────────── --}}
     @if($isAdmin && $techPerformance->count() > 0)
     <div class="db-panel db-full-row" style="margin-bottom:16px;">

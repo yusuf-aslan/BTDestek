@@ -113,6 +113,11 @@ class EditTicket extends EditRecord
                 ->modalHeading('Talep bırakılsın mı?')
                 ->modalDescription('Kaydedilmemiş değişiklikler silinecek ve diğer kullanıcılar talebi açabilecek.')
                 ->action('releaseTicket'),
+            Action::make('add_task')
+                ->label('İş Listeme Ekle')
+                ->icon('heroicon-o-clipboard-document-list')
+                ->color('gray')
+                ->url(fn ($record): string => \App\Filament\Resources\Tasks\TaskResource::getUrl('create', ['ticket' => $record->id])),
             Action::make('print')
                 ->label('Yazdır')
                 ->icon('heroicon-o-printer')

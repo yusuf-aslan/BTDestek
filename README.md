@@ -107,6 +107,13 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 ---
 ## 🔄 Geliştirme Süreci (Changelog)
 
+*   **v1.33 - Kişisel İş Listesi ve Hatırlatmalar:**
+    *   **İş Listem:** Her kullanıcının yalnızca kendisinin gördüğü iş listesi (yönetici de başkasının listesini göremez). İşe başlık, ayrıntılı açıklama (zengin metin), alt adımlar, son tarih, öncelik, durum ve ilgili talep eklenebilir. Sekmeler: Yapılacaklar, Gecikenler, Bugün, Bu Hafta, Tamamlananlar.
+    *   **Hatırlatmalar:** Son tarihten seçilen süre önce (bitiş anında, 15 dk, 1 saat, 3 saat, 1 gün, 3 gün, 1 hafta) ve süre geçince sağ üstteki bildirim ziline uyarı düşer. Günün ilk girişinde "bugün biten / geciken işler" özeti gelir. Panel açıkken 30 saniyelik kontrolle çalışır; ek kurulum gerekmez.
+    *   **Tekrarlanan İşler:** Her gün, hafta içi, her hafta, her ay. Tamamlanınca bir sonraki tarih için alt adımları sıfırlanmış yeni iş oluşur.
+    *   **Hızlı Kullanım:** Anasayfada "İş Listem" kutusu (hızlı ekleme, tek tıkla tamamlama), menüde geciken/bugünkü iş rozeti, listede 1 saat / yarın / 1 hafta erteleme, talep ekranında "İş Listeme Ekle" butonu.
+    *   **Düzeltme:** Talep atama bildirimleri kuyruğa yazıldığı ve sunucuda kuyruk işçisi olmadığı için hiç ulaşmıyordu; artık doğrudan bildirim ziline düşer.
+
 *   **v1.32 - Talep Alma Saatleri İfadesi:**
     *   **Metin Düzeltmesi:** Talep alımı mesai bitişinden önce kapatılabildiği için destek sayfasındaki "Mesai Saatleri Dışındayız" uyarısı "Talep Alma Saatleri Dışındayız", saat etiketi de "Talep Alma Saatleri" oldu. Ayarlardaki alanlar da "Talep Alma Başlangıcı / Bitişi" olarak adlandırıldı.
 

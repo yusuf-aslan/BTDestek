@@ -31,6 +31,9 @@ class TicketWatcher extends Component
 
     public function checkNewTickets()
     {
+        // İş listesi hatırlatmaları da bu 30 saniyelik kontrolle bildirim ziline düşer
+        \App\Services\TaskReminders::sendForThrottled(Auth::user());
+
         $currentCount = $this->getTicketCount();
         $isNew = $currentCount > $this->lastCount;
 
