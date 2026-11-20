@@ -49,7 +49,7 @@ class TaskForm
 
                                 FileUpload::make('photos')
                                     ->label('Fotoğraflar')
-                                    ->helperText('Birden fazla fotoğraf seçebilir ya da sürükleyip bırakabilirsiniz (en fazla 10, her biri 10 MB). Büyük fotoğraflar otomatik küçültülür. Fotoğrafları yalnızca siz görürsünüz.')
+                                    ->helperText('Birden fazla fotoğraf seçebilir, sürükleyip bırakabilir ya da ekran görüntüsünü Ctrl+V ile yapıştırabilirsiniz (en fazla 10, her biri 10 MB). Büyük fotoğraflar otomatik küçültülür. Fotoğrafları yalnızca siz görürsünüz.')
                                     ->image()
                                     ->multiple()
                                     ->maxFiles(10)

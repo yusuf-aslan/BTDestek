@@ -120,6 +120,11 @@ HTML
                 ),
             )
             ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): string => view('filament.tasks.paste-photos')->render(),
+                scopes: [\App\Filament\Resources\Tasks\Pages\CreateTask::class, \App\Filament\Resources\Tasks\Pages\EditTask::class],
+            )
+            ->renderHook(
                 PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
                 fn (): string => Blade::render(<<<'HTML'
                     @livewire(\App\Livewire\QuickActivityModal::class)
