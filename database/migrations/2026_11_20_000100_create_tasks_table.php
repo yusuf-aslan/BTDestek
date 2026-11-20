@@ -21,6 +21,7 @@ return new class extends Migration
             $table->dateTime('remind_at')->nullable();
             $table->string('repeat', 20)->nullable();
             $table->json('checklist')->nullable();
+            $table->json('photos')->nullable();
             $table->dateTime('completed_at')->nullable();
             $table->dateTime('reminded_at')->nullable();
             $table->dateTime('overdue_notified_at')->nullable();

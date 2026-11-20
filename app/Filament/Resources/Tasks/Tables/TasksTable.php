@@ -13,6 +13,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -43,6 +44,17 @@ class TasksTable
                     ->description(fn (Task $record): ?string => static::summary($record))
                     ->wrap()
                     ->searchable(['title', 'description']),
+
+                ImageColumn::make('photos')
+                    ->label('Foto')
+                    ->disk(Task::PHOTO_DISK)
+                    ->visibility('private')
+                    ->stacked()
+                    ->limit(3)
+                    ->limitedRemainingText()
+                    ->imageHeight(36)
+                    ->square()
+                    ->toggleable(),
 
                 TextColumn::make('due_at')
                     ->label('Son Tarih')

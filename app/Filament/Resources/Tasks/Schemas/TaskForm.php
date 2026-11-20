@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
 use Filament\Forms\Components\RichEditor;
@@ -45,6 +46,27 @@ class TaskForm
                                         ['h3', 'bulletList', 'orderedList', 'blockquote', 'codeBlock'],
                                         ['undo', 'redo'],
                                     ]),
+
+                                FileUpload::make('photos')
+                                    ->label('Fotoğraflar')
+                                    ->helperText('Birden fazla fotoğraf seçebilir ya da sürükleyip bırakabilirsiniz (en fazla 10, her biri 10 MB). Büyük fotoğraflar otomatik küçültülür. Fotoğrafları yalnızca siz görürsünüz.')
+                                    ->image()
+                                    ->multiple()
+                                    ->maxFiles(10)
+                                    ->maxSize(10240)
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+                                    ->disk(Task::PHOTO_DISK)
+                                    ->visibility('private')
+                                    ->directory(fn (): string => 'task-photos/'.Filament::auth()->id())
+                                    ->automaticallyResizeImagesToWidth('1920')
+                                    ->automaticallyResizeImagesMode('contain')
+                                    ->panelLayout('grid')
+                                    ->imagePreviewHeight('160')
+                                    ->appendFiles()
+                                    ->reorderable()
+                                    ->openable()
+                                    ->downloadable()
+                                    ->imageEditor(),
 
                                 Repeater::make('checklist')
                                     ->label('Alt Adımlar')

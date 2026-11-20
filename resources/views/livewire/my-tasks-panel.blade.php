@@ -100,10 +100,11 @@
             <span class="tk-prio tk-prio-{{ $task->priority }}" title="Öncelik: {{ \App\Models\Task::PRIORITIES[$task->priority] ?? $task->priority }}"></span>
             <div class="tk-main">
                 <a href="{{ \App\Filament\Resources\Tasks\TaskResource::getUrl('edit', ['record' => $task]) }}" class="tk-name" title="{{ $task->title }}">{{ $task->title }}</a>
-                @if($progress || $task->ticket || $task->repeat || $task->status === 'devam')
+                @if($progress || $task->ticket || $task->repeat || $task->status === 'devam' || $task->photoCount())
                     <div class="tk-meta">
                         @if($task->status === 'devam')<span>▶ Devam ediyor</span>@endif
                         @if($progress)<span>✓ {{ $progress['done'] }}/{{ $progress['total'] }} adım</span>@endif
+                        @if($task->photoCount())<span>📷 {{ $task->photoCount() }} fotoğraf</span>@endif
                         @if($task->ticket)<span>Talep {{ $task->ticket->tracking_number }}</span>@endif
                         @if($task->repeat)<span>↻ {{ \App\Models\Task::REPEATS[$task->repeat] ?? '' }}</span>@endif
                     </div>

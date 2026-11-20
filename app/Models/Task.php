@@ -63,7 +63,11 @@ class Task extends Model
         'remind_before_minutes',
         'repeat',
         'checklist',
+        'photos',
     ];
+
+    /** Fotoğraflar kişiye özel olduğu için herkese açık değil, özel diskte tutulur. */
+    public const PHOTO_DISK = 'local';
 
     protected $casts = [
         'due_at' => 'datetime',
@@ -72,6 +76,7 @@ class Task extends Model
         'reminded_at' => 'datetime',
         'overdue_notified_at' => 'datetime',
         'checklist' => 'array',
+        'photos' => 'array',
         'remind_before_minutes' => 'integer',
     ];
 
@@ -95,11 +100,37 @@ class Task extends Model
 
         // Bildirim işaretleri TaskReminders'ta doğrudan sorguyla yazılır; elimizdeki model
         // bunları görmemiş olabileceğinden sıfırlamayı veritabanında da garanti et
+        // Formdan çıkarılan ya da işle birlikte silinen fotoğrafların dosyaları da silinsin
+        static::updated(function (Task $task) {
+            if ($task->wasChanged('photos')) {
+                $old = json_decode((string) $task->getRawOriginal('photos'), true) ?: [];
+                static::deletePhotos(array_diff($old, $task->photos ?? []));
+            }
+        });
+
+        static::deleted(fn (Task $task) => static::deletePhotos($task->photos ?? []));
+
         static::saved(function (Task $task) {
             if ($task->wasChanged(['due_at', 'remind_before_minutes'])) {
                 static::query()->whereKey($task->id)->update(['reminded_at' => null, 'overdue_notified_at' => null]);
             }
         });
+    }
+
+    /** @param  array<string>  $paths */
+    private static function deletePhotos(array $paths): void
+    {
+        // Aynı dosyayı başka bir iş kullanıyorsa (kopyalanmış kayıt) dokunma
+        $paths = array_filter($paths, fn (string $path) => ! static::query()->whereJsonContains('photos', $path)->exists());
+
+        if ($paths) {
+            \Illuminate\Support\Facades\Storage::disk(self::PHOTO_DISK)->delete(array_values($paths));
+        }
+    }
+
+    public function photoCount(): int
+    {
+        return count($this->photos ?? []);
     }
 
     public function user(): BelongsTo
@@ -198,7 +229,8 @@ class Task extends Model
             $next = null;
 
             if ($this->repeat && $this->due_at && ! $this->isCompleted()) {
-                $next = $this->replicate(['completed_at', 'reminded_at', 'overdue_notified_at', 'remind_at']);
+                // Fotoğraflar o seferin kaydıdır; sonraki tekrara taşınmaz
+                $next = $this->replicate(['completed_at', 'reminded_at', 'overdue_notified_at', 'remind_at', 'photos']);
                 $next->status = 'bekliyor';
                 $next->due_at = $this->nextOccurrence($this->due_at);
                 $next->checklist = collect($this->checklist ?? [])
